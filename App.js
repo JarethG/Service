@@ -1,26 +1,25 @@
 import * as React from 'react';
-import { Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Request from "./Screens/Request";
+import Response from "./Screens/Response";
+
 export default function App() {
 
   const Tab = createBottomTabNavigator();
 
   return (
       <NavigationContainer>
-        <Tab.Navigator>
-          <Tab.Screen name="Home" component={HomeScreen} />
-          <Tab.Screen name="Settings" component={SettingsScreen} />
+        <Tab.Navigator
+            screenOptions={{
+                headerStyle: {backgroundColor: '#2e5d37'},
+                headerTintColor: '#fff',
+                headerTitleAlign: 'center',
+                headerTitleStyle: {fontWeight: 'bold'},
+            }}>
+          <Tab.Screen name="Response" component={Response} />
+          <Tab.Screen name="Request" component={Request} />
         </Tab.Navigator>
       </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
