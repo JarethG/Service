@@ -1,6 +1,6 @@
 import {StatusBar} from 'expo-status-bar';
 import {StyleSheet, Text, View, TextInput, Image, Button, TouchableOpacity,ScrollView} from 'react-native';
-import {Styles} from "../Styles";
+import {styles} from "../Styles";
 import {LinearGradient} from 'expo-linear-gradient';
 import {useState} from "react";
 import RequestCard from "../Components/RequestCard";
@@ -34,7 +34,7 @@ export default function Request() {
         <LinearGradient
             colors={['#68984e', '#d8e5b7']}
             start={[0, 0.5]}
-            style={Styles.background}
+            style={styles.background}
         >
             <View style={{flexDirection: "row", padding: 12}}>
                 <TextInput
@@ -51,11 +51,11 @@ export default function Request() {
                 <Image source={require('../assets/filter.png')} style={{height: 30, width: 30}}></Image>
             </View>
             <View style={{flexDirection: "row", padding: 12}}>
-                <TouchableOpacity style={searchToggle?Styles.toggleButtonSelected:Styles.toggleButtonUnselected}
+                <TouchableOpacity style={searchToggle?styles.toggleButtonSelected:styles.toggleButtonUnselected}
                                   onPress={()=>{setSearchToggle(true)}}>
                     <Text style={searchToggle?{color:"#386540"}:{color:"#ffffff"}}>Skills</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={searchToggle?Styles.toggleButtonUnselected:Styles.toggleButtonSelected}
+                <TouchableOpacity style={searchToggle?styles.toggleButtonUnselected:styles.toggleButtonSelected}
                                   onPress={()=>{setSearchToggle(false)}}>
                     <Text style={searchToggle?{color:"#ffffff"}:{color:"#386540"}}>Resources</Text>
                 </TouchableOpacity>

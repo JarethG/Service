@@ -1,6 +1,6 @@
 import {StatusBar} from 'expo-status-bar';
 import {StyleSheet, Text, View, TextInput, Image, Button, TouchableOpacity,ScrollView} from 'react-native';
-import {Styles} from "../Styles";
+import {styles} from "../Styles";
 import {LinearGradient} from 'expo-linear-gradient';
 import {useState} from "react";
 import ResponseCard from "../Components/ResponseCard";
@@ -37,7 +37,7 @@ export default function Response() {
         <LinearGradient
             colors={['#68984e', '#d8e5b7']}
             start={[0, 0.5]}
-            style={Styles.background}
+            style={styles.background}
         >
             <View style={{flexDirection: "row", padding: 12}}>
                 <TextInput

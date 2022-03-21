@@ -1,6 +1,11 @@
 import {StyleSheet} from "react-native";
 
-export const Styles = StyleSheet.create({
+export const styles = StyleSheet.create({
+    header: {
+        fontWeight: "bold",
+        fontSize: 24,
+        color: "#fff"
+    },
     background: {
         width:"100%",
         height:"100%",
