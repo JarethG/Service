@@ -1,13 +1,15 @@
-import {StyleSheet, Text, View, TextInput, Image, Button, TouchableOpacity, ScrollView} from 'react-native';
+import {StyleSheet, Text, View, TextInput, Image, Button, TouchableOpacity, ScrollView, Modal} from 'react-native';
 import {styles} from "../Styles";
 import {LinearGradient} from 'expo-linear-gradient';
 import {useState} from "react";
 import {AntDesign} from '@expo/vector-icons';
 import RequestCard from "../Components/RequestCard";
+import ToggleButtons from "../Components/ToggleButtons";
+import Filters from "../Components/Filters";
 
 export default function Profile() {
 
-    const [profileToggle, setProfileToggle] = useState(false)
+    const [profileToggle, setProfileToggle] = useState(true)
 
     return (
         <LinearGradient
@@ -26,20 +28,8 @@ export default function Profile() {
                 <AntDesign name="staro" size={24} color="black"/>
                 <Text>(8)</Text>
             </View>
-            <View style={{flexDirection: "row", padding: 12}}>
-                <TouchableOpacity style={profileToggle ? styles.toggleButtonSelected : styles.toggleButtonUnselected}
-                                  onPress={() => {
-                                      setProfileToggle(true)
-                                  }}>
-                    <Text style={profileToggle ? {color: "#386540"} : {color: "#ffffff"}}>About Me</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={profileToggle ? styles.toggleButtonUnselected : styles.toggleButtonSelected}
-                                  onPress={() => {
-                                      setProfileToggle(false)
-                                  }}>
-                    <Text style={profileToggle ? {color: "#ffffff"} : {color: "#386540"}}>My Requests</Text>
-                </TouchableOpacity>
-            </View>
+            <ToggleButtons titleLeft={"About Me"} titleRight={"My Request"}
+                           returnFunction={(r) => setProfileToggle(r)}/>
             {profileToggle ?
                 <AboutMe/> : <MyRequests/>
             }
@@ -50,8 +40,20 @@ export default function Profile() {
 }
 
 function AboutMe() {
-    const skills = ["Photography", "Tech", "+ add new"]
-    const resources = ["lawnmower"]
+    const [skills, setSkills] = useState(["Photography", "Tech"])
+    const [resources, setResources] = useState(["lawnmower"])
+    const [filters, setFilters] = useState(null);
+
+    function addSkill(string) {
+        let newArr = [...skills];
+        newArr.push(string)
+        setSkills(newArr)
+    }
+    function addResources(string) {
+        let newArr = [...resources];
+        newArr.push(string)
+        setResources(newArr)
+    }
 
     return (
         <View style={{width: "100%", padding: 15, flex: 1}}>
@@ -59,7 +61,14 @@ function AboutMe() {
             <Text>I work at Parliament - I've just come back from the
                 United Kingdom last year and i want to get to know
                 my community a little more</Text>
-            <Text style={styles.header}>Skills</Text>
+            <View style={{flexDirection: "row", alignItems: "center"}}>
+                <Text style={styles.header}>Skills</Text>
+                <AntDesign name="plussquareo" size={24} color="black" onPress={()=>
+                    setFilters(<Filters filtersVisible={true}
+                                        setFiltersVisible={(r)=> setFilters(null)}
+                                        returnFunction={(r)=>addSkill(r)}/>)
+                }/>
+            </View>
             <View>
                 <ScrollView horizontal>
                     {skills.map((skill, index) => {
@@ -74,7 +83,14 @@ function AboutMe() {
                     })}
                 </ScrollView>
             </View>
-            <Text style={styles.header}>Resources</Text>
+            <View style={{flexDirection: "row", alignItems: "center"}}>
+                <Text style={styles.header}>Resources</Text>
+                <AntDesign name="plussquareo" size={24} color="black" onPress={()=>
+                    setFilters(<Filters filtersVisible={true}
+                                        setFiltersVisible={(r)=> setFilters(null)}
+                                        returnFunction={(r)=>addResources(r)}/>)
+                }/>
+            </View>
             <View>
                 <ScrollView horizontal>
                     {resources.map((skill, index) => {
@@ -89,30 +105,35 @@ function AboutMe() {
                     })}
                 </ScrollView>
             </View>
+            {filters}
         </View>
     );
 }
 
-function MyRequests () {
+function MyRequests() {
     const requests = [
-        {name:"William Jones",
-            skills:["photography","technology","arts"],
-            title:"Photos needed for website",
-            description:"im looking for someone who can help me take photos for my website, nothing too fancy but..."},
-        {name:"Hannah Baily",
-            skills:["crafts","sewing","fashion"],
-            title:"Dress sleeve torn",
-            description:"im looking for someone who can help me take photos for my website, nothing too fancy but..."}
-        ]
-    return(
-<View>
-        <ScrollView style={{width:"100%"}}>
-            {requests.map((info,index) => {
-                return <RequestCard info={info} key={index}></RequestCard>
-            })}
+        {
+            name: "Luke Ross",
+            skills: ["Graphic Design"],
+            title: "App development",
+            description: "Hi, im looking for someone who can help lay out a new app i am trying to make"
+        },
+        {
+            name: "Luke Ross",
+            skills: ["Law"],
+            title: "Ip Agreements",
+            description: "Working with some students who have forms that i need looked over..."
+        }
+    ]
+    return (
+        <View>
+            <ScrollView style={{width: "100%"}}>
+                {requests.map((info, index) => {
+                    return <RequestCard info={info} key={index}></RequestCard>
+                })}
 
-        </ScrollView>
-</View>
+            </ScrollView>
+        </View>
     );
 }
 

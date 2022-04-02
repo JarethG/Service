@@ -1,34 +1,31 @@
-import {StatusBar} from 'expo-status-bar';
-import {StyleSheet, Text, View, TextInput, Image, Button, TouchableOpacity,ScrollView} from 'react-native';
+
+import {
+    Text,
+    View,
+    TextInput,
+    TouchableOpacity,
+    ScrollView,
+    Modal, FlatList,
+} from 'react-native';
 import {styles} from "../Styles";
 import {LinearGradient} from 'expo-linear-gradient';
+import {AntDesign} from '@expo/vector-icons';
 import {useState} from "react";
 import RequestCard from "../Components/RequestCard";
+import ToggleButtons from "../Components/ToggleButtons";
+import Filters from "../Components/Filters";
+import skillRequests from '../JSONS/Skill_Requests.json';
+import resourceRequests from '../JSONS/Resource_Requests.json';
+import ToolCard from "../Components/ToolCard";
+import Searchbar from "../Components/Searchbar";
 
 export default function Request() {
 
-    const dummy = [
-        {name:"William Jones",
-        skills:["photography","technology","arts"],
-        title:"Photos needed for website",
-        description:"im looking for someone who can help me take photos for my website, nothing too fancy but..."},
-        {name:"Hannah Baily",
-            skills:["crafts","sewing","fashion"],
-            title:"Dress sleeve torn",
-            description:"im looking for someone who can help me take photos for my website, nothing too fancy but..."},
-        {name:"Emma Scott",
-            skills:["Senior support","Caretaker","Social"],
-            title:"Photos needed for website",
-            description:"im looking for someone who can help me take photos for my website, nothing too fancy but..."},
-        {name:"Jareth Gaskin",
-            skills:["App building","Project management","Googling"],
-            title:"Bugs need fixing",
-            description:"looking for someone to review my code"}
 
-    ]
-
-    const [searchText, setSearchText] = useState();
     const [searchToggle, setSearchToggle] = useState(true)
+    const [filtersVisible, setFiltersVisible] = useState(false);
+    const [searching,setSearching] = useState(true)
+
 
     return (
         <LinearGradient
@@ -36,39 +33,30 @@ export default function Request() {
             start={[0, 0.5]}
             style={styles.background}
         >
-            <View style={{flexDirection: "row", padding: 12}}>
-                <TextInput
-                    style={{
-                        height: 30,
-                        borderWidth: 1,
-                        padding: 5,
-                        borderRadius: 5
-                    }}
-                    onChangeText={setSearchText}
-                    value={searchText}
-                    placeholder="Browse all skills and resources..."
-                />
-                <Image source={require('../assets/filter.png')} style={{height: 30, width: 30}}></Image>
-            </View>
-            <View style={{flexDirection: "row", padding: 12}}>
-                <TouchableOpacity style={searchToggle?styles.toggleButtonSelected:styles.toggleButtonUnselected}
-                                  onPress={()=>{setSearchToggle(true)}}>
-                    <Text style={searchToggle?{color:"#386540"}:{color:"#ffffff"}}>Skills</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={searchToggle?styles.toggleButtonUnselected:styles.toggleButtonSelected}
-                                  onPress={()=>{setSearchToggle(false)}}>
-                    <Text style={searchToggle?{color:"#ffffff"}:{color:"#386540"}}>Resources</Text>
-                </TouchableOpacity>
-            </View>
-            <ScrollView style={{width:"100%"}}>
-                {dummy.map((info,index) => {
+
+            <Searchbar/>
+            <ToggleButtons titleLeft={"Skills"} titleRight={"Resources"} returnFunction={(r) => setSearchToggle(r)}/>
+            <TouchableOpacity style={{borderWidth: 1, flexDirection: "row"}} onPress={() => setFiltersVisible(true)}>
+                <Text>filters</Text>
+                <AntDesign name="filter" size={24} color="black"/>
+            </TouchableOpacity>
+            <ScrollView style={{width: "100%"}}>
+                {searchToggle?
+                skillRequests.map((info, index) => {
                     return <RequestCard info={info} key={index}></RequestCard>
-                })}
-
+                })
+                :
+                    resourceRequests.map((info, index) => {
+                        return <ToolCard info={info} key={index}></ToolCard>
+                    })
+                }
             </ScrollView>
-            <StatusBar style="auto"/>
+            <Filters filtersVisible={filtersVisible} setFiltersVisible={(r) => setFiltersVisible(r)}
+                     returnFunction={() => {
+                     }}/>
         </LinearGradient>
-
 
     );
 }
+
+

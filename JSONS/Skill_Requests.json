@@ -1,0 +1,44 @@
+[
+  {
+    "name": "William Jones",
+    "skills": [
+      "photography",
+      "technology",
+      "arts"
+    ],
+    "title": "Photos needed for website",
+    "description": "im looking for someone who can help me take photos for my website, nothing too fancy but..."
+  },
+  {
+    "name": "Hannah Baily",
+    "skills": [
+      "crafts",
+      "sewing",
+      "fashion"
+    ],
+    "title": "Dress sleeve torn",
+    "description": "im looking for someone who can help me take photos for my website, nothing too fancy but..."
+  },
+  {
+    "name": "Emma Scott",
+    "skills": [
+      "Senior support",
+      "Caretaker",
+      "Social"
+    ],
+    "title": "Photos needed for website",
+    "description": "im looking for someone who can help me take photos for my website, nothing too fancy but..."
+  },
+  {
+    "name": "Jareth Gaskin",
+    "skills": [
+      "App building",
+      "Project management",
+      "Googling"
+    ],
+    "title": "Bugs need fixing",
+    "description": "looking for someone to review my code"
+  }
+]
+
+

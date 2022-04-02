@@ -2,6 +2,7 @@
   "expo": {
     "name": "Community_Exchange",
     "slug": "Community_Exchange",
+    "owner": "community_exchange_team",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
