@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import {styles} from "../Styles";
 import {LinearGradient} from 'expo-linear-gradient';
-import {AntDesign} from '@expo/vector-icons';
 import {useState} from "react";
 import RequestCard from "../Components/RequestCard";
 import ToggleButtons from "../Components/ToggleButtons";
@@ -17,15 +16,26 @@ import Filters from "../Components/Filters";
 import skillRequests from '../JSONS/Skill_Requests.json';
 import resourceRequests from '../JSONS/Resource_Requests.json';
 import ToolCard from "../Components/ToolCard";
-import Searchbar from "../Components/Searchbar";
+import Search from "../Components/Search";
 
 export default function Request() {
 
 
+    const [resources,setResources]=useState(resourceRequests)
     const [searchToggle, setSearchToggle] = useState(true)
     const [filtersVisible, setFiltersVisible] = useState(false);
-    const [searching,setSearching] = useState(true)
+    const [searchResult,setSearchResult] = useState()
 
+    function filterRequests(tag){
+       let res = resourceRequests.filter((request)=>{
+            return request.tool==tag
+        })
+        setResources(res);
+    }
+
+    function removeFilter() {
+        setResources(resourceRequests);
+    }
 
     return (
         <LinearGradient
@@ -33,20 +43,19 @@ export default function Request() {
             start={[0, 0.5]}
             style={styles.background}
         >
-
-            <Searchbar/>
+            <Search result={(r)=>filterRequests(r)}/>
             <ToggleButtons titleLeft={"Skills"} titleRight={"Resources"} returnFunction={(r) => setSearchToggle(r)}/>
-            <TouchableOpacity style={{borderWidth: 1, flexDirection: "row"}} onPress={() => setFiltersVisible(true)}>
-                <Text>filters</Text>
-                <AntDesign name="filter" size={24} color="black"/>
+            <TouchableOpacity style={{borderWidth: 1, flexDirection: "row",padding:5}} onPress={() => removeFilter()}>
+                <Text>remove filter</Text>
             </TouchableOpacity>
+            <Text>{searchResult}</Text>
             <ScrollView style={{width: "100%"}}>
                 {searchToggle?
                 skillRequests.map((info, index) => {
                     return <RequestCard info={info} key={index}></RequestCard>
                 })
                 :
-                    resourceRequests.map((info, index) => {
+                    resources.map((info, index) => {
                         return <ToolCard info={info} key={index}></ToolCard>
                     })
                 }
