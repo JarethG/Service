@@ -29,7 +29,7 @@ export default function Profile() {
                 <Text>(8)</Text>
             </View>
             <ToggleButtons titleLeft={"About Me"} titleRight={"My Request"}
-                           returnFunction={(r) => setProfileToggle(r)}/>
+                           onToggle={(r) => setProfileToggle(r)}/>
             {profileToggle ?
                 <AboutMe/> : <MyRequests/>
             }

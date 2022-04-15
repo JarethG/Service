@@ -17,7 +17,7 @@ export default function Community() {
             start={[0, 0.5]}
             style={styles.background}
         >
-            <ToggleButtons titleLeft={"Events"} titleRight={"Leaderboard"} returnFunction={(r)=> setCommunityToggle(r)}/>
+            <ToggleButtons titleLeft={"Events"} titleRight={"Leaderboard"} onToggle={(r)=> setCommunityToggle(r)}/>
             {communityToggle?
             <Events/>:<Leaderboard/>}
             
