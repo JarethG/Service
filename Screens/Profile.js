@@ -1,14 +1,15 @@
 import {StyleSheet, Text, View, TextInput, Image, Button, TouchableOpacity, ScrollView, Modal} from 'react-native';
 import {styles} from "../Styles";
 import {LinearGradient} from 'expo-linear-gradient';
-import {useState} from "react";
+import React, {useContext, useState} from "react";
 import {AntDesign} from '@expo/vector-icons';
 import RequestCard from "../Components/RequestCard";
 import ToggleButtons from "../Components/ToggleButtons";
 import Filters from "../Components/Filters";
+import {AuthContext} from "../App";
 
 export default function Profile() {
-
+    const { signOut } = useContext(AuthContext);
     const [profileToggle, setProfileToggle] = useState(true)
 
     return (
@@ -17,6 +18,7 @@ export default function Profile() {
             start={[0, 0.5]}
             style={styles.background}
         >
+            <Button title="Sign out" onPress={signOut} />
             <View style={{width: 150, height: 150, borderRadius: 75, backgroundColor: "#ffffff"}}></View>
             <Text>Luke Ross</Text>
             <Text>Videographer / Photographer</Text>
