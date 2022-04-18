@@ -6,22 +6,25 @@ import {AntDesign} from '@expo/vector-icons';
 import RequestCard from "../Components/RequestCard";
 import ToggleButtons from "../Components/ToggleButtons";
 import Filters from "../Components/Filters";
-import {AuthContext} from "../App";
+import UserContext from "../Components/AuthContextFrame";
+import * as SecureStore from 'expo-secure-store';
 
 export default function Profile() {
-    const { signOut } = useContext(AuthContext);
     const [profileToggle, setProfileToggle] = useState(true)
-
+    const {user,setUser}= useContext(UserContext)
     return (
         <LinearGradient
             colors={['#68984e', '#d8e5b7']}
             start={[0, 0.5]}
             style={styles.background}
         >
-            <Button title="Sign out" onPress={signOut} />
-            <View style={{width: 150, height: 150, borderRadius: 75, backgroundColor: "#ffffff"}}></View>
-            <Text>Luke Ross</Text>
-            <Text>Videographer / Photographer</Text>
+            <Button title={"Sign Out"} onPress={()=>{
+                setUser(null)
+                SecureStore.deleteItemAsync('userToken').then(console.log("signed out"))
+            }}/>
+            <View style={{width: 150, height: 150, borderRadius: 75, backgroundColor: "#ffffff"}}/>
+            <Text style={styles.header}>{user.name}</Text>
+            <Text>{user.title}</Text>
             <View style={{flexDirection: "row"}}>
                 <AntDesign name="star" size={24} color="black"/>
                 <AntDesign name="star" size={24} color="black"/>
@@ -33,7 +36,7 @@ export default function Profile() {
             <ToggleButtons titleLeft={"About Me"} titleRight={"My Request"}
                            onToggle={(r) => setProfileToggle(r)}/>
             {profileToggle ?
-                <AboutMe/> : <MyRequests/>
+                <AboutMe user={user}/> : <MyRequests/>
             }
         </LinearGradient>
 
@@ -41,9 +44,9 @@ export default function Profile() {
     );
 }
 
-function AboutMe() {
-    const [skills, setSkills] = useState(["Photography", "Tech"])
-    const [resources, setResources] = useState(["lawnmower"])
+function AboutMe({user}) {
+    const [skills, setSkills] = useState(user.skills)
+    const [resources, setResources] = useState(user.resources)
     const [filters, setFilters] = useState(null);
 
     function addSkill(string) {
@@ -60,9 +63,7 @@ function AboutMe() {
     return (
         <View style={{width: "100%", padding: 15, flex: 1}}>
             <Text style={styles.header}>About</Text>
-            <Text>I work at Parliament - I've just come back from the
-                United Kingdom last year and i want to get to know
-                my community a little more</Text>
+            <Text>{user.about}</Text>
             <View style={{flexDirection: "row", alignItems: "center"}}>
                 <Text style={styles.header}>Skills</Text>
                 <AntDesign name="plussquareo" size={24} color="black" onPress={()=>

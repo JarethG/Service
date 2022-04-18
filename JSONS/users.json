@@ -1,0 +1,18 @@
+{
+  "user1Token": {
+    "name": "Luke Ross",
+    "title": "Videographer / Photographer",
+    "email": "???",
+    "about": "I work at Parliament - I've just come back from the United Kingdom last year and i want to get to know my community a little more",
+    "skills" : ["Photography", "Tech"],
+    "resources" : ["lawnmower"]
+  },
+  "user2Token": {
+    "name": "Jareth Gaskin",
+    "title": "student / developer",
+    "email": "jarethgaskin@gmail.com",
+    "about": "a lonely admin who left some code in in the final production apparently",
+    "skills" : ["manipulation", "deceit"],
+    "resources" : ["desktop computer"]
+  }
+}
