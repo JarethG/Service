@@ -24,10 +24,10 @@ export default function App({ navigation }) {
 
                     }
                 }}>
-                <Tab.Screen name="Profile" component={Profile} options={{ tabBarIcon:()=><Ionicons name="person-circle" size={24} color="black" />}}/>
                 <Tab.Screen name="Request" component={Request} options={{ tabBarIcon:()=><FontAwesome5 name="sign" size={24} color="black"/>}}/>
                 <Tab.Screen name="Response" component={Response} options={{ tabBarIcon:()=><Ionicons name="chatbubbles" size={24} color="black" />}}/>
                 <Tab.Screen name="Community" component={Community} options={{ tabBarIcon:()=><Ionicons name="people" size={24} color="black" />}}/>
+                <Tab.Screen name="Profile" component={Profile} options={{ tabBarIcon:()=><Ionicons name="person-circle" size={24} color="black" />}}/>
             </Tab.Navigator>
         </AuthContextFrame>
 

@@ -4,7 +4,7 @@ import {styles} from "../Styles";
 
 export default function RequestCard({info}) {
     return (
-        <View style={styles.cardContainer}>
+        <View style={styles.SkillCardContainer}>
             <View style={{flexDirection: "row"}}>
                 <View style={styles.cardProfilePicture}></View>
                 <View>
@@ -16,10 +16,10 @@ export default function RequestCard({info}) {
                     </ScrollView>
                 </View>
             </View>
-            <Text style={{fontWeight:"bold"}}>{info.title}</Text>
-            <Text>{info.description}</Text>
-            <Button title={"talk to " + info.name}></Button>
+            <Text style={[styles.cardText,{fontWeight:"bold"}]}>{info.title}</Text>
+            <Text style={styles.cardText}>{info.description}</Text>
         </View>
     );
 }
+
 

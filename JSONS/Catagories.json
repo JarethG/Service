@@ -1,0 +1,61 @@
+{"Resource Categories": {
+  "Clothing & Fashion": [
+    "Sewing Equipment",
+    "Clothes"
+  ],
+  "Electronics": [
+    "Dehumidifier"
+  ],
+  "Gardening": [
+    "Gardening Equipment",
+    "Pots",
+    "Soil"
+  ],
+  "General Tools": [
+    "Screwdrivers",
+    "Power Tools",
+    "Measuring Tape"
+  ],
+  "Hobbies & Crafts": [
+    "Art Equipment",
+   "Photography Equipment",
+    "Books"
+  ],
+  "Sports & Outdoor Living": [
+    "Sports Equipment",
+    "Tramping Equipment",
+    "Outdoor Furniture"
+  ],
+  "Vehicles & Trailers": [
+    "Trailer",
+    "Van",
+    "Car"
+  ]
+},
+  "Skill Categories": {
+    "Arts & Crafts": [],
+    "Communication": ["Writing"],
+    "Financial": [
+     "Tax Support",
+      "Digital Support"
+    ],
+    "Media & Design": [
+      "Website Building",
+      "Photography",
+      "Videography"
+    ],
+    "Repairs": [
+      "Sewing",
+      "Plumber",
+     "Carpenter",
+      "Electrician"
+    ],
+    "Social Support": [
+      "Caretaker",
+      "Senior Support",
+      "Social"
+    ],
+    "Technology": [
+     "IT Skills"
+    ]
+  }}

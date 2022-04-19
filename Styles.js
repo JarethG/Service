@@ -31,8 +31,14 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    cardContainer: {
-        backgroundColor: 'rgba(255,255,255,0.4)',
+    ResourceCardContainer: {
+        backgroundColor: 'rgb(65,138,167)',
+        margin: 5,
+        borderRadius: 10,
+        padding: 7
+    },
+    SkillCardContainer:{
+        backgroundColor: 'rgb(253,135,31)',
         margin: 5,
         borderRadius: 10,
         padding: 7
@@ -50,12 +56,15 @@ export const styles = StyleSheet.create({
         color: "white"
     },
     cardTags: {
-        backgroundColor: "#ffffff",
+        backgroundColor: 'rgba(255,255,255,0.5)',
         borderRadius: 15,
         margin: 3,
         padding: 5,
-        color: "#386540",
+        color: "#ffffff",
         fontSize: 12,
         alignSelf:"flex-start"
+    },
+    cardText: {
+        color:'#ffffff'
     }
 });
