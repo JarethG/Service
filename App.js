@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Request from "./Screens/Request";
-import Response from "./Screens/Response"
+import Messages from "./Screens/Messages"
 import Community from "./Screens/Community";
 import Profile from "./Screens/Profile";
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -24,10 +24,10 @@ export default function App({ navigation }) {
 
                     }
                 }}>
-                <Tab.Screen name="Request" component={Request} options={{ tabBarIcon:()=><FontAwesome5 name="sign" size={24} color="black"/>}}/>
-                <Tab.Screen name="Response" component={Response} options={{ tabBarIcon:()=><Ionicons name="chatbubbles" size={24} color="black" />}}/>
-                <Tab.Screen name="Community" component={Community} options={{ tabBarIcon:()=><Ionicons name="people" size={24} color="black" />}}/>
-                <Tab.Screen name="Profile" component={Profile} options={{ tabBarIcon:()=><Ionicons name="person-circle" size={24} color="black" />}}/>
+                <Tab.Screen name="Notice Board" component={Request} options={{ tabBarIcon:()=><FontAwesome5 name="sign" size={24} color="gray"/>}}/>
+                <Tab.Screen name="Messages" component={Messages} options={{ tabBarIcon:()=><Ionicons name="chatbubbles" size={24} color="gray" />}}/>
+                <Tab.Screen name="Community" component={Community} options={{ tabBarIcon:()=><FontAwesome5 name="medal" size={24} color="gray" />}}/>
+                <Tab.Screen name="Profile" component={Profile} options={{ tabBarIcon:()=><Ionicons name="person-circle" size={24} color="gray" />}}/>
             </Tab.Navigator>
         </AuthContextFrame>
 

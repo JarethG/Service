@@ -3,20 +3,26 @@ import {ScrollView} from "react-native";
 import {styles} from "../Styles";
 
 export default function RequestCard({info}) {
+
+    const isSkill = info.type=="skill"
     return (
-        <View style={styles.SkillCardContainer}>
+        <View style={isSkill?styles.SkillCardContainer:styles.ResourceCardContainer}>
             <View style={{flexDirection: "row"}}>
                 <View style={styles.cardProfilePicture}></View>
                 <View>
                     <Text style={styles.cardName}>{info.name}</Text>
+                    {isSkill?
                     <ScrollView horizontal>
                         {info.skills.map((skill, index) => {
                             return <Text style={styles.cardTags} key={index}>{skill}</Text>
                         })}
                     </ScrollView>
+                        :
+                        <Text style={styles.cardTags}>{info.category}</Text>
+                    }
                 </View>
             </View>
-            <Text style={[styles.cardText,{fontWeight:"bold"}]}>{info.title}</Text>
+            {isSkill?<Text style={[styles.cardText,{fontWeight:"bold"}]}>{info.title}</Text>:null}
             <Text style={styles.cardText}>{info.description}</Text>
         </View>
     );

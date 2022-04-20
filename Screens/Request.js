@@ -1,18 +1,9 @@
-import {Text, TouchableOpacity, ScrollView, View, FlatList, Button,} from 'react-native';
+import {Text, TouchableOpacity, View, FlatList, Button,} from 'react-native';
 import {styles} from "../Styles";
-import {LinearGradient} from 'expo-linear-gradient';
 import {useState} from "react";
 import RequestCard from "../Components/RequestCard";
-import ToggleButtons from "../Components/ToggleButtons";
-import skillRequests from '../JSONS/Skill_Requests.json';
-import resourceRequests from '../JSONS/Resource_Requests.json';
-import ToolCard from "../Components/ToolCard";
-import Search from "../Components/Search";
-import lists from "../JSONS/Filters.json"
 import {Octicons} from '@expo/vector-icons';
 import {createStackNavigator} from "@react-navigation/stack";
-import {NavigationContainer} from "@react-navigation/native";
-import {Touchable} from "react-native-web";
 import {AntDesign} from '@expo/vector-icons';
 import {Ionicons} from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
@@ -28,14 +19,31 @@ export default function Request() {
 
 
     const Stack = createStackNavigator();
-    function read2() {
+
+    function setCategoriesList() {
+        let branches
+        switch(sorter){
+            case "All" :
+                branches= ["Resource Categories","Skill Categories"]
+                break
+            case "Skills":
+                branches=["Skill Categories"]
+                break
+            case "Resources":
+                branches=["Resource Categories"]
+                break
+        }
         let res = []
-        for(const Category in CategoryList){
-            for(const subCategory in CategoryList[Category]){
-                    res.push(subCategory)
-            }}
-        return res
+        branches.forEach((x)=>{
+            console.log(x)
+            for(const subCategory in CategoryList[x]){
+                CategoryList[x][subCategory].forEach((item)=>
+                    res.push(item)
+                )
+            }})
+        filter(res)
     }
+
     function read3() {
         let res = []
         for(const Category in CategoryList){
@@ -46,16 +54,29 @@ export default function Request() {
             }}
         return res
     }
+
     const sorters = ["All", "Skills", "Resources"]
-    const [categoryList,filter] = useState(read3)
+    const [categoryList,filter] = useState([])
 
     function applyFilters() {
-        let res = Requests.filter((request)=>{
+        let res
+        switch(sorter){
+            case "All" :
+                res=Requests
+                break
+            case "Skills":
+                res=Requests.filter((request)=>{return request.type==="skill"})
+                break
+            case "Resources":
+                res=Requests.filter((request)=>{return request.type==="resource"})
+                break
+        }
+        if(categories.size!=0){
+         res = res.filter((request)=>{
             return  request.type=="resource"? categories.includes(request.category)
                 :
                request.skills.some(item=>categories.includes(item))
-        })
-        console.log(res)
+        })}
         res.length==0? setFilteredResults([{
             "type": "resource",
             "name": "Sorry",
@@ -64,19 +85,15 @@ export default function Request() {
         }]) : setFilteredResults(res)
     }
 
-
-
-
     function Main({navigation}) {
-        return <View style={[styles.background,{backgroundColor:"#eae2b7"}]}>
+        return <View style={{backgroundColor:"#eae2b7"}}>
                 <View style={{flexDirection: "row", alignItems: "center", justifyContent: "center"}}>
                     {/*<Search data={lists.Education} text={"Browse skills..."} onSearch={(r)=>filterSkills(r)}/>*/}
                     <Octicons name="settings" size={24} color="black"
                               style={{borderWidth: 1, borderColor: "black", margin: 10}} onPress={()=>navigation.navigate("Filters")}/>
                 </View>
                 <FlatList data={filteredResults} keyExtractor={(item, index) => index.toString()}
-                          renderItem={({item}) => item.type=="resource"?
-                              <ToolCard info={item}></ToolCard> : <RequestCard info={item}></RequestCard>
+                          renderItem={({item}) => <RequestCard info={item}></RequestCard>
                 }/>
             </View>
     }
@@ -104,7 +121,10 @@ export default function Request() {
                     padding: 10,
                     borderColor: "grey",
                     borderTopWidth: 1,
-                }} onPress={() => navigation.navigate("Categories")}>
+                }} onPress={() => {
+                    setCategoriesList()
+                    navigation.navigate("Categories")
+                }}>
                     <Text style={{flex: 1}}>Catagories</Text>
                     <AntDesign name="right" size={24} color="black"/>
                 </TouchableOpacity>
@@ -129,7 +149,7 @@ export default function Request() {
         )
     }
 
-    function SortBy() {
+    function SortBy({navigation}) {
         const renderItem = (string) => {
             return <TouchableOpacity style={{
                 flexDirection: "row",
@@ -138,7 +158,11 @@ export default function Request() {
                 padding: 10,
                 borderColor: "grey",
                 borderTopWidth: 1,
-            }} onPress={() => setSorter(string)}>
+            }} onPress={() => {
+                setSorter(string)
+                navigation.goBack()
+            }
+            }>
                 <Text style={{flex: 1}}>{string}</Text>
                 {sorter == string ?
                     <Ionicons name="ios-radio-button-on" size={24} color="black"/>

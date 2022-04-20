@@ -5,7 +5,7 @@ import {LinearGradient} from 'expo-linear-gradient';
 import {useState} from "react";
 import ResponseCard from "../Components/ResponseCard";
 
-export default function Response() {
+export default function Messages() {
 
     const dummy = [
         {name:"William Jones",
