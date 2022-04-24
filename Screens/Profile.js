@@ -13,11 +13,7 @@ export default function Profile() {
     const [profileToggle, setProfileToggle] = useState(true)
     const {user,setUser}= useContext(UserContext)
     return (
-        <LinearGradient
-            colors={['#68984e', '#d8e5b7']}
-            start={[0, 0.5]}
-            style={styles.background}
-        >
+        <View style={[styles.background,{alignItems: 'center'}]}>
             <Button title={"Sign Out"} onPress={()=>{
                 setUser(null)
                 SecureStore.deleteItemAsync('userToken').then(console.log("signed out"))
@@ -38,7 +34,7 @@ export default function Profile() {
             {profileToggle ?
                 <AboutMe user={user}/> : <MyRequests/>
             }
-        </LinearGradient>
+        </View>
 
 
     );

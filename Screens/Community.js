@@ -12,16 +12,11 @@ export default function Community() {
     const [communityToggle, setCommunityToggle] = useState(true)
 
     return (
-        <LinearGradient
-            colors={['#68984e', '#d8e5b7']}
-            start={[0, 0.5]}
-            style={styles.background}
-        >
+        <View style={styles.background}>
             <ToggleButtons titleLeft={"Events"} titleRight={"Leaderboard"} onToggle={(r)=> setCommunityToggle(r)}/>
             {communityToggle?
             <Events/>:<Leaderboard/>}
-            
-        </LinearGradient>
+        </View>
 
 
     );

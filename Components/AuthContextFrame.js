@@ -8,6 +8,7 @@ import {styles} from "../Styles";
 import * as users from '../JSONS/users.json'
 import {useContext, useState} from "react";
 import Splash from "../Screens/Splash";
+import logins from "../JSONS/logins.json"
 
 const UserContext = React.createContext({
     user : null,
@@ -22,8 +23,14 @@ function SignInScreen() {
     const {user,setUser} = useContext(UserContext)
 
     function signIn(data) {
-        if(data.username!="Admin") return
-        let token = 'user1Token'
+        let token
+        logins.map((x)=>{
+        if(data.username == x.username ){
+            token=x["user token"]
+        }})
+
+        if(!token)return
+
         let retrieved = users[token]
         setUser(retrieved)
         SecureStore.setItemAsync('userToken', token).then()

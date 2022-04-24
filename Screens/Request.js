@@ -86,7 +86,7 @@ export default function Request() {
     }
 
     function Main({navigation}) {
-        return <View style={{backgroundColor:"#eae2b7"}}>
+        return <View style={styles.background}>
                 <View style={{flexDirection: "row", alignItems: "center", justifyContent: "center"}}>
                     {/*<Search data={lists.Education} text={"Browse skills..."} onSearch={(r)=>filterSkills(r)}/>*/}
                     <Octicons name="settings" size={24} color="black"

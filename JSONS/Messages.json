@@ -1,0 +1,26 @@
+{
+  "Luke Ross" : {
+    "William Jones": [
+      {
+        "sender": true,
+        "time": 1,
+        "message": "hello there"
+      },
+      {
+        "sender": false,
+        "time": 1,
+        "message": "welcome"
+      },
+      {
+        "sender": true,
+        "time": 1,
+        "message": "how are you?"
+      }
+    ],
+    "Hannah Bailey": [],
+    "Emma Scott":  [],
+    "George Hitt": [],
+    "Spencer Fay": []
+  },
+  
+}
