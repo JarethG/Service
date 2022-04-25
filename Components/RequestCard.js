@@ -6,11 +6,11 @@ export default function RequestCard({info}) {
 
     const isSkill = info.type=="skill"
     return (
-        <View style={isSkill?styles.SkillCardContainer:styles.ResourceCardContainer}>
+        <View style={[isSkill?styles.skillsTheme:styles.resourceTheme,styles.container]}>
             <View style={{flexDirection: "row"}}>
                 <View style={styles.cardProfilePicture}></View>
                 <View>
-                    <Text style={styles.cardName}>{info.name}</Text>
+                    <Text style={styles.header}>{info.name}</Text>
                     {isSkill?
                     <ScrollView horizontal>
                         {info.skills.map((skill, index) => {
@@ -22,8 +22,8 @@ export default function RequestCard({info}) {
                     }
                 </View>
             </View>
-            {isSkill?<Text style={[styles.cardText,{fontWeight:"bold"}]}>{info.title}</Text>:null}
-            <Text style={styles.cardText}>{info.description}</Text>
+            {isSkill?<Text style={styles.title}>{info.title}</Text>:null}
+            <Text style={styles.cardText}>{info.description.length<100? info.description : info.description.substr(0,100) }</Text>
         </View>
     );
 }

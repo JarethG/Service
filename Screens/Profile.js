@@ -5,7 +5,7 @@ import React, {useContext, useState} from "react";
 import {AntDesign} from '@expo/vector-icons';
 import RequestCard from "../Components/RequestCard";
 import ToggleButtons from "../Components/ToggleButtons";
-import Filters from "../Components/Filters";
+import SkillSearch from "../Components/SkillSearch";
 import UserContext from "../Components/AuthContextFrame";
 import * as SecureStore from 'expo-secure-store';
 
@@ -63,9 +63,9 @@ function AboutMe({user}) {
             <View style={{flexDirection: "row", alignItems: "center"}}>
                 <Text style={styles.header}>Skills</Text>
                 <AntDesign name="plussquareo" size={24} color="black" onPress={()=>
-                    setFilters(<Filters filtersVisible={true}
-                                        setFiltersVisible={(r)=> setFilters(null)}
-                                        returnFunction={(r)=>addSkill(r)}/>)
+                    setFilters(<SkillSearch filtersVisible={true}
+                                            setFiltersVisible={(r)=> setFilters(null)}
+                                            returnFunction={(r)=>addSkill(r)}/>)
                 }/>
             </View>
             <View>
@@ -85,9 +85,9 @@ function AboutMe({user}) {
             <View style={{flexDirection: "row", alignItems: "center"}}>
                 <Text style={styles.header}>Resources</Text>
                 <AntDesign name="plussquareo" size={24} color="black" onPress={()=>
-                    setFilters(<Filters filtersVisible={true}
-                                        setFiltersVisible={(r)=> setFilters(null)}
-                                        returnFunction={(r)=>addResources(r)}/>)
+                    setFilters(<SkillSearch filtersVisible={true}
+                                            setFiltersVisible={(r)=> setFilters(null)}
+                                            returnFunction={(r)=>addResources(r)}/>)
                 }/>
             </View>
             <View>

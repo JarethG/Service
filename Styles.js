@@ -27,21 +27,21 @@ export const styles = StyleSheet.create({
         borderWidth: 1,
     },
     container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
+        margin: 5,
+        borderRadius: 10,
+        padding: 7
     },
-    ResourceCardContainer: {
+    transparentContainer :{
+        backgroundColor: 'rgba(255,255,255,0.5)',
+        borderRadius: 10,
+        margin: 5,
+        padding: 7,
+    },
+    resourceTheme: {
         backgroundColor: 'rgb(65,138,167)',
-        margin: 5,
-        borderRadius: 10,
-        padding: 7
     },
-    SkillCardContainer:{
+    skillsTheme:{
         backgroundColor: 'rgb(253,135,31)',
-        margin: 5,
-        borderRadius: 10,
-        padding: 7
     },
     cardProfilePicture: {
         width: 70,
@@ -49,9 +49,8 @@ export const styles = StyleSheet.create({
         borderRadius: 35,
         backgroundColor: "#ffffff"
     },
-    cardName: {
-        flex: 1,
-        fontSize: 20,
+    title: {
+        fontSize: 16,
         fontWeight: "bold",
         color: "white"
     },
@@ -66,5 +65,13 @@ export const styles = StyleSheet.create({
     },
     cardText: {
         color:'#ffffff'
+    },
+    menuItem: {
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: 10,
+        borderColor: "grey",
+        borderBottomWidth: 1,
     }
 });

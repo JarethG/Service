@@ -1,7 +1,7 @@
 import {Modal, Pressable, StyleSheet, Text, View, ScrollView} from "react-native";
 
 
-export default function Filters({filtersVisible, setFiltersVisible,returnFunction}) {
+export default function SkillSearch({filtersVisible, setFiltersVisible,returnFunction}) {
     const skills = require('../JSONS/Filters.json')
     const categories = ["Education", "Sport","Items","Numbers"]
     return (
