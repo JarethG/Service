@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "439003403125",
+    "project_id": "community-exchange-36fb6",
+    "storage_bucket": "community-exchange-36fb6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:439003403125:android:c0949c5a691b5a8ef5793c",
+        "android_client_info": {
+          "package_name": "com.community_exchange_team.thyme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "439003403125-ujltpt8s6n46ekhfnd7vcei12jfsntd4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBM_frsdOqGVP2KSuysMF-FspY9sugsBZE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "439003403125-ujltpt8s6n46ekhfnd7vcei12jfsntd4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

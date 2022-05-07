@@ -10,6 +10,9 @@ import {useContext, useState} from "react";
 import Splash from "../Screens/Splash";
 import logins from "../JSONS/logins.json"
 
+
+import {sendMessage} from "../Firebase";
+
 const UserContext = React.createContext({
     user : null,
     setUser: () =>{}
@@ -20,6 +23,7 @@ export default UserContext
 function SignInScreen() {
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
+    const [message,setMessage] = useState('')
     const {user,setUser} = useContext(UserContext)
 
     function signIn(data) {
@@ -40,16 +44,16 @@ function SignInScreen() {
         <LinearGradient
             colors={['#68984e', '#d8e5b7']}
             start={[0, 0.5]}
-            style={[styles.background,styles.container]}
+            style={[styles.container, {height:"100%",alignItems:"center",justifyContent:"center"}]}
         >
-            <View style={styles.cardContainer}>
+            <View style={styles.transparentContainer}>
             <TextInput
                 placeholder="Username"
                 value={username}
                 onChangeText={setUsername}
             />
             </View>
-            <View style={styles.cardContainer}>
+            <View style={styles.transparentContainer}>
             <TextInput
                 placeholder="Password"
                 value={password}
@@ -58,6 +62,14 @@ function SignInScreen() {
             />
             </View>
             <Button title="Sign in" onPress={() => signIn({ username, password })} />
+            <View style={styles.transparentContainer}>
+            <TextInput
+                placeholder="message"
+                value={message}
+                onChangeText={setMessage}
+            />
+            </View>
+            <Button title={"send"} onPress={()=>{sendMessage("test1", message).then(r => console.log("message sent |>" + r))}}/>
         </LinearGradient>
     );
 }

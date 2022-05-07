@@ -33,7 +33,7 @@ export default function Messages() {
 
     const ContactCard = ({info}) => {
         return (
-            <View style={{backgroundColor: 'rgba(255,255,255,0.4)', margin: 10, borderRadius: 10, padding: 7,}}>
+            <View style={[styles.skillsTheme,{ margin: 10, borderRadius: 10, padding: 7,}]}>
                 <View style={{flexDirection: "row"}}>
                     <View style={{width: 70, height: 70, borderRadius: 35, backgroundColor: "#ffffff"}}></View>
                     <View style={{flex: 1}}>
@@ -56,9 +56,9 @@ export default function Messages() {
 
         const renderItem = (item) => {
             return <Text style={item.sender?
-                [styles.SkillCardContainer,{alignSelf:"flex-start"}]
+                [styles.container,styles.resourceTheme,{alignSelf:"flex-start"}]
                 :
-                [styles.ResourceCardContainer,{alignSelf:"flex-end"}]}>{item.message}</Text>
+                [styles.container,styles.skillsTheme,{alignSelf:"flex-end"}]}>{item.message}</Text>
 
         }
 
@@ -87,7 +87,7 @@ export default function Messages() {
                     <View style={{borderColor:"#cbcbcb",borderWidth:2,width:"100%",flex:1}}>
                         <FlatList data={openMessages} keyExtractor={(item, index) => index.toString()}
                                   renderItem={({item}) => renderItem(item)}/>
-                        <View style={[styles.ResourceCardContainer,{flexDirection:"row",justifyContent:"space-between"  }]}>
+                        <View style={[styles.transparentContainer,{flexDirection:"row",justifyContent:"space-between",backgroundColor: "grey"  }]}>
                             <TextInput
                                 placeholder="Type you message..."
                                 value={text}
