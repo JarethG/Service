@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { Button, Text, TextInput, View } from 'react-native';
+import { Button, Text,TextInput, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as SecureStore from 'expo-secure-store';
-import {LinearGradient} from 'expo-linear-gradient';
 import {styles} from "../Styles";
 import * as users from '../JSONS/users.json'
 import {useContext, useState} from "react";
@@ -41,11 +40,7 @@ function SignInScreen() {
     }
 
     return (
-        <LinearGradient
-            colors={['#68984e', '#d8e5b7']}
-            start={[0, 0.5]}
-            style={[styles.container, {height:"100%",alignItems:"center",justifyContent:"center"}]}
-        >
+        <View style={styles.background}>
             <View style={styles.transparentContainer}>
             <TextInput
                 placeholder="Username"
@@ -70,16 +65,16 @@ function SignInScreen() {
             />
             </View>
             <Button title={"send"} onPress={()=>{sendMessage("test1", message).then(r => console.log("message sent |>" + r))}}/>
-        </LinearGradient>
+        </View>
     );
 }
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
  export function AuthContextFrame({ children }) {
 
 
-     const [isLoading,setIsLoading] = useState(true)
+     const [isLoading,setIsLoading] = useState(false)
      const [user,setUser] = useState()
      const value = {user,setUser}
 
@@ -88,7 +83,6 @@ const Stack = createStackNavigator();
         // Fetch the token from storage then navigate to our appropriate place
         const bootstrapAsync = async () => {
             let userToken;
-
             try {
                 // Restore token stored in `SecureStore` or any other encrypted storage
                 userToken = await SecureStore.getItemAsync('userToken');
@@ -111,7 +105,7 @@ const Stack = createStackNavigator();
             // This will switch to the App screen or Auth screen and this loading
             // screen will be unmounted and thrown away.
         };
-        bootstrapAsync();
+        // bootstrapAsync();
     }, []);
 
 

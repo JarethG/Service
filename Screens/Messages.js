@@ -13,12 +13,10 @@ import {
 } from 'react-native';
 import {styles} from "../Styles";
 import { FontAwesome } from '@expo/vector-icons';
-import {LinearGradient} from 'expo-linear-gradient';
 import {useContext, useState} from "react";
 import dummy from '../JSONS/Contacts.json'
 import {Ionicons} from "@expo/vector-icons";
 import UserContext from "../Components/AuthContextFrame";
-import {Touchable} from "react-native-web";
 import messages from '../JSONS/Messages.json'
 
 export default function Messages() {

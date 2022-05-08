@@ -4,12 +4,12 @@ import Slider from "@react-native-community/slider";
 import {useEffect, useState} from "react";
 import Requests from "../JSONS/Requests.json";
 import CategoryList from "../JSONS/Catagories.json";
-import {createStackNavigator} from "@react-navigation/stack";
+import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import {styles} from "../Styles";
 
 
 export const NoticeboardFilters = ({onClose, setFilteredList}) => {
-    const Stack = createStackNavigator();
+    const Stack = createNativeStackNavigator();
 
     const [sorter, setSortFilter] = useState("All")
     const [categories, setCategories] = useState([])

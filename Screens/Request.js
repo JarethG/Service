@@ -3,7 +3,7 @@ import {styles} from "../Styles";
 import {useState} from "react";
 import RequestCard from "../Components/RequestCard";
 import {AntDesign, Ionicons, Octicons} from '@expo/vector-icons';
-import {createStackNavigator} from "@react-navigation/stack";
+import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import Requests from '../JSONS/Requests.json'
 import {NoticeboardFilters} from "../Components/NoticeboardFilters";
 
@@ -103,13 +103,13 @@ export default function Request({navigation}) {
         </View>
     }
 
-    const Stack = createStackNavigator();
+    const Stack = createNativeStackNavigator();
 
     const Main = () => {
         return (
             <View style={styles.background}>
                 <View style={{alignItems: "center", justifyContent: "center"}}>
-                    <Octicons name="settings" size={24} color="black"
+                    <AntDesign name="filter" size={24} color="black"
                               style={{borderWidth: 1, borderColor: "black", margin: 10}}
                               onPress={() => setFiltering(true)}/>
                 </View>

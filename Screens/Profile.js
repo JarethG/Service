@@ -1,6 +1,5 @@
 import {StyleSheet, Text, View, TextInput, Image, Button, TouchableOpacity, ScrollView, Modal} from 'react-native';
 import {styles} from "../Styles";
-import {LinearGradient} from 'expo-linear-gradient';
 import React, {useContext, useState} from "react";
 import {AntDesign} from '@expo/vector-icons';
 import RequestCard from "../Components/RequestCard";

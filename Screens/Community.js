@@ -1,6 +1,5 @@
 import { Text, View,  TouchableOpacity,ScrollView} from 'react-native';
 import {styles} from "../Styles";
-import {LinearGradient} from 'expo-linear-gradient';
 import {useState} from "react";
 import EventCard from "../Components/EventCard";
 import LeaderboardCard from "../Components/LeaderboardCard";
