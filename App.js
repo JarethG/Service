@@ -1,35 +1,28 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Request from "./Screens/Request";
-import Messages from "./Screens/Messages"
-import Community from "./Screens/Community";
-import Profile from "./Screens/Profile";
-import { FontAwesome5 } from '@expo/vector-icons';
-import { Ionicons } from '@expo/vector-icons';
-import * as React from 'react';
-import {AuthContextFrame} from "./Components/AuthContextFrame";
+import React, {useState} from 'react';
+import './utils/Firebase'
+import { Authentication } from './utils/Authentication';
+import UserStack from './utils/UserStack';
+import AuthStack from './utils/AuthStack';
+import Splash from "./Screens/Splash";
 
-const Tab = createBottomTabNavigator();
+export default function App() {
 
-export default function App({ navigation }) {
+    const [checkingUserStatus,setCheckingUserStatus] = useState(true)
+    const { user } = Authentication();
 
-    return (
-        <AuthContextFrame>
-            <Tab.Navigator
-                screenOptions={{
-                    headerStyle: {backgroundColor: '#2e5d37'},
-                    headerTintColor: '#fff',
-                    headerTitleAlign: 'center',
-                    headerTitleStyle: {fontWeight: 'bold'},
-                    tabBarIcon: ()=> {
+    React.useEffect(() => {
+        setTimeout(() => {
+            setCheckingUserStatus(false)
+        },1000)
+    },[])
 
-                    }
-                }}>
-                <Tab.Screen name="Notice Board" component={Request} options={{ tabBarIcon:()=><FontAwesome5 name="sign" size={24} color="gray"/>}}/>
-                <Tab.Screen name="Messages" component={Messages} options={{ tabBarIcon:()=><Ionicons name="chatbubbles" size={24} color="gray" />}}/>
-                <Tab.Screen name="Community" component={Community} options={{ tabBarIcon:()=><FontAwesome5 name="medal" size={24} color="gray" />}}/>
-                <Tab.Screen name="Profile" component={Profile} options={{ tabBarIcon:()=><Ionicons name="person-circle" size={24} color="gray" />}}/>
-            </Tab.Navigator>
-        </AuthContextFrame>
+    /*
+    user = true and check = true the userStack
+    user = true and check = false the userStack
+    user = false and check = true splash
+    user = false and check = false Auth
 
-    );
+     */
+
+    return  user ? <UserStack  user={user} /> : checkingUserStatus ? Splash() : <AuthStack />;
 }

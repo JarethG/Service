@@ -5,21 +5,21 @@ import {AntDesign} from '@expo/vector-icons';
 import RequestCard from "../Components/RequestCard";
 import ToggleButtons from "../Components/ToggleButtons";
 import SkillSearch from "../Components/SkillSearch";
-import UserContext from "../Components/AuthContextFrame";
-import * as SecureStore from 'expo-secure-store';
+import { signOut, getAuth } from 'firebase/auth';
+import { Authentication } from '../utils/Authentication';
 
-export default function Profile() {
+export default function Profile({route}) {
+    console.log("profile = ")
+    console.log(route.params)
+    const profile = route.params
+    const auth = getAuth();
     const [profileToggle, setProfileToggle] = useState(true)
-    const {user,setUser}= useContext(UserContext)
     return (
         <View style={[styles.background,{alignItems: 'center'}]}>
-            <Button title={"Sign Out"} onPress={()=>{
-                setUser(null)
-                SecureStore.deleteItemAsync('userToken').then(console.log("signed out"))
-            }}/>
+            <Button title="Sign Out" style={styles.button} onPress={() => signOut(auth)} />
             <View style={{width: 150, height: 150, borderRadius: 75, backgroundColor: "#ffffff"}}/>
-            <Text style={styles.header}>{user.name}</Text>
-            <Text>{user.title}</Text>
+            <Text style={styles.header}>{profile.name}</Text>
+            <Text>{profile.title}</Text>
             <View style={{flexDirection: "row"}}>
                 <AntDesign name="star" size={24} color="black"/>
                 <AntDesign name="star" size={24} color="black"/>
@@ -30,9 +30,9 @@ export default function Profile() {
             </View>
             <ToggleButtons titleLeft={"About Me"} titleRight={"My Request"}
                            onToggle={(r) => setProfileToggle(r)}/>
-            {profileToggle ?
-                <AboutMe user={user}/> : <MyRequests/>
-            }
+            {/*{profileToggle ?*/}
+            {/*    <AboutMe user={user}/> : <MyRequests/>*/}
+            {/*}*/}
         </View>
 
 
