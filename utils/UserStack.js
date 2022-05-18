@@ -32,14 +32,14 @@ function UserStack(user) {
         };
         getUserProfile().then(r => {
             setProfile(r)
-            setLoading(true)
+            setLoading(false)
         })
     }, []);
 
 
     return (
         loading ?
-            Splash()
+            Splash("fetching profile")
             :
             <NavigationContainer>
                 <Tab.Navigator
@@ -52,11 +52,7 @@ function UserStack(user) {
 
                         }
                     }}>
-                    <Tab.Screen name="Profile" component={Profile} initialParams={profile}
-                                options={{
-                                    tabBarIcon: () => <Ionicons name="person-circle" size={24} color="gray"/>
-                                }}/>
-                    <Tab.Screen name="Notice Board" component={Request}
+                    <Tab.Screen name="Notice Board" component={Request} initialParams={profile}
                                 options={{tabBarIcon: () => <FontAwesome5 name="sign" size={24} color="gray"/>}}/>
                     <Tab.Screen name="Messages" component={Messages}
                                 options={{
@@ -64,6 +60,10 @@ function UserStack(user) {
                                 }}/>
                     <Tab.Screen name="Community" component={Community}
                                 options={{tabBarIcon: () => <FontAwesome5 name="medal" size={24} color="gray"/>}}/>
+                    <Tab.Screen name="Profile" component={Profile} initialParams={profile}
+                                options={{
+                                    tabBarIcon: () => <Ionicons name="person-circle" size={24} color="gray"/>
+                                }}/>
                 </Tab.Navigator>
             </NavigationContainer>
     )

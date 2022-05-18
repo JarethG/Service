@@ -23,11 +23,35 @@ const db = getFirestore(app);
 
 export default app;
 
-// export async function sendMessage(messageID, message) {
-//     await setDoc(doc(firestore, "Requests", messageID), {
-//         message:message
-//     });
-// }
+export async function sendMessage(messageID, message) {
+    await setDoc(doc(db, "Requests", messageID), {
+        message:message
+    });
+}
+
+export async function newOffer(request) {
+    await setDoc(doc(db, "Offers"), request);
+}
+
+export async function newProfile(userEmail,profileData) {
+    await setDoc(doc(db, "Users", userEmail.toLowerCase()), {
+        about:profileData.about,
+        name:profileData.name,
+        resources:profileData.resources,
+        skills:[],
+        title:profileData.title
+    });
+}
+
+export async function updateProfile(userEmail,profileData) {
+    await setDoc(doc(db, "Users", userEmail.toLowerCase()), {
+        about:profileData.about,
+        name:profileData.name,
+        resources:profileData.resources,
+        skills:[],
+        title:profileData.title
+    });
+}
 
 export async function getProfile(email){
     const docRef = doc(db, "Users", email);

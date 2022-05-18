@@ -1,11 +1,15 @@
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React, {useState} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import {createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword} from "firebase/auth";
-import {Button, Text, TextInput, View} from "react-native";
+import {newProfile} from "./Firebase";
+import {Text, TextInput, View, Touchable, Pressable, Modal} from "react-native";
 import {styles} from "../Styles";
-import {useState} from "react";
+import {NoticeboardFilters} from "../Components/NoticeboardFilters";
+import Requests from "../JSONS/Requests.json";
+import ResourcePicker from "../Components/ResourcePicker";
+import Button from '../Components/Button'
 
 function SignInScreen({navigation}) {
     const auth = getAuth()
@@ -54,8 +58,9 @@ function SignInScreen({navigation}) {
                         secureTextEntry={true}
                     />
                 </View>
-                <Button title="Sign in" onPress={()=>signIn()}/>
-                <Button title="Sign up" onPress={()=>navigation.navigate("sign up")}/>
+                <Button title="Sign in" onPress={() => signIn()}/>
+                <Button title="Sign up" onPress={() => navigation.navigate("sign up")}/>
+                <Button title="shortcut" onPress={() => navigation.navigate("create profile",{value:{email:"test@test.com"}})}/>
             </View>
         </View>
     );
@@ -68,9 +73,8 @@ function SignUpScreen({navigation}) {
         password: '',
         error: ''
     })
-    const auth = getAuth()
 
-    async function signUp() {
+    function signUp() {
         if (value.email === '' || value.password === '') {
             setValue({
                 ...value,
@@ -78,16 +82,7 @@ function SignUpScreen({navigation}) {
             })
             return;
         }
-
-        try {
-            await createUserWithEmailAndPassword(auth, value.email, value.password);
-            navigation.navigate('sign up');
-        } catch (error) {
-            setValue({
-                ...value,
-                error: error.message,
-            })
-        }
+        navigation.navigate("create profile",{value})
     }
 
     return (
@@ -119,18 +114,99 @@ function SignUpScreen({navigation}) {
     );
 }
 
+function NewProfileScreen({navigation,route}) {
+    // console.log(route.params)
+    const [profile, setProfile] = React.useState({
+        about: "",
+        name: "",
+        resources: [],
+        skills: [],
+        title: ""
+    })
+    const [filteredResults, setFilteredResults] = useState(Requests)
+    const [filtering, setFiltering] = useState(false)
+    const [visible,setVisible] = useState(false)
+
+    const auth = getAuth()
+
+    async function createNewAccount() {
+        try {
+            await createUserWithEmailAndPassword(auth, route.params.value.email, route.params.value.password);
+            newProfile(route.params.value.email,profile).then(r => console.log("new profile created"))
+            navigation.navigate('sign in');
+        } catch (error) {
+            console.log("Massive errors",error)
+            }
+        }
+
+    return (
+        <View style={styles.background}>
+            <View style={styles.container}>
+                <Text style={styles.header}>Welcome!</Text>
+                <Text style={styles.cardText}>let continue the creation of your account.</Text>
+                <Text style={styles.cardText}>All of this information can be changed later, dont worry too much about the
+                    specifics!</Text>
+                <Text style={styles.header}>Tell us about yourself</Text>
+                <View style={styles.transparentContainer}>
+                    <TextInput
+                        profile={profile.about}
+                        placeholder='text...'
+                        onChangeText={(text) => setProfile({...profile, about: text})}
+                    />
+                </View>
+                <Text style={styles.header}> Name </Text>
+                <View style={styles.transparentContainer}>
+                    <TextInput
+                        profile={profile.name}
+                        placeholder='text...'
+                        onChangeText={(text) => setProfile({...profile, name: text})}
+                    />
+                </View>
+                <Text style={styles.header}> Your personal title</Text>
+                <View style={styles.transparentContainer}>
+                    <TextInput
+                        profile={profile.title}
+                        placeholder='i.e Teacher, student, doctor'
+                        onChangeText={(text) => setProfile({...profile, title: text})}
+                    />
+                </View>
+                <Text style={styles.header}>what can you provide?</Text>
+                {visible? <Modal
+                    onRequestClose={() => {
+                        setVisible(false);
+                    }}>
+                        <ResourcePicker setVisible={setVisible} apply={(r) => setProfile({...profile, resources: r})}/>
+                    </Modal> :
+                    <Button title={"select resources"} onPress={()=>setVisible(true)}></Button>}
+                <View style={styles.transparentContainer}>
+                {profile.resources?.map((resource,index)=>{
+                    return <Text key={index}>{resource}</Text>
+                })}
+                </View>
+                <Button title={"Start"} onPress={()=> {
+                    createNewAccount().then(r => console.log("finsihed"))
+                    navigation.navigate("sign in")
+                }
+                }/>
+            </View>
+        </View>
+    )
+}
 
 
 const Stack = createNativeStackNavigator();
+
 function AuthStack() {
     return (
         <NavigationContainer>
             <Stack.Navigator>
                 {/*<Stack.Screen name="Welcome" component={WelcomeScreen} />*/}
-                <Stack.Screen name="sign in" component={SignInScreen} />
-                <Stack.Screen name="sign up" component={SignUpScreen} />
+                <Stack.Screen name="sign in" component={SignInScreen}/>
+                <Stack.Screen name="sign up" component={SignUpScreen}/>
+                <Stack.Screen name="create profile" component={NewProfileScreen}/>
             </Stack.Navigator>
         </NavigationContainer>
     );
 }
+
 export default AuthStack
