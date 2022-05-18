@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, setDoc, doc,getDocs,collection,getDoc} from 'firebase/firestore';
+import { getFirestore, setDoc,addDoc, doc,getDocs,orderBy,collection,getDoc,limit,query} from 'firebase/firestore';
 import { getDatabase, ref, onValue } from 'firebase/database';
 import React from "react";
 import * as firebase from "firebase/app";
@@ -29,8 +29,12 @@ export async function sendMessage(messageID, message) {
     });
 }
 
-export async function newOffer(request) {
-    await setDoc(doc(db, "Offers"), request);
+export async function newOffer(offer) {
+    await addDoc(collection(db, "Offers"), offer);
+}
+
+export async function newRequest(request) {
+    await addDoc(collection(db, "Requests"), request);
 }
 
 export async function newProfile(userEmail,profileData) {
@@ -64,4 +68,13 @@ export async function getProfile(email){
         console.log("No such document!");
     }
     return docSnap.data()
+}
+
+export async function getOffers(max) {
+    const q = query(collection(db,"Requests"),limit(max))
+    const querySnapshot = await getDocs(q);
+     let offers = querySnapshot.docs.map((doc) => {
+        return doc.data();
+    })
+    return offers
 }

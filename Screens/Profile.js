@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, TextInput, Image, Button, TouchableOpacity, ScrollView, Modal} from 'react-native';
+import {StyleSheet, Text, View, TextInput, Image,TouchableOpacity, ScrollView, Modal} from 'react-native';
 import {styles} from "../Styles";
 import React, {useContext, useState} from "react";
 import {AntDesign} from '@expo/vector-icons';
@@ -7,16 +7,18 @@ import ToggleButtons from "../Components/ToggleButtons";
 import SkillSearch from "../Components/SkillSearch";
 import { signOut, getAuth } from 'firebase/auth';
 import { Authentication } from '../utils/Authentication';
+import Button from '../Components/Button'
+import ResourcePicker from "../Components/ResourcePicker";
+import {UpdateAccount} from "../utils/AccountHandler";
 
 export default function Profile({route}) {
-    console.log("profile = ")
-    console.log(route.params)
+
     const profile = route.params
     const auth = getAuth();
     const [profileToggle, setProfileToggle] = useState(true)
+    const [visible, setVisible] = useState(false)
     return (
         <View style={[styles.background,{alignItems: 'center'}]}>
-            <Button title="Sign Out" style={styles.button} onPress={() => signOut(auth)} />
             <View style={{width: 150, height: 150, borderRadius: 75, backgroundColor: "#ffffff"}}/>
             <Text style={styles.header}>{profile.name}</Text>
             <Text>{profile.title}</Text>
@@ -30,18 +32,30 @@ export default function Profile({route}) {
             </View>
             <ToggleButtons titleLeft={"About Me"} titleRight={"My Request"}
                            onToggle={(r) => setProfileToggle(r)}/>
-            {/*{profileToggle ?*/}
-            {/*    <AboutMe user={user}/> : <MyRequests/>*/}
-            {/*}*/}
+            {profileToggle ?
+                <AboutMe profile={profile}/> : <MyRequests/>
+            }
+            <Button title="Sign Out" style={styles.button} onPress={() => signOut(auth)} />
+
+
+            {visible? <Modal
+                    onRequestClose={() => {
+                        setVisible(false);
+                    }}>
+                    <UpdateAccount email={auth.currentUser.email} oldData={profile}/>
+                </Modal> :
+                <Button title="update info" style={styles.button} onPress={()=>setVisible(true)} />}
+
+
         </View>
 
 
     );
 }
 
-function AboutMe({user}) {
-    const [skills, setSkills] = useState(user.skills)
-    const [resources, setResources] = useState(user.resources)
+function AboutMe({profile}) {
+    const [skills, setSkills] = useState(profile.skills)
+    const [resources, setResources] = useState(profile.resources)
     const [filters, setFilters] = useState(null);
 
     function addSkill(string) {
@@ -58,14 +72,10 @@ function AboutMe({user}) {
     return (
         <View style={{width: "100%", padding: 15, flex: 1}}>
             <Text style={styles.header}>About</Text>
-            <Text>{user.about}</Text>
+            <Text>{profile.about}</Text>
             <View style={{flexDirection: "row", alignItems: "center"}}>
                 <Text style={styles.header}>Skills</Text>
-                <AntDesign name="plussquareo" size={24} color="black" onPress={()=>
-                    setFilters(<SkillSearch filtersVisible={true}
-                                            setFiltersVisible={(r)=> setFilters(null)}
-                                            returnFunction={(r)=>addSkill(r)}/>)
-                }/>
+
             </View>
             <View>
                 <ScrollView horizontal>
@@ -83,11 +93,7 @@ function AboutMe({user}) {
             </View>
             <View style={{flexDirection: "row", alignItems: "center"}}>
                 <Text style={styles.header}>Resources</Text>
-                <AntDesign name="plussquareo" size={24} color="black" onPress={()=>
-                    setFilters(<SkillSearch filtersVisible={true}
-                                            setFiltersVisible={(r)=> setFilters(null)}
-                                            returnFunction={(r)=>addResources(r)}/>)
-                }/>
+
             </View>
             <View>
                 <ScrollView horizontal>

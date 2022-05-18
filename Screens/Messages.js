@@ -16,13 +16,11 @@ import { FontAwesome } from '@expo/vector-icons';
 import {useContext, useState} from "react";
 import dummy from '../JSONS/Contacts.json'
 import {Ionicons} from "@expo/vector-icons";
-import UserContext from "../Components/AuthContextFrame";
 import messages from '../JSONS/Messages.json'
 
 export default function Messages() {
 
     const [searchText, setSearchText] = useState();
-    const {user, setUser} = useContext(UserContext)
 
     const [modalData, setModalData] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);

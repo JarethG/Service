@@ -11,6 +11,22 @@ export const styles = StyleSheet.create({
         height: "100%",
         backgroundColor:"#eae2b7"
     },
+    button:{
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 12,
+        paddingHorizontal: 32,
+        borderRadius: 6,
+        elevation: 3,
+        backgroundColor: 'rgba(255,255,255,0.5)',
+    },
+    buttonText:{
+        fontSize: 16,
+        lineHeight: 21,
+        fontWeight: 'bold',
+        letterSpacing: 0.25,
+        color: 'black',
+    },
     toggleButtonSelected: {
         flex: 1,
         padding: 5,

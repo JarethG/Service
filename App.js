@@ -4,6 +4,7 @@ import { Authentication } from './utils/Authentication';
 import UserStack from './utils/UserStack';
 import AuthStack from './utils/AuthStack';
 import Splash from "./Screens/Splash";
+import {LogBox} from "react-native";
 
 export default function App() {
 
@@ -24,5 +25,5 @@ export default function App() {
 
      */
 
-    return  user ? <UserStack  user={user} /> : checkingUserStatus ? Splash() : <AuthStack />;
+    return  user ? <UserStack  user={user} /> : checkingUserStatus ? Splash("checking user login") : <AuthStack />;
 }
