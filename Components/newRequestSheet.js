@@ -8,7 +8,6 @@ import {newOffer, newRequest} from "../utils/Firebase";
 
 const NewRequestSheet = ({navigation,route}) => {
     const profile = route.params
-    console.log(profile.name)
     const [request, setRequest] = useState({
         type: "skill",
         name: profile.name,
@@ -62,8 +61,8 @@ const NewRequestSheet = ({navigation,route}) => {
                 <Button title={"show preview"} onPress={()=>setShowPreview(true)}></Button>}
 
             <Button title={"Post"} onPress={()=>{
-                newRequest(request).then(() =>  navigation.navigate("Main"))
-
+                console.log("posting")
+                newRequest(request,profile.email).then(() =>  navigation.navigate("Main"))
             }}/>
         </View>
 

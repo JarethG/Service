@@ -10,6 +10,7 @@ import { Authentication } from '../utils/Authentication';
 import Button from '../Components/Button'
 import ResourcePicker from "../Components/ResourcePicker";
 import {UpdateAccount} from "../utils/AccountHandler";
+import {getMyRequests} from "../utils/Firebase";
 
 export default function Profile({route}) {
 
@@ -17,6 +18,11 @@ export default function Profile({route}) {
     const auth = getAuth();
     const [profileToggle, setProfileToggle] = useState(true)
     const [visible, setVisible] = useState(false)
+    const [myRequests,setMyRequests] = useState(getRequests)
+
+    async function getRequests(){
+        getMyRequests(profile.email).then(r=>console.log(r.myRequests))
+    }
     return (
         <View style={[styles.background,{alignItems: 'center'}]}>
             <View style={{width: 150, height: 150, borderRadius: 75, backgroundColor: "#ffffff"}}/>
@@ -33,7 +39,7 @@ export default function Profile({route}) {
             <ToggleButtons titleLeft={"About Me"} titleRight={"My Request"}
                            onToggle={(r) => setProfileToggle(r)}/>
             {profileToggle ?
-                <AboutMe profile={profile}/> : <MyRequests/>
+                <AboutMe profile={profile}/> : <MyRequests profile={profile}/>
             }
             <Button title="Sign Out" style={styles.button} onPress={() => signOut(auth)} />
 
@@ -114,7 +120,7 @@ function AboutMe({profile}) {
     );
 }
 
-function MyRequests() {
+function MyRequests({profile}) {
     const requests = [
         {
             name: "Luke Ross",

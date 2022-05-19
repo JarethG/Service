@@ -29,19 +29,26 @@ export async function sendMessage(messageID, message) {
     });
 }
 
-export async function newOffer(offer) {
+export async function newOffer(offer,userEmail) {
     const docRef = await addDoc(collection(db, "Offers"), offer);
-//     const washingtonRef = doc(db, userEmail, "myRequest");
-//
-// // Atomically add a new region to the "regions" array field.
-//     await updateDoc(washingtonRef, {
-//         myRequests: arrayUnion("docRef")
-//     });
+
 
 }
 
-export async function newRequest(request) {
-    await addDoc(collection(db, "Requests"), request);
+export async function getMyRequests(userEmail){
+    const userDoc = doc(db, "Users", userEmail);
+    const docSnap = await getDoc(userDoc);
+    return docSnap.data()
+}
+
+export async function newRequest(request,userEmail) {
+    const docRef = await addDoc(collection(db, "Requests"), request);
+    const userDoc = doc(db, "Users", userEmail);
+
+// Atomically add a new region to the "regions" array field.
+    await updateDoc(userDoc, {
+        myRequests: arrayUnion(docRef.id)
+    });
 }
 
 export async function newProfile(userEmail,profileData) {

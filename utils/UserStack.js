@@ -23,9 +23,10 @@ function UserStack(user) {
         // Fetch the token from storage then navigate to our appropriate place
         const getUserProfile = async () => {
             //check if profile exists in storage, if not check online
-            const profileDoc = await getProfile(user.user.email)
+            let profileDoc = await getProfile(user.user.email)
             // console.log("profile at effect", profileDoc)
             //need to persist profile
+            profileDoc["email"] = user.user.email
             return profileDoc
 
             //let them into page
