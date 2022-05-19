@@ -10,12 +10,15 @@ import {getProfile} from "./Firebase";
 import {View, Text, Pressable} from "react-native";
 import {styles} from "../Styles";
 import Splash from "../Screens/Splash";
+import ExpoUpdates from "expo-updates/src/ExpoUpdates";
+import Updates from "../Components/Updates";
 
 const Tab = createBottomTabNavigator();
 
 
 function UserStack(user) {
     const [loading, setLoading] = useState(true)
+    const [updates, setUpdates] = useState(true)
     const [profile, setProfile] = useState()
 
 
@@ -39,34 +42,37 @@ function UserStack(user) {
 
 
     return (
-        loading ?
-            Splash("fetching profile")
+        updates ?
+            Updates(() => setUpdates(false))
             :
-            <NavigationContainer>
-                <Tab.Navigator
-                    screenOptions={{
-                        headerStyle: {backgroundColor: '#2e5d37'},
-                        headerTintColor: '#fff',
-                        headerTitleAlign: 'center',
-                        headerTitleStyle: {fontWeight: 'bold'},
-                        tabBarIcon: () => {
+            loading ?
+                Splash("fetching profile")
+                :
+                <NavigationContainer>
+                    <Tab.Navigator
+                        screenOptions={{
+                            headerStyle: {backgroundColor: '#2e5d37'},
+                            headerTintColor: '#fff',
+                            headerTitleAlign: 'center',
+                            headerTitleStyle: {fontWeight: 'bold'},
+                            tabBarIcon: () => {
 
-                        }
-                    }}>
-                    <Tab.Screen name="Notice Board" component={Request} initialParams={profile}
-                                options={{tabBarIcon: () => <FontAwesome5 name="sign" size={24} color="gray"/>}}/>
-                    <Tab.Screen name="Messages" component={Messages}
-                                options={{
-                                    tabBarIcon: () => <Ionicons name="chatbubbles" size={24} color="gray"/>
-                                }}/>
-                    <Tab.Screen name="Community" component={Community}
-                                options={{tabBarIcon: () => <FontAwesome5 name="medal" size={24} color="gray"/>}}/>
-                    <Tab.Screen name="Profile" component={Profile} initialParams={profile}
-                                options={{
-                                    tabBarIcon: () => <Ionicons name="person-circle" size={24} color="gray"/>
-                                }}/>
-                </Tab.Navigator>
-            </NavigationContainer>
+                            }
+                        }}>
+                        <Tab.Screen name="Notice Board" component={Request} initialParams={profile}
+                                    options={{tabBarIcon: () => <FontAwesome5 name="sign" size={24} color="gray"/>}}/>
+                        <Tab.Screen name="Messages" component={Messages}
+                                    options={{
+                                        tabBarIcon: () => <Ionicons name="chatbubbles" size={24} color="gray"/>
+                                    }}/>
+                        <Tab.Screen name="Community" component={Community}
+                                    options={{tabBarIcon: () => <FontAwesome5 name="medal" size={24} color="gray"/>}}/>
+                        <Tab.Screen name="Profile" component={Profile} initialParams={profile}
+                                    options={{
+                                        tabBarIcon: () => <Ionicons name="person-circle" size={24} color="gray"/>
+                                    }}/>
+                    </Tab.Navigator>
+                </NavigationContainer>
     )
 }
 

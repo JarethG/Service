@@ -146,5 +146,3 @@ function MyRequests({profile}) {
         </View>
     );
 }
-
-

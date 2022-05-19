@@ -57,6 +57,7 @@ const NewRequestSheet = ({navigation,route}) => {
                         setShowPreview(false);
                     }}>
                     <RequestCard info={request}/>
+                    <Button title={"back"} onPress={()=>setShowPreview(false)}></Button>
                 </Modal> :
                 <Button title={"show preview"} onPress={()=>setShowPreview(true)}></Button>}
 

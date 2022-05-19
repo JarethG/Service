@@ -159,7 +159,10 @@ export default function Request({navigation,route}) {
         filtering ?
             <NoticeboardFilters onClose={(r) => setFiltering(false)} setFilteredList={(r) => setFilteredResults(r)}/>
             :
-            <Stack.Navigator>
+            <Stack.Navigator
+                screenOptions={{
+                    headerShown: false
+                }}>
                 <Stack.Screen name={"Main"} component={Main}/>
                 <Stack.Screen name={"NewRequest"} component={NewRequestSheet} initialParams={profile}/>
                 <Stack.Screen name={"Expanded"} component={DetailedRequest}/>
