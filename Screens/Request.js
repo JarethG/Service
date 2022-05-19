@@ -9,6 +9,7 @@ import {NoticeboardFilters} from "../Components/NoticeboardFilters";
 import NewRequestSheet from "../Components/newRequestSheet";
 import Button from "../Components/Button";
 import {getOffers} from "../utils/Firebase";
+import RequestFeed from "../Components/RequestFeed";
 
 export default function Request({navigation,route}) {
 
@@ -138,16 +139,17 @@ export default function Request({navigation,route}) {
                     onPress={()=>{navigation.navigate("NewRequest")}}/>
 
                 </View>
-                <FlatList data={feed} keyExtractor={(item, index) => index.toString()}
-                          renderItem={({item}) => <Pressable
-                              onPress={() => navigation.navigate("Expanded", item)}>
-                              <RequestCard info={item}/>
-                          </Pressable>
-                          }
-                          ListFooterComponent={
-                    <Button title={loading?"loading...":"load more"} onPress={()=>setFeed(loadMoreRequests)}/>
-                          }
-                />
+                <RequestFeed navigation={navigation}/>
+                {/*<FlatList data={feed} keyExtractor={(item, index) => index.toString()}*/}
+                {/*          renderItem={({item}) => <Pressable*/}
+                {/*              onPress={() => navigation.navigate("Expanded", item)}>*/}
+                {/*              <RequestCard info={item}/>*/}
+                {/*          </Pressable>*/}
+                {/*          }*/}
+                {/*          ListFooterComponent={*/}
+                {/*    <Button title={loading?"loading...":"load more"} onPress={()=>setFeed(loadMoreRequests)}/>*/}
+                {/*          }*/}
+                {/*/>*/}
             </View>
         )
     }

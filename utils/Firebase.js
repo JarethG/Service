@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, setDoc,addDoc, doc,getDocs,orderBy,collection,getDoc,limit,query} from 'firebase/firestore';
+import { getFirestore, setDoc,addDoc, doc,getDocs,orderBy,collection,getDoc,limit,query,updateDoc,arrayUnion} from 'firebase/firestore';
 import { getDatabase, ref, onValue } from 'firebase/database';
 import React from "react";
 import * as firebase from "firebase/app";
@@ -30,7 +30,14 @@ export async function sendMessage(messageID, message) {
 }
 
 export async function newOffer(offer) {
-    await addDoc(collection(db, "Offers"), offer);
+    const docRef = await addDoc(collection(db, "Offers"), offer);
+//     const washingtonRef = doc(db, userEmail, "myRequest");
+//
+// // Atomically add a new region to the "regions" array field.
+//     await updateDoc(washingtonRef, {
+//         myRequests: arrayUnion("docRef")
+//     });
+
 }
 
 export async function newRequest(request) {
@@ -43,7 +50,8 @@ export async function newProfile(userEmail,profileData) {
         name:profileData.name,
         resources:profileData.resources,
         skills:[],
-        title:profileData.title
+        title:profileData.title,
+        myRequests:[]
     });
 }
 
