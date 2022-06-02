@@ -5,7 +5,7 @@ import {AntDesign} from "@expo/vector-icons";
 import Settings from "./Settings";
 import Button from "./Button";
 
-const Post = ({details}) => {
+const Post = ({details,navButton}) => {
     const theme = details.type === "skill"
     const [expand, setExpand] = useState(false)
     return (
@@ -31,7 +31,8 @@ const Post = ({details}) => {
                 {expand?<>
                     <Text style={styles.text}>{details.description}</Text>
                     <View style={[styles.container, {height: 200, backgroundColor: "white"}]}/>
-                    <Button title={"contact " + details.name} onPress={()=>console.log("you fool!!!")}/>
+                    {navButton}
+
                 </>:<Text style={styles.text}>{details.description.substr(0, 100)}</Text>}
             </View>
         </Pressable>

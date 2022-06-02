@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, setDoc,addDoc, doc,getDocs,orderBy,collection,getDoc,limit,query,updateDoc,arrayUnion,where} from 'firebase/firestore';
+import { getFirestore, setDoc,addDoc, doc,getDocs,deleteDoc,orderBy,collection,getDoc,limit,query,updateDoc,arrayUnion,where} from 'firebase/firestore';
 import { getDatabase, ref, onValue } from 'firebase/database';
 import React from "react";
 import * as firebase from "firebase/app";
@@ -44,6 +44,10 @@ export async function getMyRequests(email){
     })
     console.log(offers)
     return offers
+}
+
+export async function deleteMyRequest(docID){
+    await deleteDoc(doc(db, "Requests", docID));
 }
 
 export async function getDocsByIDs(docIds){

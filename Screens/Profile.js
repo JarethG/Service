@@ -10,12 +10,13 @@ import { Authentication } from '../utils/Authentication';
 import Button from '../Components/Button'
 import ResourcePicker from "../Components/ResourcePicker";
 import {UpdateAccount} from "../utils/AccountHandler";
-import {getDocsByIDs, getMyRequests, getOffers} from "../utils/Firebase";
+import {deleteMyRequest, getDocsByIDs, getMyRequests, getOffers} from "../utils/Firebase";
 import Post from "../Components/Post";
 
 export default function Profile({route}) {
 
     const profile = route.params
+    const auth = getAuth();
 
     const [profileToggle, setProfileToggle] = useState(true)
     const [myRequests,setMyRequests] = useState(getRequests)
@@ -124,7 +125,7 @@ const AboutMe =({profile})=> {
 const MyRequests =({profile})=> {
 
     const [requests, setRequests] = useState([])
-
+    // console.log(requests)
     useEffect(() => {
         get().then(r => {
             setRequests(r)
@@ -140,7 +141,13 @@ const MyRequests =({profile})=> {
         <View style={{flex: 1}}>
             {requests?
                 <FlatList data={requests} keyExtractor={(item, index) => index.toString()}
-                          renderItem={({item}) => <Post details={item.doc}/>}
+                          renderItem={({item,index}) => <Post details={item.doc} navButton={
+                              <Button title={"delete request"} onPress={()=>{
+                                  deleteMyRequest(item.id).then(
+                                      setRequests((requests) => requests.filter((_, num) => num !== index))
+                                  )
+                              }}/>
+                          }/>}
                           />
                 :<Text>It apears you havent made any requests yet, head over to the Notice Boards tab to get started</Text>}
         </View>

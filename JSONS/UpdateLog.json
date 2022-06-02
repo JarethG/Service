@@ -5,20 +5,32 @@
   "sinceLastUpdate": [
     "remove shortcuts",
     "add back button to new request preview",
-    "add requests to the profile myrequests"
+    "add requests to the profile requests",
+    "separate account creation across multiple pages so all fits.",
+    "Fixed title and description disappearing from profile creating when resources where picked.",
+    "Added Skills to profile creation.",
+    "My Requests can now be deleted",
+    "reload page after myRequests has been deleted to remove deleted request"
   ],
   "toDo": [
-    "add settings to profile->include signout",
+    "preview new post causes description to dissapear (cant recreate)",
+    "add \"are you sure?\" to delete",
+    "applying no tags after having some selected does not update the new request screen but removes the tags",
+    "after new request is posted, data and request page is still mounted (logs still print after reloading",
+    "refreshing flatList after adding new request causes app to crash (Naan request)",
+    "update the updates page to look nice.",
+    "look into double reload on start",
+    "add settings to profile->include sign out",
     "delete requests",
     "updating info needs to have resources already selected",
-    "add approval to new resources seearching",
-    "selecting resources removes title and description",
+    "add approval to new resources searching",
     "title is missing when a skills request is added",
     "add skills to profile building",
     "ethics application- usability evaluations what is the protocol of the study, what kind of tasks wil you give the user. no more than a page. what are tasks",
     "where will they be, in a testing room? at home.",
     "feedback b4 23 may",
     "tidy up code",
-    "add avatars"
+    "add avatars",
+    "change creation process to remove unnessesary extra stack screen"
   ]
 }

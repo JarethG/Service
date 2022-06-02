@@ -7,6 +7,7 @@ import RequestCard from "./RequestCard";
 import {newOffer, newRequest} from "../utils/Firebase";
 
 const NewRequestSheet = ({navigation,route}) => {
+
     const profile = route.params
     const [request, setRequest] = useState({
         account:profile.email,
@@ -16,6 +17,7 @@ const NewRequestSheet = ({navigation,route}) => {
         title: "",
         description: ""
     })
+    console.log(request)
 
     const inputs = ["name", "title","description"]
     const [visible,setVisible] = useState(false)

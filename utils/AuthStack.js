@@ -8,8 +8,9 @@ import {Text, TextInput, View, Touchable, Pressable, Modal} from "react-native";
 import {styles} from "../Styles";
 import {NoticeboardFilters} from "../Components/NoticeboardFilters";
 import Requests from "../JSONS/Requests.json";
-import ResourcePicker from "../Components/ResourcePicker";
 import Button from '../Components/Button'
+import {Skills, Resources} from '../JSONS/Tags.json'
+import Picker from "../Components/Picker";
 
 function SignInScreen({navigation}) {
     const auth = getAuth()
@@ -81,12 +82,12 @@ function SignUpScreen({navigation}) {
             })
             return;
         }
-        navigation.navigate("create profile",{value})
+        navigation.navigate("create profile", {value})
     }
 
     return (
         <View style={styles.background}>
-            <Text style={styles.header}> sign up screen </Text>
+            <Text style={styles.header}> Email </Text>
 
             {!!value.error && <View style={styles.error}><Text>{value.error}</Text></View>}
 
@@ -98,6 +99,7 @@ function SignUpScreen({navigation}) {
                         onChangeText={(text) => setValue({...value, email: text})}
                     />
                 </View>
+                <Text style={styles.header}> Password </Text>
                 <View style={styles.transparentContainer}>
                     <TextInput
                         placeholder='Password'
@@ -107,13 +109,13 @@ function SignUpScreen({navigation}) {
                     />
                 </View>
 
-                <Button title="Sign up" onPress={signUp}/>
+                <Button title="Next" onPress={signUp}/>
             </View>
         </View>
     );
 }
 
-function NewProfileScreen({navigation,route}) {
+function NewProfileScreen({navigation, route}) {
     // console.log(route.params)
     const [profile, setProfile] = React.useState({
         about: "",
@@ -124,70 +126,91 @@ function NewProfileScreen({navigation,route}) {
     })
     const [filteredResults, setFilteredResults] = useState(Requests)
     const [filtering, setFiltering] = useState(false)
-    const [visible,setVisible] = useState(false)
+    const [stage,setStage] = useState(0)
+
 
     const auth = getAuth()
 
     async function createNewAccount() {
         try {
             await createUserWithEmailAndPassword(auth, route.params.value.email, route.params.value.password);
-            newProfile(route.params.value.email,profile).then(r => console.log("new profile created"))
+            newProfile(route.params.value.email, profile).then(r => console.log("new profile created"))
             navigation.navigate('sign in');
         } catch (error) {
-            console.log("Massive errors",error)
-            }
+            console.log("Massive errors", error)
         }
+    }
 
     return (
         <View style={styles.background}>
-            <View style={styles.container}>
-                <Text style={styles.header}>Welcome!</Text>
-                <Text style={styles.cardText}>let continue the creation of your account.</Text>
-                <Text style={styles.cardText}>All of this information can be changed later, dont worry too much about the
-                    specifics!</Text>
-                <Text style={styles.header}>Tell us about yourself</Text>
-                <View style={styles.transparentContainer}>
-                    <TextInput
-                        profile={profile.about}
-                        placeholder='text...'
-                        onChangeText={(text) => setProfile({...profile, about: text})}
-                    />
+            {stage == 0 ?
+                <View style={styles.container}>
+                    <Text style={styles.header}>Welcome!</Text>
+                    <Text style={styles.cardText}>let continue the creation of your account.</Text>
+                    <Text style={styles.cardText}>All of this information can be changed later, dont worry too much
+                        about
+                        the
+                        specifics!</Text>
+                    <Text style={styles.header}>Tell us about yourself</Text>
+                    <View style={styles.transparentContainer}>
+                        <TextInput
+                            value={profile.about}
+                            placeholder='text...'
+                            onChangeText={(text) => setProfile({...profile, about: text})}
+                        />
+                    </View>
+                    <Text style={styles.header}> Name </Text>
+                    <View style={styles.transparentContainer}>
+                        <TextInput
+                            value={profile.name}
+                            placeholder='text...'
+                            onChangeText={(text) => setProfile({...profile, name: text})}
+                        />
+                    </View>
+                    <Text style={styles.header}> Your personal title</Text>
+                    <View style={styles.transparentContainer}>
+                        <TextInput
+                            value={profile.title}
+                            placeholder='i.e Teacher, student, doctor'
+                            onChangeText={(text) => setProfile({...profile, title: text})}
+                        />
+                    </View>
+                    <Button title={"next"} onPress={() => {
+                       setStage(1)}}/>
                 </View>
-                <Text style={styles.header}> Name </Text>
-                <View style={styles.transparentContainer}>
-                    <TextInput
-                        profile={profile.name}
-                        placeholder='text...'
-                        onChangeText={(text) => setProfile({...profile, name: text})}
-                    />
+                :
+                <View style={styles.container}>
+                    <Button title={"back"} onPress={() => {
+                        setStage(0)
+                    }}/>
+                    <Text style={styles.header}>what can you provide?</Text>
+                    <Picker data={Resources}
+                            buttonTitle={"Select Resource"}
+                            apply={(r) => setProfile({...profile, resources: r})
+                            }/>
+                    <View style={styles.transparentContainer}>
+                        {profile.resources?.map((resource, index) => {
+                            return <Text key={index}>{resource}</Text>
+                        })}
+                    </View>
+                    <Picker data={Skills}
+                            buttonTitle={"Select Skills"}
+                            apply={(r) => setProfile({...profile, skills: r})
+                            }/>
+                    <View style={styles.transparentContainer}>
+                        {profile.skills?.map((resource, index) => {
+                            return <Text key={index}>{resource}</Text>
+                        })}
+
+
+                    </View>
+                    <Button title={"Create Account"} onPress={() => {
+                        createNewAccount().then(r => console.log("finished"))
+                        navigation.navigate("sign in")
+                    }
+                    }/>
                 </View>
-                <Text style={styles.header}> Your personal title</Text>
-                <View style={styles.transparentContainer}>
-                    <TextInput
-                        profile={profile.title}
-                        placeholder='i.e Teacher, student, doctor'
-                        onChangeText={(text) => setProfile({...profile, title: text})}
-                    />
-                </View>
-                <Text style={styles.header}>what can you provide?</Text>
-                {visible? <Modal
-                    onRequestClose={() => {
-                        setVisible(false);
-                    }}>
-                        <ResourcePicker setVisible={setVisible} apply={(r) => setProfile({...profile, resources: r})}/>
-                    </Modal> :
-                    <Button title={"select resources"} onPress={()=>setVisible(true)}></Button>}
-                <View style={styles.transparentContainer}>
-                {profile.resources?.map((resource,index)=>{
-                    return <Text key={index}>{resource}</Text>
-                })}
-                </View>
-                <Button title={"Start"} onPress={()=> {
-                    createNewAccount().then(r => console.log("finsihed"))
-                    navigation.navigate("sign in")
-                }
-                }/>
-            </View>
+            }
         </View>
     )
 }

@@ -1,10 +1,12 @@
-import {Button, FlatList, Text, TouchableOpacity, View} from "react-native";
+import { FlatList, Modal, Text, TouchableOpacity, View} from "react-native";
 import {styles} from "../Styles";
 import {Ionicons} from "@expo/vector-icons";
 import {useState} from "react";
+import Button from './Button'
 
-const Picker = ({data,apply}) => {
+const Picker = ({data,buttonTitle,apply}) => {
 
+    const [visible,setVisible] = useState(false)
     const [picked,setPicked] = useState([])
 
     function add(string) {
@@ -35,9 +37,18 @@ const Picker = ({data,apply}) => {
 
     return (
         <>
+            {visible? <Modal
+            onRequestClose={() => {
+                setVisible(false);
+            }}>
         <FlatList data={data} keyExtractor={(item ) => item}
                   renderItem={({item})=><RenderItem string={item}/>}/>
-            <Button title={"apply"} onPress={()=>apply(picked)}/>
+            <Button title={"apply"} onPress={()=>{
+                apply(picked)
+                setVisible(false)
+            }}/>
+        </Modal> :
+            <Button title={buttonTitle} onPress={()=>setVisible(true)}></Button>}
         </>
     )
 }

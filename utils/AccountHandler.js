@@ -5,6 +5,7 @@ import {styles} from "../Styles";
 import ResourcePicker from "../Components/ResourcePicker";
 import Button from "../Components/Button";
 import React, {useState} from "react";
+import Picker from "../Components/Picker";
 
 export const UpdateAccount = ({email, oldData}) => {
 
@@ -50,13 +51,14 @@ return (
                 />
             </View>
             <Text style={styles.header}>what can you provide?</Text>
-            {visible? <Modal
-                    onRequestClose={() => {
-                        setVisible(false);
-                    }}>
-                    <ResourcePicker setVisible={setVisible} apply={(r) => setUpdates({...updates, resources: r})}/>
-                </Modal> :
-                <Button title={"select resources"} onPress={()=>setVisible(true)}></Button>}
+            {/*{visible? <Modal*/}
+            {/*        onRequestClose={() => {*/}
+            {/*            setVisible(false);*/}
+            {/*        }}>*/}
+            {/*        <ResourcePicker setVisible={setVisible} apply={(r) => setUpdates({...updates, resources: r})}/>*/}
+            {/*    </Modal> :*/}
+            {/*    <Button title={"select resources"} onPress={()=>setVisible(true)}></Button>}*/}
+            <Picker data={tags} apply={(r) => setFilter({...filter, tags: r})}/>
             <View style={styles.transparentContainer}>
                 {updates.resources?.map((resource,index)=>{
                     return <Text key={index}>{resource}</Text>

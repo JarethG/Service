@@ -72,7 +72,9 @@ export default function Request({navigation, route}) {
                             }}/>
                 </View>
                 <FlatList data={feed} keyExtractor={(item, index) => index.toString()}
-                          renderItem={({item}) => <Post details={item}/>}
+                          renderItem={({item}) => <Post details={item} navButton={
+                              <Button title={"contact " + item.name} onPress={()=>console.log("you fool!!!")}/>
+                          }/>}
                           ListFooterComponent={
                               <Button title={"load more"} onPress={() => setFeed(loadMoreRequests)}/>
                           }/>
