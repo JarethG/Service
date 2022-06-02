@@ -60,7 +60,6 @@ function SignInScreen({navigation}) {
                 </View>
                 <Button title="Sign in" onPress={() => signIn()}/>
                 <Button title="Sign up" onPress={() => navigation.navigate("sign up")}/>
-                <Button title="shortcut" onPress={() => navigation.navigate("create profile",{value:{email:"test@test.com"}})}/>
             </View>
         </View>
     );

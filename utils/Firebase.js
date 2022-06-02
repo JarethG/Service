@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, setDoc,addDoc, doc,getDocs,orderBy,collection,getDoc,limit,query,updateDoc,arrayUnion} from 'firebase/firestore';
+import { getFirestore, setDoc,addDoc, doc,getDocs,orderBy,collection,getDoc,limit,query,updateDoc,arrayUnion,where} from 'firebase/firestore';
 import { getDatabase, ref, onValue } from 'firebase/database';
 import React from "react";
 import * as firebase from "firebase/app";
@@ -35,10 +35,26 @@ export async function newOffer(offer,userEmail) {
 
 }
 
-export async function getMyRequests(userEmail){
-    const userDoc = doc(db, "Users", userEmail);
-    const docSnap = await getDoc(userDoc);
-    return docSnap.data()
+export async function getMyRequests(email){
+    console.log("starting")
+    const q = query(collection(db, "Requests"), where("account", "==", email));
+    const querySnapshot = await getDocs(q);
+    let offers = querySnapshot.docs.map((doc) => {
+       return {id:doc.id,doc:doc.data()}
+    })
+    console.log(offers)
+    return offers
+}
+
+export async function getDocsByIDs(docIds){
+    let promises = docIds.map(function(key) {
+        return getDoc(doc(key));
+    });
+    Promise.all(promises).then(function(snapshots) {
+        snapshots.forEach(function(snapshot) {
+            console.log(snapshot.key+": "+snapshot.val());
+        });
+    });
 }
 
 export async function newRequest(request,userEmail) {

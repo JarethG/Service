@@ -3,16 +3,18 @@
 
   ],
   "sinceLastUpdate": [
-
+    "remove shortcuts",
+    "add back button to new request preview",
+    "add requests to the profile myrequests"
   ],
   "toDo": [
+    "add settings to profile->include signout",
+    "delete requests",
     "updating info needs to have resources already selected",
-    "add back button to new request preview",
     "add approval to new resources seearching",
     "selecting resources removes title and description",
     "title is missing when a skills request is added",
     "add skills to profile building",
-    "remove shortcuts",
     "ethics application- usability evaluations what is the protocol of the study, what kind of tasks wil you give the user. no more than a page. what are tasks",
     "where will they be, in a testing room? at home.",
     "feedback b4 23 may",

@@ -70,7 +70,7 @@ export const styles = StyleSheet.create({
         fontWeight: "bold",
         color: "white"
     },
-    cardTags: {
+    tags: {
         backgroundColor: 'rgba(255,255,255,0.5)',
         borderRadius: 15,
         margin: 3,
@@ -89,5 +89,15 @@ export const styles = StyleSheet.create({
         padding: 10,
         borderColor: "grey",
         borderBottomWidth: 1,
+    },
+    settingsModule: {
+        height: '50%',
+        marginTop: 'auto',
+        backgroundColor: 'white',
+        borderColor: "gray",
+        borderWidth: 1,
+        margin: 5,
+        borderRadius: 10,
+        padding: 7
     }
 });

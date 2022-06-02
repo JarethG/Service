@@ -1,6 +1,6 @@
-import {StyleSheet, Text, View, TextInput, Image,TouchableOpacity, ScrollView, Modal} from 'react-native';
+import {StyleSheet, Text, View, TextInput, Image, TouchableOpacity, ScrollView, Modal, FlatList} from 'react-native';
 import {styles} from "../Styles";
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {AntDesign} from '@expo/vector-icons';
 import RequestCard from "../Components/RequestCard";
 import ToggleButtons from "../Components/ToggleButtons";
@@ -10,14 +10,14 @@ import { Authentication } from '../utils/Authentication';
 import Button from '../Components/Button'
 import ResourcePicker from "../Components/ResourcePicker";
 import {UpdateAccount} from "../utils/AccountHandler";
-import {getMyRequests} from "../utils/Firebase";
+import {getDocsByIDs, getMyRequests, getOffers} from "../utils/Firebase";
+import Post from "../Components/Post";
 
 export default function Profile({route}) {
 
     const profile = route.params
-    const auth = getAuth();
+
     const [profileToggle, setProfileToggle] = useState(true)
-    const [visible, setVisible] = useState(false)
     const [myRequests,setMyRequests] = useState(getRequests)
 
     async function getRequests(){
@@ -44,13 +44,7 @@ export default function Profile({route}) {
             <Button title="Sign Out" style={styles.button} onPress={() => signOut(auth)} />
 
 
-            {visible? <Modal
-                    onRequestClose={() => {
-                        setVisible(false);
-                    }}>
-                    <UpdateAccount email={auth.currentUser.email} oldData={profile}/>
-                </Modal> :
-                <Button title="update info" style={styles.button} onPress={()=>setVisible(true)} />}
+
 
 
         </View>
@@ -59,10 +53,11 @@ export default function Profile({route}) {
     );
 }
 
-function AboutMe({profile}) {
+const AboutMe =({profile})=> {
     const [skills, setSkills] = useState(profile.skills)
     const [resources, setResources] = useState(profile.resources)
-    const [filters, setFilters] = useState(null);
+    const auth = getAuth();
+    const [visible, setVisible] = useState(false)
 
     function addSkill(string) {
         let newArr = [...skills];
@@ -115,34 +110,39 @@ function AboutMe({profile}) {
                     })}
                 </ScrollView>
             </View>
-            {filters}
+            {visible? <Modal
+                    onRequestClose={() => {
+                        setVisible(false);
+                    }}>
+                    <UpdateAccount email={auth.currentUser.email} oldData={profile}/>
+                </Modal> :
+                <Button title="update info" style={styles.button} onPress={()=>setVisible(true)} />}
         </View>
     );
 }
 
-function MyRequests({profile}) {
-    const requests = [
-        {
-            name: "Luke Ross",
-            skills: ["Graphic Design"],
-            title: "App development",
-            description: "Hi, im looking for someone who can help lay out a new app i am trying to make"
-        },
-        {
-            name: "Luke Ross",
-            skills: ["Law"],
-            title: "Ip Agreements",
-            description: "Working with some students who have forms that i need looked over..."
-        }
-    ]
-    return (
-        <View>
-            <ScrollView style={{width: "100%"}}>
-                {requests.map((info, index) => {
-                    return <RequestCard info={info} key={index}></RequestCard>
-                })}
+const MyRequests =({profile})=> {
 
-            </ScrollView>
+    const [requests, setRequests] = useState([])
+
+    useEffect(() => {
+        get().then(r => {
+            setRequests(r)
+        })
+    }, [])
+
+    function get() {
+        let newFeed = getMyRequests(profile.email).then()
+        // setRequestCounter(requestCounter+20)
+        return newFeed
+    }
+    return (
+        <View style={{flex: 1}}>
+            {requests?
+                <FlatList data={requests} keyExtractor={(item, index) => index.toString()}
+                          renderItem={({item}) => <Post details={item.doc}/>}
+                          />
+                :<Text>It apears you havent made any requests yet, head over to the Notice Boards tab to get started</Text>}
         </View>
     );
 }

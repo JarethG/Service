@@ -9,6 +9,7 @@ import {newOffer, newRequest} from "../utils/Firebase";
 const NewRequestSheet = ({navigation,route}) => {
     const profile = route.params
     const [request, setRequest] = useState({
+        account:profile.email,
         type: "skill",
         name: profile.name,
         skills: [],
@@ -34,6 +35,7 @@ const NewRequestSheet = ({navigation,route}) => {
     }
     return (
         <View style={styles.background}>
+            <Button title={"Back"} onPress={()=> navigation.navigate("NoticeBoard")}/>
             <Text style={styles.header}>Create a new Request</Text>
             {inputs.map((input,index)=> {
                 return <InputFrame key={index} inputValue={input} onChange={
@@ -63,7 +65,7 @@ const NewRequestSheet = ({navigation,route}) => {
 
             <Button title={"Post"} onPress={()=>{
                 console.log("posting")
-                newRequest(request,profile.email).then(() =>  navigation.navigate("Main"))
+                newRequest(request,profile.email).then(() =>  navigation.navigate("NoticeBoard"))
             }}/>
         </View>
 
