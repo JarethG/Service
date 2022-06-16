@@ -9,38 +9,41 @@ import {
     TouchableOpacity,
     ScrollView,
     Modal,
-    Alert, Pressable, FlatList
+    Alert, Pressable, FlatList, Keyboard
 } from 'react-native';
 import {styles} from "../Styles";
-import { FontAwesome } from '@expo/vector-icons';
-import {useContext, useState} from "react";
+import {FontAwesome} from '@expo/vector-icons';
+import {useContext, useEffect, useState} from "react";
 import dummy from '../JSONS/Contacts.json'
 import {Ionicons} from "@expo/vector-icons";
 import messages from '../JSONS/Messages.json'
+import {getMessage, getMyRequests, pushMessage, sendMessage} from "../utils/Firebase";
 
-export default function Messages() {
+export default function Messages({route}) {
 
+    const profile = route.params
     const [searchText, setSearchText] = useState();
 
     const [modalData, setModalData] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
 
-    const [openMessages,setOpenMessages] = useState()
+    const [openMessages, setOpenMessages] = useState()
+    const [openChat, setOpenChat] = useState()
 
     const ContactCard = ({info}) => {
         return (
-            <View style={[styles.skillsTheme,{ margin: 10, borderRadius: 10, padding: 7,}]}>
+            <View style={[styles.skillsTheme, {margin: 10, borderRadius: 10, padding: 7,}]}>
                 <View style={{flexDirection: "row"}}>
                     <View style={{width: 70, height: 70, borderRadius: 35, backgroundColor: "#ffffff"}}></View>
                     <View style={{flex: 1}}>
                         <View style={{flexDirection: "row", justifyContent: "space-between"}}>
                             <Text>{info.name}</Text>
-                            <Text>{info.time}</Text>
+                            <Text>{info.title}</Text>
                         </View>
                         <View style={{flexDirection: "row", alignItems: "center"}}>
                             <Ionicons name="checkmark-done-circle-outline" size={24}
                                       color={info.checked ? "green" : "grey"}/>
-                            <Text>{info.message}</Text>
+                            <Text>{info.description}</Text>
                         </View>
                     </View>
                 </View>
@@ -51,23 +54,29 @@ export default function Messages() {
     const MessagingModal = () => {
 
         const renderItem = (item) => {
-            return <Text style={item.sender?
-                [styles.container,styles.resourceTheme,{alignSelf:"flex-start"}]
+            return <Text style={item.userID==profile.email ?
+                [styles.container, styles.resourceTheme, {alignSelf: "flex-start"}]
                 :
-                [styles.container,styles.skillsTheme,{alignSelf:"flex-end"}]}>{item.message}</Text>
+                [styles.container, styles.skillsTheme, {alignSelf: "flex-end"}]}>{item.message}</Text>
 
         }
 
-        const [text,setText] = useState()
+        const [messages, setMessages] = useState()
+
+        useEffect(()=> {
+            get()
+        },[])
+
+        function get() {
+            return  getMessage("6q8Pp3fBf8ZmNJJ4mwVs", profile.email, (r) => setMessages(r.reverse()))
+        }
+
+        const [text, setText] = useState()
 
         function sendMessage() {
-            setOpenMessages([...openMessages,
-                {
-                "sender": true,
-                "time": 1,
-                "message": text
-            },])
+            pushMessage("6q8Pp3fBf8ZmNJJ4mwVs", text, profile.email).then(()=> console.log("sent!"))
         }
+
         return <Modal
             animationType="slide"
             transparent={true}
@@ -79,16 +88,24 @@ export default function Messages() {
         >
             <View style={styles.background}>
                 <View style={[styl.modalView, {flex: 1}]}>
-                    <Ionicons name="return-up-back" size={24} color="black" onPress={()=>setModalVisible(false)}/>
-                    <View style={{borderColor:"#cbcbcb",borderWidth:2,width:"100%",flex:1}}>
-                        <FlatList data={openMessages} keyExtractor={(item, index) => index.toString()}
-                                  renderItem={({item}) => renderItem(item)}/>
-                        <View style={[styles.transparentContainer,{flexDirection:"row",justifyContent:"space-between",backgroundColor: "grey"  }]}>
+                    <Ionicons name="return-up-back" size={24} color="black" onPress={() => setModalVisible(false)}/>
+                    <View style={{borderColor: "#cbcbcb", borderWidth: 2, width: "100%", flex: 1}}>
+                        <FlatList data={messages} keyExtractor={(item, index) => index.toString()}
+                                  renderItem={({item}) => renderItem(item)}
+                        inverted={true}/>
+                        <View style={[styles.transparentContainer, {
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            backgroundColor: "grey"
+                        }]}>
                             <TextInput
                                 placeholder="Type you message..."
                                 value={text}
                                 onChangeText={setText}/>
-                            <FontAwesome name="send-o" size={24} color="black" onPress={()=>sendMessage()}/>
+                            <FontAwesome name="send-o" size={24} color="black" onPress={() =>{
+                                sendMessage()
+                                Keyboard.dismiss()
+                            }}/>
                         </View>
                     </View>
 
@@ -97,8 +114,14 @@ export default function Messages() {
         </Modal>
     }
 
+    const chatIDs = profile.myRequests;
+
+    const [R,setR] = useState()
+
     return (
         <View style={styles.background}>
+            <Button title={"get my requests"} onPress={() => getMyRequests(profile.email).then((r)=>setR(r))}/>
+
             <View style={{flexDirection: "row", padding: 12}}>
                 <TextInput
                     style={{
@@ -114,19 +137,20 @@ export default function Messages() {
                 />
             </View>
             <ScrollView style={{width: "100%"}}>
-                {dummy.map((info, index) => {
-                    return <TouchableOpacity key={index} onPress={() => {
-                        setModalData(info)
-                        setOpenMessages(messages["Luke Ross"][info.name])
-                        setModalVisible(true)
-                    }}>
-                        <ContactCard info={info}/>
-                    </TouchableOpacity>
-                })
+                {R == null ? <Text>empty</Text> :
+                    R.map((request, index) => {
+                        return <TouchableOpacity key={index} onPress={() => {
+                                    setOpenChat("fdsb")
+                                    setModalVisible(true)
+                                }}>
+                                    <ContactCard info={request.doc}/>
+                                </TouchableOpacity>
+
+                        })
                 }
             </ScrollView>
             <StatusBar style="auto"/>
-            {modalData ? <MessagingModal/> : null}
+            {openChat ? <MessagingModal/> : null}
         </View>
     );
 }

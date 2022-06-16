@@ -22,7 +22,7 @@ const Post = ({details,navButton}) => {
 
                         </View>
                         <View style={{flexDirection: "row"}}>
-                            {details.skills.map((tag, key) =>
+                            {details.tags.map((tag, key) =>
                                 <Text key={key}style={styles.tags}>{tag}</Text>)}
                         </View>
                     </View>

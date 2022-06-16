@@ -61,7 +61,7 @@ function UserStack(user) {
                         }}>
                         <Tab.Screen name="Notice Board" component={Request} initialParams={profile}
                                     options={{tabBarIcon: () => <FontAwesome5 name="sign" size={24} color="gray"/>}}/>
-                        <Tab.Screen name="Messages" component={Messages}
+                        <Tab.Screen name="Messages" component={Messages} initialParams={profile}
                                     options={{
                                         tabBarIcon: () => <Ionicons name="chatbubbles" size={24} color="gray"/>
                                     }}/>

@@ -5,6 +5,10 @@ import ResourcePicker from "./ResourcePicker";
 import Button from "./Button";
 import RequestCard from "./RequestCard";
 import {newOffer, newRequest} from "../utils/Firebase";
+import Picker from "./Picker";
+import {Resources, Skills} from "../JSONS/Tags.json";
+import ToggleButtons from "./ToggleButtons";
+import Post from "./Post";
 
 const NewRequestSheet = ({navigation,route}) => {
 
@@ -13,7 +17,7 @@ const NewRequestSheet = ({navigation,route}) => {
         account:profile.email,
         type: "skill",
         name: profile.name,
-        skills: [],
+        tags: [],
         title: "",
         description: ""
     })
@@ -22,6 +26,7 @@ const NewRequestSheet = ({navigation,route}) => {
     const inputs = ["name", "title","description"]
     const [visible,setVisible] = useState(false)
     const [showPreview,setShowPreview] = useState(false)
+    const [toggle,switchToggle] = useState(true)
 
     const InputFrame = ({inputValue,onChange}) => {
         const [currentValue, setCurrentValue] = useState(request[inputValue]);
@@ -36,31 +41,34 @@ const NewRequestSheet = ({navigation,route}) => {
         </View>
     }
     return (
-        <View style={styles.background}>
+        <View style={[styles.background,toggle?styles.skillsTheme:styles.resourceTheme]}>
             <Button title={"Back"} onPress={()=> navigation.navigate("NoticeBoard")}/>
+            <ToggleButtons titleLeft={"Skill"} titleRight={"Resource"} onToggle={()=>{
+                setRequest({...request, type: !toggle?"skill":"resource"});
+                switchToggle(!toggle)
+            }}/>
             <Text style={styles.header}>Create a new Request</Text>
             {inputs.map((input,index)=> {
                 return <InputFrame key={index} inputValue={input} onChange={
                     (r)=>setRequest({...request, [input]: r})
                 }/>
             })}
-            {visible? <Modal
-                    onRequestClose={() => {
-                        setVisible(false);
-                    }}>
-                    <ResourcePicker setVisible={setVisible} apply={(r) => setRequest({...request, skills: r})}/>
-                </Modal> :
-                <Button title={"select resources"} onPress={()=>setVisible(true)}></Button>}
-            <View style={{flexDirection:"row"}}>
-            {request.skills?.map((resource,index)=>{
-                return <View key={index} style={styles.transparentContainer}><Text>{resource}</Text></View>
-            })}
-        </View>
+            <Picker data={toggle?Skills:Resources}
+                    buttonTitle={"Select " + (toggle? "Skills":"Resources")}
+                    apply={(r) => setRequest({...request, tags: r})
+                    }/>
+            <View style={styles.transparentContainer}>
+                {request.tags?.map((resource, index) => {
+                    return <Text key={index}>{resource}</Text>
+                })}
+
+
+            </View>
             {showPreview? <Modal
                     onRequestClose={() => {
                         setShowPreview(false);
                     }}>
-                    <RequestCard info={request}/>
+                <Post details={request} navButton={null}/>
                     <Button title={"back"} onPress={()=>setShowPreview(false)}></Button>
                 </Modal> :
                 <Button title={"show preview"} onPress={()=>setShowPreview(true)}></Button>}

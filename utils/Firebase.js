@@ -1,6 +1,21 @@
-import { initializeApp } from 'firebase/app';
-import { getFirestore, setDoc,addDoc, doc,getDocs,deleteDoc,orderBy,collection,getDoc,limit,query,updateDoc,arrayUnion,where} from 'firebase/firestore';
-import { getDatabase, ref, onValue } from 'firebase/database';
+import {initializeApp} from 'firebase/app';
+import {
+    getFirestore,
+    setDoc,
+    addDoc,
+    doc,
+    getDocs,
+    deleteDoc,
+    orderBy,
+    collection,
+    getDoc,
+    limit,
+    query,
+    updateDoc,
+    arrayUnion,
+    where
+} from 'firebase/firestore';
+import {getDatabase, ref, onValue, set, push, get} from 'firebase/database';
 import React from "react";
 import * as firebase from "firebase/app";
 
@@ -20,48 +35,71 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const rtdb = getDatabase(app);
 
 export default app;
 
-export async function sendMessage(messageID, message) {
-    await setDoc(doc(db, "Requests", messageID), {
-        message:message
+export async function sendMessage(chatID, message, userID) {
+    await set(ref(rtdb, 'chats/' + chatID), {
+        userID: userID,
+        message: "hello,World!",
+        timestamp: Date.now()
     });
 }
 
-export async function newOffer(offer,userEmail) {
+export async function pushMessage(chatID, message, userID) {
+    await push(ref(rtdb, 'chats/' + chatID), {
+        userID: userID,
+        message: message,
+        timestamp: Date.now()
+    });
+}
+
+export function getMessage(chatID, userID,callback) {
+     onValue(ref(rtdb, 'chats/' + chatID),  (snapshot) => {
+         let list = [];
+        snapshot.forEach(snap => {
+            const issue = snap.val();
+            console.log(issue);
+            list.push(issue)
+        })
+     callback(list)
+     })
+}
+
+export async function newOffer(offer, userEmail) {
     const docRef = await addDoc(collection(db, "Offers"), offer);
 
 
 }
 
-export async function getMyRequests(email){
+export async function getMyRequests(email) {
     console.log("starting")
     const q = query(collection(db, "Requests"), where("account", "==", email));
     const querySnapshot = await getDocs(q);
     let offers = querySnapshot.docs.map((doc) => {
-       return {id:doc.id,doc:doc.data()}
+        return {id: doc.id, doc: doc.data()}
     })
     console.log(offers)
     return offers
 }
 
-export async function deleteMyRequest(docID){
+export async function deleteMyRequest(docID) {
     await deleteDoc(doc(db, "Requests", docID));
 }
 
-export async function getDocsByIDs(docIds){
-    let promises = docIds.map(function(key) {
+export async function getDocsByIDs(docIds) {
+    let promises = docIds.map(function (key) {
         return getDoc(doc(key));
     });
-    Promise.all(promises).then(function(snapshots) {
-        snapshots.forEach(function(snapshot) {
-            console.log(snapshot.key+": "+snapshot.val());
+    Promise.all(promises).then(function (snapshots) {
+        snapshots.forEach(function (snapshot) {
+            console.log(snapshot.key + ": " + snapshot.val());
         });
     });
 }
 
-export async function newRequest(request,userEmail) {
+export async function newRequest(request, userEmail) {
     const docRef = await addDoc(collection(db, "Requests"), request);
     const userDoc = doc(db, "Users", userEmail);
 
@@ -71,28 +109,28 @@ export async function newRequest(request,userEmail) {
     });
 }
 
-export async function newProfile(userEmail,profileData) {
+export async function newProfile(userEmail, profileData) {
     await setDoc(doc(db, "Users", userEmail.toLowerCase()), {
-        about:profileData.about,
-        name:profileData.name,
-        resources:profileData.resources,
-        skills:[],
-        title:profileData.title,
-        myRequests:[]
+        about: profileData.about,
+        name: profileData.name,
+        resources: profileData.resources,
+        skills: [],
+        title: profileData.title,
+        myRequests: []
     });
 }
 
-export async function updateProfile(userEmail,profileData) {
+export async function updateProfile(userEmail, profileData) {
     await setDoc(doc(db, "Users", userEmail.toLowerCase()), {
-        about:profileData.about,
-        name:profileData.name,
-        resources:profileData.resources,
-        skills:[],
-        title:profileData.title
+        about: profileData.about,
+        name: profileData.name,
+        resources: profileData.resources,
+        skills: [],
+        title: profileData.title
     });
 }
 
-export async function getProfile(email){
+export async function getProfile(email) {
     const docRef = doc(db, "Users", email);
     const docSnap = await getDoc(docRef);
 
@@ -106,10 +144,20 @@ export async function getProfile(email){
 }
 
 export async function getOffers(max) {
-    const q = query(collection(db,"Requests"),limit(max))
+    const q = query(collection(db, "Requests"), limit(max))
     const querySnapshot = await getDocs(q);
-     let offers = querySnapshot.docs.map((doc) => {
+    let offers = querySnapshot.docs.map((doc) => {
         return doc.data();
     })
     return offers
+}
+
+export async function getMessages() {
+    db.ref("chats").on("value", snapshot => {
+        let chats = [];
+        snapshot.forEach((snap) => {
+            chats.push(snap.val());
+        });
+        this.setState({chats});
+    });
 }
