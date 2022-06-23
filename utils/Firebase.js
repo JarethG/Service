@@ -55,6 +55,18 @@ export async function pushMessage(chatID, message, userID) {
     });
 }
 
+export async function createChatHeader(chatID,data){
+    await set(ref(rtdb, 'chatHeaders/' + chatID), {
+        acceptingUser: "",
+        client: data.account,
+        jobTitle: data.title,
+        lastMessage: "waiting for someone to accept your offer",
+        lastTimeStamp: Date.now(),
+
+    });
+    console.log("done")
+}
+
 export function getMessage(chatID, userID,callback) {
      onValue(ref(rtdb, 'chats/' + chatID),  (snapshot) => {
          let list = [];
@@ -107,6 +119,14 @@ export async function newRequest(request, userEmail) {
     await updateDoc(userDoc, {
         myRequests: arrayUnion(docRef.id)
     });
+    await createChatHeader(docRef.id, request)
+}
+
+export async function acceptRequest(requestID, userEmail) {
+    const userDoc = doc(db, "Users", userEmail);
+    await updateDoc(userDoc, {
+        acceptedRequests: arrayUnion(requestID)
+    });
 }
 
 export async function newProfile(userEmail, profileData) {
@@ -147,17 +167,20 @@ export async function getOffers(max) {
     const q = query(collection(db, "Requests"), limit(max))
     const querySnapshot = await getDocs(q);
     let offers = querySnapshot.docs.map((doc) => {
-        return doc.data();
+        let offer =  doc.data();
+        console.log("docid == ",doc.id)
+        offer.requestID = doc.id
+        return offer
     })
     return offers
 }
-
-export async function getMessages() {
-    db.ref("chats").on("value", snapshot => {
-        let chats = [];
-        snapshot.forEach((snap) => {
-            chats.push(snap.val());
-        });
-        this.setState({chats});
-    });
-}
+//
+// export async function getMessages() {
+//     db.ref("chats").on("value", snapshot => {
+//         let chats = [];
+//         snapshot.forEach((snap) => {
+//             chats.push(snap.val());
+//         });
+//         this.setState({chats});
+//     });
+// }

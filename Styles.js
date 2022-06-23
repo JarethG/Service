@@ -99,5 +99,13 @@ export const styles = StyleSheet.create({
         margin: 5,
         borderRadius: 10,
         padding: 7
+    },
+    messageBubble: {
+        marginLeft: 15,
+        marginRight: 15,
+        marginBottom:3,
+        borderRadius: 10,
+        padding: 7,
+        backgroundColor: 'rgb(253,135,31)',
     }
 });

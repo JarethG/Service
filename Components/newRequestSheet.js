@@ -4,7 +4,7 @@ import React, {useState} from "react";
 import ResourcePicker from "./ResourcePicker";
 import Button from "./Button";
 import RequestCard from "./RequestCard";
-import {newOffer, newRequest} from "../utils/Firebase";
+import {createChatHeader, newOffer, newRequest} from "../utils/Firebase";
 import Picker from "./Picker";
 import {Resources, Skills} from "../JSONS/Tags.json";
 import ToggleButtons from "./ToggleButtons";

@@ -10,9 +10,15 @@
     "Fixed title and description disappearing from profile creating when resources where picked.",
     "Added Skills to profile creation.",
     "My Requests can now be deleted",
-    "reload page after myRequests has been deleted to remove deleted request"
+    "reload page after myRequests has been deleted to remove deleted request",
+    "messenger now implemented to create chats between people that have accepted job."
   ],
   "toDo": [
+    "clicking request gives user chat id",
+    "on message board, user can click on chathead to open messages",
+    "when chat head is made (another rtdb) all info is added",
+    "format rtdb to have better chat heads",
+    "use effect creates error in messenger",
     "preview new post causes description to dissapear (cant recreate)",
     "add \"are you sure?\" to delete",
     "applying no tags after having some selected does not update the new request screen but removes the tags",

@@ -8,7 +8,7 @@ import Requests from '../JSONS/Requests.json'
 import {NoticeboardFilters} from "../Components/NoticeboardFilters";
 import NewRequestSheet from "../Components/newRequestSheet";
 import Button from "../Components/Button";
-import {getOffers} from "../utils/Firebase";
+import {acceptRequest, createChatHeader, getOffers} from "../utils/Firebase";
 import RequestFeed from "../Components/RequestFeed";
 import Post from "../Components/Post";
 import Search from "../Components/Search";
@@ -73,7 +73,9 @@ export default function Request({navigation, route}) {
                 </View>
                 <FlatList data={feed} keyExtractor={(item, index) => index.toString()}
                           renderItem={({item}) => <Post details={item} navButton={
-                              <Button title={"contact " + item.name} onPress={()=>console.log("you fool!!!")}/>
+                              <Button title={"contact " + item.name} onPress={()=>{
+                                  acceptRequest(item.requestID,profile.email)
+                              }}/>
                           }/>}
                           ListFooterComponent={
                               <Button title={"load more"} onPress={() => setFeed(loadMoreRequests)}/>
