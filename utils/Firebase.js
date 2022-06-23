@@ -134,7 +134,7 @@ export async function newProfile(userEmail, profileData) {
         about: profileData.about,
         name: profileData.name,
         resources: profileData.resources,
-        skills: [],
+        skills: profileData.skills,
         title: profileData.title,
         myRequests: []
     });
@@ -145,7 +145,7 @@ export async function updateProfile(userEmail, profileData) {
         about: profileData.about,
         name: profileData.name,
         resources: profileData.resources,
-        skills: [],
+        skills: profileData.skills,
         title: profileData.title
     });
 }
