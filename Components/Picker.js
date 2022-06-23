@@ -1,14 +1,18 @@
 import { FlatList, Modal, Text, TouchableOpacity, View} from "react-native";
 import {styles} from "../Styles";
 import {Ionicons} from "@expo/vector-icons";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import Button from './Button'
 
 const Picker = ({data,buttonTitle,apply}) => {
 
+
     const [visible,setVisible] = useState(false)
     const [picked,setPicked] = useState([])
-
+    console.log(picked)
+    useEffect(()=> {
+setPicked([])
+    },[data])
     function add(string) {
         setPicked([...picked, string])
     }

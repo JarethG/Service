@@ -53,6 +53,7 @@ const NewRequestSheet = ({navigation,route}) => {
                     (r)=>setRequest({...request, [input]: r})
                 }/>
             })}
+
             <Picker data={toggle?Skills:Resources}
                     buttonTitle={"Select " + (toggle? "Skills":"Resources")}
                     apply={(r) => setRequest({...request, tags: r})
