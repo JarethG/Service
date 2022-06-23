@@ -9,11 +9,11 @@ const Picker = ({data,buttonTitle,apply}) => {
 
     const [visible,setVisible] = useState(false)
     const [picked,setPicked] = useState([])
-    console.log(picked)
     useEffect(()=> {
 setPicked([])
     },[data])
     function add(string) {
+        if(picked.length<3)
         setPicked([...picked, string])
     }
 

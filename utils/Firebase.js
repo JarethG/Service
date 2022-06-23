@@ -15,7 +15,7 @@ import {
     arrayUnion,
     where
 } from 'firebase/firestore';
-import {getDatabase, ref, onValue, set, push, get} from 'firebase/database';
+import {getDatabase, ref, onValue, set, push, update} from 'firebase/database';
 import React from "react";
 import * as firebase from "firebase/app";
 
@@ -55,28 +55,36 @@ export async function pushMessage(chatID, message, userID) {
     });
 }
 
-export async function createChatHeader(chatID,data){
+export async function createChatHeader(chatID, data) {
     await set(ref(rtdb, 'chatHeaders/' + chatID), {
         acceptingUser: "",
         client: data.account,
         jobTitle: data.title,
         lastMessage: "waiting for someone to accept your offer",
         lastTimeStamp: Date.now(),
-
     });
     console.log("done")
 }
 
-export function getMessage(chatID, userID,callback) {
-     onValue(ref(rtdb, 'chats/' + chatID),  (snapshot) => {
-         let list = [];
+export async function getChatHeaders(chatID,callback) {
+    console.log(chatID)
+    onValue(ref(rtdb, 'chatHeaders/' + chatID), (snapshot) => {
+        let header = snapshot.val()
+        header.id = chatID
+        callback(old =>[...old,header])
+    })
+}
+
+export function getMessage(chatID, userID, callback) {
+    onValue(ref(rtdb, 'chats/' + chatID), (snapshot) => {
+        let list = [];
         snapshot.forEach(snap => {
             const issue = snap.val();
             console.log(issue);
             list.push(issue)
         })
-     callback(list)
-     })
+        callback(list)
+    })
 }
 
 export async function newOffer(offer, userEmail) {
@@ -127,6 +135,11 @@ export async function acceptRequest(requestID, userEmail) {
     await updateDoc(userDoc, {
         acceptedRequests: arrayUnion(requestID)
     });
+    await update(ref(rtdb, 'chatHeaders/' + requestID), {
+       acceptingUser:userEmail
+    });
+    console.log("done")
+
 }
 
 export async function newProfile(userEmail, profileData) {
@@ -136,7 +149,7 @@ export async function newProfile(userEmail, profileData) {
         resources: profileData.resources,
         skills: profileData.skills,
         title: profileData.title,
-        acceptedRequests:[],
+        acceptedRequests: [],
         myRequests: []
     });
 }
@@ -168,8 +181,8 @@ export async function getOffers(max) {
     const q = query(collection(db, "Requests"), limit(max))
     const querySnapshot = await getDocs(q);
     let offers = querySnapshot.docs.map((doc) => {
-        let offer =  doc.data();
-        console.log("docid == ",doc.id)
+        let offer = doc.data();
+        // console.log("docid == ", doc.id)
         offer.requestID = doc.id
         return offer
     })

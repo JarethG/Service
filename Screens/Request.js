@@ -71,12 +71,11 @@ export default function Request({navigation, route}) {
                                 navigation.navigate("NewRequest")
                             }}/>
                 </View>
-                {console.log(feed)}
                 {feed.length!=0?
                 <FlatList data={feed} keyExtractor={(item, index) => index.toString()}
                           renderItem={({item}) => <Post details={item} navButton={
                               <Button title={"contact " + item.name} onPress={()=>{
-                                  acceptRequest(item.requestID,profile.email)
+                                  acceptRequest(item.requestID,profile.email).then(()=> console.log("accepted"))
                               }}/>
                           }/>}
                           ListFooterComponent={

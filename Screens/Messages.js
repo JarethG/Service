@@ -17,7 +17,14 @@ import {useContext, useEffect, useState} from "react";
 import dummy from '../JSONS/Contacts.json'
 import {Ionicons} from "@expo/vector-icons";
 import messages from '../JSONS/Messages.json'
-import {createChatHeader, getMessage, getMyRequests, pushMessage, sendMessage} from "../utils/Firebase";
+import {
+    createChatHeader,
+    getChatHeaders,
+    getMessage,
+    getMyRequests,
+    pushMessage,
+    sendMessage
+} from "../utils/Firebase";
 
 export default function Messages({route}) {
 
@@ -37,14 +44,15 @@ export default function Messages({route}) {
                     <View style={{width: 70, height: 70, borderRadius: 35, backgroundColor: "#ffffff"}}></View>
                     <View style={{flex: 1}}>
                         <View style={{flexDirection: "row", justifyContent: "space-between"}}>
-                            <Text>{info.name}</Text>
-                            <Text>{info.title}</Text>
+                            <Text style={styles.title}>{info.acceptingUser}</Text>
+                            <Text>{info.jobTitle}</Text>
                         </View>
                         <View style={{flexDirection: "row", alignItems: "center"}}>
                             <Ionicons name="checkmark-done-circle-outline" size={24}
                                       color={info.checked ? "green" : "grey"}/>
-                            <Text>{info.description}</Text>
+                            <Text>{info.client}</Text>
                         </View>
+                        <Text>{info.lastMessage}</Text>
                     </View>
                 </View>
             </View>
@@ -55,9 +63,9 @@ export default function Messages({route}) {
 
         const renderItem = (item) => {
             return <Text style={item.userID == profile.email ?
-                [styles.messageBubble, {alignSelf: "flex-start"}]
+                [styles.messageBubble, {alignSelf: "flex-end"}]
                 :
-                [styles.messageBubble, {alignSelf: "flex-end"}]}>{item.message}</Text>
+                [styles.messageBubble, {alignSelf: "flex-start"}]}>{item.message}</Text>
         }
 
         const [messages, setMessages] = useState()
@@ -71,7 +79,7 @@ export default function Messages({route}) {
         }
 
         const [text, setText] = useState()
-//6q8Pp3fBf8ZmNJJ4mwVs
+
         function sendMessage() {
             pushMessage(openChat, text, profile.email).then(() => console.log("sent!"))
         }
@@ -113,17 +121,17 @@ export default function Messages({route}) {
         </Modal>
     }
 
-    const [chatIDs,setChatIDs] = useState([])
-    const [err,setErr] = useState("open your messages above")
+    const [chatIDs, setChatIDs] = useState([])
+    const [err, setErr] = useState("open your messages above")
 
     return (
         <View style={styles.background}>
             <Button title={"open chats"} onPress={() => {
+                setChatIDs([])
                 let ids = profile.acceptedRequests.concat(profile.myRequests);
-                ids.length == 0?setErr("It appears you have no open or accepted requests!")
-            :
-                    setChatIDs(ids)
-
+                ids.length == 0 ? setErr("It appears you have no open or accepted requests!")
+                    :
+                    ids.forEach((id)=> getChatHeaders(id,setChatIDs))
             }
             }/>
             <View style={{flexDirection: "row", padding: 12}}>
@@ -141,18 +149,17 @@ export default function Messages({route}) {
                 />
             </View>
             <ScrollView style={{width: "100%"}}>
-                {chatIDs.length == 0 ?
+                {
+                    chatIDs.length == 0 ?
                     <Text style={styles.header}>{err}</Text>
                     :
                     chatIDs.map((request, index) => {
                         return <TouchableOpacity key={index} onPress={() => {
-                            setOpenChat(request)
+                            setOpenChat(request.id)
                             setModalVisible(true)
                         }}>
-                            {/*<ContactCard info={request.doc}/>*/}
-                            <View style={styles.tags}>
-                                <Text>{request}</Text>
-                            </View>
+                            {console.log(request)}
+                            <ContactCard info={request}/>
                         </TouchableOpacity>
                     })
                 }
