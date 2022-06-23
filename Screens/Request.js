@@ -71,6 +71,8 @@ export default function Request({navigation, route}) {
                                 navigation.navigate("NewRequest")
                             }}/>
                 </View>
+                {console.log(feed)}
+                {feed.length!=0?
                 <FlatList data={feed} keyExtractor={(item, index) => index.toString()}
                           renderItem={({item}) => <Post details={item} navButton={
                               <Button title={"contact " + item.name} onPress={()=>{
@@ -80,6 +82,7 @@ export default function Request({navigation, route}) {
                           ListFooterComponent={
                               <Button title={"load more"} onPress={() => setFeed(loadMoreRequests)}/>
                           }/>
+                    : <Text>no list</Text>}
             </View>
         )
     }

@@ -114,13 +114,18 @@ export default function Messages({route}) {
     }
 
     const [chatIDs,setChatIDs] = useState([])
+    const [err,setErr] = useState("open your messages above")
 
     return (
         <View style={styles.background}>
-            <Button title={"get chat id's"} onPress={() =>
-                setChatIDs(profile.acceptedRequests.concat(profile.myRequests))
-            }/>
+            <Button title={"open chats"} onPress={() => {
+                let ids = profile.acceptedRequests.concat(profile.myRequests);
+                ids.length == 0?setErr("It appears you have no open or accepted requests!")
+            :
+                    setChatIDs(ids)
 
+            }
+            }/>
             <View style={{flexDirection: "row", padding: 12}}>
                 <TextInput
                     style={{
@@ -136,7 +141,9 @@ export default function Messages({route}) {
                 />
             </View>
             <ScrollView style={{width: "100%"}}>
-                {chatIDs == null ? <Text>empty</Text> :
+                {chatIDs.length == 0 ?
+                    <Text style={styles.header}>{err}</Text>
+                    :
                     chatIDs.map((request, index) => {
                         return <TouchableOpacity key={index} onPress={() => {
                             setOpenChat(request)
@@ -147,7 +154,6 @@ export default function Messages({route}) {
                                 <Text>{request}</Text>
                             </View>
                         </TouchableOpacity>
-
                     })
                 }
             </ScrollView>

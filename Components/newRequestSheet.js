@@ -44,7 +44,7 @@ const NewRequestSheet = ({navigation,route}) => {
         <View style={[styles.background,toggle?styles.skillsTheme:styles.resourceTheme]}>
             <Button title={"Back"} onPress={()=> navigation.navigate("NoticeBoard")}/>
             <ToggleButtons titleLeft={"Skill"} titleRight={"Resource"} onToggle={()=>{
-                setRequest({...request, type: !toggle?"skill":"resource"});
+                setRequest({...request, type: !toggle?"skill":"resource",tags:[]});
                 switchToggle(!toggle)
             }}/>
             <Text style={styles.header}>Create a new Request</Text>
