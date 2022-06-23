@@ -14,6 +14,7 @@
     "messenger now implemented to create chats between people that have accepted job."
   ],
   "toDo": [
+    "updating profile information doesnt recall data that has been posted.",
     "clicking request gives user chat id",
     "on message board, user can click on chathead to open messages",
     "when chat head is made (another rtdb) all info is added",

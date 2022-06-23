@@ -113,14 +113,13 @@ export default function Messages({route}) {
         </Modal>
     }
 
-
-    const [R, setR] = useState()
     const [chatIDs,setChatIDs] = useState([])
 
     return (
         <View style={styles.background}>
-            {/*<Button title={"get my requests"} onPress={() => getMyRequests(profile.email).then((r) => setR(r))}/>*/}
-            <Button title={"get chat id's"} onPress={() => setChatIDs(profile.acceptedRequests.concat(profile.myRequests))}/>
+            <Button title={"get chat id's"} onPress={() =>
+                setChatIDs(profile.acceptedRequests.concat(profile.myRequests))
+            }/>
 
             <View style={{flexDirection: "row", padding: 12}}>
                 <TextInput

@@ -136,17 +136,18 @@ export async function newProfile(userEmail, profileData) {
         resources: profileData.resources,
         skills: profileData.skills,
         title: profileData.title,
+        acceptedRequests:[],
         myRequests: []
     });
 }
 
 export async function updateProfile(userEmail, profileData) {
-    await setDoc(doc(db, "Users", userEmail.toLowerCase()), {
+    await updateDoc(doc(db, "Users", userEmail.toLowerCase()), {
         about: profileData.about,
         name: profileData.name,
         resources: profileData.resources,
         skills: profileData.skills,
-        title: profileData.title
+        title: profileData.title,
     });
 }
 
@@ -174,13 +175,3 @@ export async function getOffers(max) {
     })
     return offers
 }
-//
-// export async function getMessages() {
-//     db.ref("chats").on("value", snapshot => {
-//         let chats = [];
-//         snapshot.forEach((snap) => {
-//             chats.push(snap.val());
-//         });
-//         this.setState({chats});
-//     });
-// }

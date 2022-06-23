@@ -111,13 +111,7 @@ const AboutMe =({profile})=> {
                     })}
                 </ScrollView>
             </View>
-            {visible? <Modal
-                    onRequestClose={() => {
-                        setVisible(false);
-                    }}>
-                    <UpdateAccount email={auth.currentUser.email} oldData={profile}/>
-                </Modal> :
-                <Button title="update info" style={styles.button} onPress={()=>setVisible(true)} />}
+            <UpdateAccount email={auth.currentUser.email} oldData={profile}/>
         </View>
     );
 }
