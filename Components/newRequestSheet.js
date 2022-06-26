@@ -13,8 +13,9 @@ import Post from "./Post";
 const NewRequestSheet = ({navigation,route}) => {
 
     const profile = route.params
+    console.log(profile)
     const [request, setRequest] = useState({
-        account:profile.email,
+        // account:profile.email,
         type: "skill",
         name: profile.name,
         tags: [],

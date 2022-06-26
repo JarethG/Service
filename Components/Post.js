@@ -6,12 +6,13 @@ import Settings from "./Settings";
 import Button from "./Button";
 
 const Post = ({details,navButton}) => {
+    // console.log("details" ,details)
     const theme = details.type === "skill"
     const [expand, setExpand] = useState(false)
     return (
         <Pressable onPress={() => setExpand(!expand)}>
             <View style={[styles.container, theme ? styles.skillsTheme : styles.resourceTheme]}>
-                {expand?<Settings/>:null}
+                {expand?<Settings data={details}/>:null}
                 <View style={{flexDirection: "row"}}>
                     <View style={styles.cardProfilePicture}/>
                     <View>

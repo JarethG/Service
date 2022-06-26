@@ -2,11 +2,21 @@ import {Modal, Pressable, Text, View} from "react-native";
 import {styles} from "../Styles";
 import {AntDesign, Ionicons} from "@expo/vector-icons";
 import React, {useState} from "react";
+import ProfileContext from "../utils/profileContext";
+import {deleteRequest} from "../utils/Firebase";
 
-const Settings = () => {
+const Settings = ({data}) => {
+
+    const profile = React.useContext(ProfileContext)
+    console.log(data)
+
     return (
         <SettingsModule>
             <View style={{flex: 1}}>
+                <Pressable style={styles.menuItem} onPress={()=>deleteRequest(data.requestID,profile.email).then(console.log("deleted"))} >
+                    <AntDesign name="delete" size={24} color="black"/>
+                    <Text style={{left: 20}}>delete request</Text>
+                </Pressable>
                 <View style={styles.menuItem}>
                     <AntDesign name="hearto" size={24} color="black"/>
                     <Text style={{left: 20}}>Save to favorites</Text>

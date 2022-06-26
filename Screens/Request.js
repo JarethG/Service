@@ -14,17 +14,17 @@ import Post from "../Components/Post";
 import Search from "../Components/Search";
 import Picker from "../Components/Picker";
 import {Skills, Resources} from '../JSONS/Tags.json'
+import ProfileContext from "../utils/profileContext";
 
 export default function Request({navigation, route}) {
 
-    const [loading, setLoading] = useState(true)
-    const [requestCounter, setRequestCounter] = useState(0)
     const [feed, setFeed] = useState([])
     const [filter, setFilter] = useState({
         type: "All",
         tags: "",
     })
-    const profile = route.params
+    const profile = React.useContext(ProfileContext)
+    // console.log("Request profile => ",profile)
 
     const Stack = createNativeStackNavigator();
 
@@ -37,7 +37,6 @@ export default function Request({navigation, route}) {
     useEffect(() => {
         loadMoreRequests().then(r => {
             setFeed(r)
-            setLoading(false)
         })
     }, [])
 
@@ -62,7 +61,7 @@ export default function Request({navigation, route}) {
         return (
             <View style={styles.background}>
                 <View style={{alignItems: "center", justifyContent: "center", flexDirection: "row"}}>
-                    <SearchBar onPress={() => navigation.navigate("Search")}/>
+                    {/*<SearchBar onPress={() => navigation.navigate("Search")}/>*/}
                     {/*<AntDesign name="filter" size={24} color="black"*/}
                     {/*           style={{borderWidth: 1, borderColor: "black", margin: 10}}*/}
                     {/*           onPress={() => setFiltering(true)}/>*/}
@@ -139,7 +138,7 @@ export default function Request({navigation, route}) {
                 headerShown: false
             }}>
             <Stack.Screen name={"NoticeBoard"} component={NoticeBoard}/>
-            <Stack.Screen name={"Search"} component={Search}/>
+            {/*<Stack.Screen name={"Search"} component={Search}/>*/}
             <Stack.Screen name={"NewRequest"} component={NewRequestSheet} initialParams={profile}/>
         </Stack.Navigator>
 

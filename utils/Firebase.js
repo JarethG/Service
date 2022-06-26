@@ -13,9 +13,10 @@ import {
     updateDoc,
     arrayUnion,
     where,
-    onSnapshot
+    onSnapshot,
+    arrayRemove
 } from 'firebase/firestore';
-import {getDatabase, ref, onValue, set, push, update} from 'firebase/database';
+import {getDatabase, ref, onValue, set, push, update, remove} from 'firebase/database';
 import React from "react";
 import * as firebase from "firebase/app";
 
@@ -39,6 +40,19 @@ const rtdb = getDatabase(app);
 
 export default app;
 
+export async function deleteRequest(requestID, userEmail) {
+    //delete the main request doc
+    await deleteDoc(doc(db, "Requests",requestID));
+    //delete doc reference id from profile
+    const userDoc = doc(db, "Users", userEmail);
+    await updateDoc(userDoc, {
+        myRequests: arrayRemove(requestID)
+    });
+    //delete chat and chat head references
+    await remove(ref(rtdb, 'chatHeaders/' + requestID))
+    await remove(ref(rtdb, 'chats/' + requestID))
+}
+
 export async function sendMessage(chatID, message, userID) {
     await set(ref(rtdb, 'chats/' + chatID), {
         userID: userID,
@@ -58,7 +72,7 @@ export async function pushMessage(chatID, message, userID) {
 export async function createChatHeader(chatID, data) {
     await set(ref(rtdb, 'chatHeaders/' + chatID), {
         acceptingUser: "",
-        client: data.account,
+        client: data.name,
         jobTitle: data.title,
         lastMessage: "waiting for someone to accept your offer",
         lastTimeStamp: Date.now(),
