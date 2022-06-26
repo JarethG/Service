@@ -35,16 +35,26 @@ export default function Request({navigation, route}) {
     }
 
     useEffect(() => {
-        loadMoreRequests().then(r => {
-            setFeed(r)
-        })
+        onRefresh()
     }, [])
 
-    function loadMoreRequests() {
-        let newFeed = getOffers(20).then()
-        // setRequestCounter(requestCounter+20)
-        return newFeed
-    }
+    // function loadMoreRequests() {
+    //     let newFeed = getOffers(20).then()
+    //     // setRequestCounter(requestCounter+20)
+    //     return newFeed
+    // }
+
+    const [isFetching, setIsFetching] = useState(false);
+
+    const fetchData = () => {
+        getOffers(20).then((r)=>setFeed(r))
+        setIsFetching(false);
+    };
+
+    const onRefresh = () => {
+        setIsFetching(true);
+        fetchData();
+    };
 
     const SearchBar = ({onPress}) => {
         return (
@@ -78,8 +88,11 @@ export default function Request({navigation, route}) {
                               }}/>
                           }/>}
                           ListFooterComponent={
-                              <Button title={"load more"} onPress={() => setFeed(loadMoreRequests)}/>
-                          }/>
+                              <Button title={"load more"} onPress={() => onRefresh()}/>
+                          }
+                          onRefresh={onRefresh}
+                          refreshing={isFetching}
+                />
                     : <Text>no list</Text>}
             </View>
         )
