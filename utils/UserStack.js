@@ -68,8 +68,8 @@ function UserStack(user) {
                                     options={{
                                         tabBarIcon: () => <Ionicons name="chatbubbles" size={24} color="gray"/>
                                     }}/>
-                        <Tab.Screen name="Community" component={Community}
-                                    options={{tabBarIcon: () => <FontAwesome5 name="medal" size={24} color="gray"/>}}/>
+                        {/*<Tab.Screen name="Community" component={Community}*/}
+                        {/*            options={{tabBarIcon: () => <FontAwesome5 name="medal" size={24} color="gray"/>}}/>*/}
                         <Tab.Screen name="Profile" component={Profile} initialParams={profile}
                                     options={{
                                         tabBarIcon: () => <Ionicons name="person-circle" size={24} color="gray"/>
