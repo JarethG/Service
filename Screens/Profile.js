@@ -12,10 +12,11 @@ import ResourcePicker from "../Components/ResourcePicker";
 import {UpdateAccount} from "../utils/AccountHandler";
 import {deleteMyRequest, getDocsByIDs, getMyRequests, getOffers} from "../utils/Firebase";
 import Post from "../Components/Post";
+import ProfileContext from "../utils/profileContext";
 
-export default function Profile({route}) {
+export default function Profile() {
 
-    const profile = route.params
+    const profile = React.useContext(ProfileContext)
     const auth = getAuth();
 
     const [profileToggle, setProfileToggle] = useState(true)
@@ -55,59 +56,26 @@ export default function Profile({route}) {
 }
 
 const AboutMe =({profile})=> {
-    const [skills, setSkills] = useState(profile.skills)
-    const [resources, setResources] = useState(profile.resources)
     const auth = getAuth();
-    const [visible, setVisible] = useState(false)
-
-    function addSkill(string) {
-        let newArr = [...skills];
-        newArr.push(string)
-        setSkills(newArr)
-    }
-    function addResources(string) {
-        let newArr = [...resources];
-        newArr.push(string)
-        setResources(newArr)
-    }
+    // console.log("anout me => ",profile)
 
     return (
         <View style={{width: "100%", padding: 15, flex: 1}}>
             <Text style={styles.header}>About</Text>
             <Text>{profile.about}</Text>
-            <View style={{flexDirection: "row", alignItems: "center"}}>
                 <Text style={styles.header}>Skills</Text>
-
-            </View>
             <View>
                 <ScrollView horizontal>
-                    {skills.map((skill, index) => {
-                        return <Text style={{
-                            backgroundColor: "#ffffff",
-                            borderRadius: 15,
-                            margin: 3,
-                            padding: 5,
-                            color: "#386540",
-                            fontSize: 12
-                        }} key={index}>{skill}</Text>
+                    {profile.skills.map((skill, index) => {
+                        return <Text style={[styles.tags,styles.skillsTheme]} key={index}>{skill}</Text>
                     })}
                 </ScrollView>
             </View>
-            <View style={{flexDirection: "row", alignItems: "center"}}>
                 <Text style={styles.header}>Resources</Text>
-
-            </View>
             <View>
                 <ScrollView horizontal>
-                    {resources.map((skill, index) => {
-                        return <Text style={{
-                            backgroundColor: "#ffffff",
-                            borderRadius: 15,
-                            margin: 3,
-                            padding: 5,
-                            color: "#386540",
-                            fontSize: 12
-                        }} key={index}>{skill}</Text>
+                    {profile.resources.map((skill, index) => {
+                        return <Text style={[styles.tags,styles.resourceTheme]} key={index}>{skill}</Text>
                     })}
                 </ScrollView>
             </View>

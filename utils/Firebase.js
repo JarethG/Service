@@ -6,14 +6,14 @@ import {
     doc,
     getDocs,
     deleteDoc,
-    orderBy,
     collection,
     getDoc,
     limit,
     query,
     updateDoc,
     arrayUnion,
-    where
+    where,
+    onSnapshot
 } from 'firebase/firestore';
 import {getDatabase, ref, onValue, set, push, update} from 'firebase/database';
 import React from "react";
@@ -164,17 +164,22 @@ export async function updateProfile(userEmail, profileData) {
     });
 }
 
-export async function getProfile(email) {
+export async function getProfile(email,callback) {
     const docRef = doc(db, "Users", email);
-    const docSnap = await getDoc(docRef);
+    const docSnap = await onSnapshot(docRef,(doc)=> {
+        let profileData = doc.data()
+        profileData["email"] = email
+        console.log("Firebase/getprofile/ => profile reloaded")
+        callback(profileData)
+    });
 
-    if (docSnap.exists()) {
+    if (docSnap) {
         // console.log("Document data:", docSnap.data());
+        console.log("success");
     } else {
         // doc.data() will be undefined in this case
         console.log("No such document!");
     }
-    return docSnap.data()
 }
 
 export async function getOffers(max) {

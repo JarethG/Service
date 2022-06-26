@@ -12,13 +12,14 @@ import {styles} from "../Styles";
 import Splash from "../Screens/Splash";
 import ExpoUpdates from "expo-updates/src/ExpoUpdates";
 import Updates from "../Components/Updates";
+import ProfileContext from "./profileContext";
 
 const Tab = createBottomTabNavigator();
 
 
 function UserStack(user) {
     const [loading, setLoading] = useState(true)
-    const [updates, setUpdates] = useState(true)
+    const [updates, setUpdates] = useState(false)
     const [profile, setProfile] = useState()
 
 
@@ -26,16 +27,16 @@ function UserStack(user) {
         // Fetch the token from storage then navigate to our appropriate place
         const getUserProfile = async () => {
             //check if profile exists in storage, if not check online
-            let profileDoc = await getProfile(user.user.email)
+            let profileDoc = await getProfile(user.user.email,setProfile)
             // console.log("profile at effect", profileDoc)
             //need to persist profile
-            profileDoc["email"] = user.user.email
-            return profileDoc
+            // profileDoc["email"] = user.user.email
+            // return profileDoc
 
             //let them into page
         };
-        getUserProfile().then(r => {
-            setProfile(r)
+        getUserProfile().then(()=> {
+            // setProfile(r)
             setLoading(false)
         })
     }, []);
@@ -48,6 +49,7 @@ function UserStack(user) {
             loading ?
                 Splash("fetching profile")
                 :
+                <ProfileContext.Provider value={profile}>
                 <NavigationContainer>
                     <Tab.Navigator
                         screenOptions={{
@@ -59,6 +61,7 @@ function UserStack(user) {
 
                             }
                         }}>
+                        {console.log("UserStack/profile => ",profile)}
                         <Tab.Screen name="Notice Board" component={Request} initialParams={profile}
                                     options={{tabBarIcon: () => <FontAwesome5 name="sign" size={24} color="gray"/>}}/>
                         <Tab.Screen name="Messages" component={Messages} initialParams={profile}
@@ -73,6 +76,7 @@ function UserStack(user) {
                                     }}/>
                     </Tab.Navigator>
                 </NavigationContainer>
+                </ProfileContext.Provider>
     )
 }
 
