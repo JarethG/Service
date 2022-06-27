@@ -12,7 +12,7 @@ const Post = ({details,navButton}) => {
     return (
         <Pressable onPress={() => setExpand(!expand)}>
             <View style={[styles.container, theme ? styles.skillsTheme : styles.resourceTheme]}>
-                {expand?<Settings data={details}/>:null}
+                {/*{expand?<Settings data={details}/>:null}*/}
                 <View style={{flexDirection: "row"}}>
                     <View style={styles.cardProfilePicture}/>
                     <View>

@@ -92,7 +92,7 @@ const MyRequests =({profile})=> {
         get().then(r => {
             setRequests(r)
         })
-    }, [])
+    }, [profile])
 
     function get() {
         let newFeed = getMyRequests(profile.email).then()

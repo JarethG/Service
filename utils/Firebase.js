@@ -83,9 +83,11 @@ export async function createChatHeader(chatID, data) {
 export async function getChatHeaders(chatID,callback) {
     console.log(chatID)
     onValue(ref(rtdb, 'chatHeaders/' + chatID), (snapshot) => {
-        let header = snapshot.val()
-        header.id = chatID
-        callback(old =>[...old,header])
+        if(snapshot.exists()) {
+            let header = snapshot.val()
+            header.id = chatID
+            callback(old => [...old, header])
+        }
     })
 }
 
@@ -99,12 +101,6 @@ export function getMessage(chatID, userID, callback) {
         })
         callback(list)
     })
-}
-
-export async function newOffer(offer, userEmail) {
-    const docRef = await addDoc(collection(db, "Offers"), offer);
-
-
 }
 
 export async function getMyRequests(email) {

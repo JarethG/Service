@@ -4,7 +4,7 @@ import React, {useState} from "react";
 import ResourcePicker from "./ResourcePicker";
 import Button from "./Button";
 import RequestCard from "./RequestCard";
-import {createChatHeader, newOffer, newRequest} from "../utils/Firebase";
+import {createChatHeader, newRequest} from "../utils/Firebase";
 import Picker from "./Picker";
 import {Resources, Skills} from "../JSONS/Tags.json";
 import ToggleButtons from "./ToggleButtons";
@@ -15,7 +15,7 @@ const NewRequestSheet = ({navigation,route}) => {
     const profile = route.params
     console.log(profile)
     const [request, setRequest] = useState({
-        // account:profile.email,
+        account:profile.email,
         type: "skill",
         name: profile.name,
         tags: [],
