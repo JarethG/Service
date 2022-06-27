@@ -141,10 +141,17 @@ export async function newRequest(request, userEmail) {
 }
 
 export async function acceptRequest(requestID, userEmail) {
+    //set accepted boolean to true
+    const requestDoc = doc(db,"Requests", requestID)
+    await updateDoc(requestDoc, {
+        accepted: true
+    });
+    //add request to accepting users account
     const userDoc = doc(db, "Users", userEmail);
     await updateDoc(userDoc, {
         acceptedRequests: arrayUnion(requestID)
     });
+    //update chatHeader to reflect acceptance
     await update(ref(rtdb, 'chatHeaders/' + requestID), {
        acceptingUser:userEmail
     });
@@ -193,7 +200,7 @@ export async function getProfile(email,callback) {
 }
 
 export async function getOffers(max) {
-    const q = query(collection(db, "Requests"), limit(max))
+    const q = query(collection(db, "Requests"), limit(max),where("accepted", "==", false))
     const querySnapshot = await getDocs(q);
     let offers = querySnapshot.docs.map((doc) => {
         let offer = doc.data();

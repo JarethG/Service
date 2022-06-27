@@ -15,6 +15,7 @@ const NewRequestSheet = ({navigation,route}) => {
     const profile = route.params
     console.log(profile)
     const [request, setRequest] = useState({
+        accepted:false,
         account:profile.email,
         type: "skill",
         name: profile.name,

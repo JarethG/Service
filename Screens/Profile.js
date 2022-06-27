@@ -87,7 +87,7 @@ const AboutMe =({profile})=> {
 const MyRequests =({profile})=> {
 
     const [requests, setRequests] = useState([])
-    // console.log(requests)
+    console.log("requests => ",requests)
     useEffect(() => {
         get().then(r => {
             setRequests(r)
@@ -105,7 +105,7 @@ const MyRequests =({profile})=> {
                 <FlatList data={requests} keyExtractor={(item, index) => index.toString()}
                           renderItem={({item,index}) => <Post details={item.doc} navButton={
                               <Button title={"delete request"} onPress={()=>{
-                                  deleteMyRequest(item.id).then(
+                                  deleteMyRequest(item.id,profile.email).then(
                                       setRequests((requests) => requests.filter((_, num) => num !== index))
                                   )
                               }}/>

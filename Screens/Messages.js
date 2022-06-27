@@ -25,10 +25,11 @@ import {
     pushMessage,
     sendMessage
 } from "../utils/Firebase";
+import ProfileContext from "../utils/profileContext";
 
 export default function Messages({route}) {
 
-    const profile = route.params
+    const profile = useContext(ProfileContext)
     const [searchText, setSearchText] = useState();
 
     const [modalData, setModalData] = useState(null);
@@ -129,6 +130,7 @@ export default function Messages({route}) {
             <Button title={"open chats"} onPress={() => {
                 setChatIDs([])
                 let ids = profile.acceptedRequests.concat(profile.myRequests);
+                console.log("message ids",ids)
                 ids.length == 0 ? setErr("It appears you have no open or accepted requests!")
                     :
                     ids.forEach((id)=> getChatHeaders(id,setChatIDs))
