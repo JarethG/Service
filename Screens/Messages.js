@@ -21,11 +21,12 @@ import {
     createChatHeader,
     getChatHeaders,
     getMessage,
-    getMyRequests,
+    getMyRequests, proposeJobCompleted,
     pushMessage,
     sendMessage
 } from "../utils/Firebase";
 import ProfileContext from "../utils/profileContext";
+import {isCompositeComponent} from "react-dom/test-utils";
 
 export default function Messages({route}) {
 
@@ -37,8 +38,10 @@ export default function Messages({route}) {
 
     const [openMessages, setOpenMessages] = useState()
     const [openChat, setOpenChat] = useState()
+    const [chatIDs, setChatIDs] = useState([])
 
     const ContactCard = ({info}) => {
+        // console.log(info)
         return (
             <View style={[styles.skillsTheme, {margin: 10, borderRadius: 10, padding: 7,}]}>
                 <View style={{flexDirection: "row"}}>
@@ -49,8 +52,6 @@ export default function Messages({route}) {
                             <Text>{info.jobTitle}</Text>
                         </View>
                         <View style={{flexDirection: "row", alignItems: "center"}}>
-                            <Ionicons name="checkmark-done-circle-outline" size={24}
-                                      color={info.checked ? "green" : "grey"}/>
                             <Text>{info.client}</Text>
                         </View>
                         <Text>{info.lastMessage}</Text>
@@ -76,13 +77,13 @@ export default function Messages({route}) {
         }, [])
 
         function get() {
-            return getMessage(openChat, profile.email, (r) => setMessages(r.reverse()))
+            return getMessage(chatIDs[openChat].id, profile.email, (r) => setMessages(r.reverse()))
         }
 
         const [text, setText] = useState()
 
         function sendMessage() {
-            pushMessage(openChat, text, profile.email).then(() => console.log("sent!"))
+            pushMessage(chatIDs[openChat].id, text, profile.email).then(() => console.log("sent!"))
         }
 
         return <Modal
@@ -96,7 +97,43 @@ export default function Messages({route}) {
         >
             <View style={styles.background}>
                 <View style={[styl.modalView, {flex: 1}]}>
-                    <Ionicons name="return-up-back" size={24} color="black" onPress={() => setModalVisible(false)}/>
+                    {/*<Ionicons name="return-up-back" size={24} color="black" onPress={() => setModalVisible(false)}/>*/}
+                    <Button title={"back"} onPress={() => setModalVisible(false)}/>
+
+
+                    {chatIDs[openChat].isComplete === "" ?
+                        <Button title={"Request completed"} onPress={()=>{
+                            proposeJobCompleted(chatIDs[openChat].id,profile.name).then()
+                        }}/>
+                        :
+                        <>
+                        {
+                            chatIDs[openChat].isComplete === profile.name ?
+
+                                <Text>you have suggested that this job is finished, waiting for confirmation</Text>
+                                :
+                                <Text>{chatIDs[openChat].isComplete} has suggested that this job is finished, do you
+                                    agree?</Text>
+
+
+                        }
+                            <Button title={"revoke completion"} onPress={()=>{
+                                proposeJobCompleted(chatIDs[openChat].id,"").then()
+                            }}/>
+                        </>
+                        }
+
+
+
+
+
+
+
+
+
+
+
+
                     <View style={{width: "100%", flex: 1}}>
                         <FlatList data={messages} keyExtractor={(item, index) => index.toString()}
                                   renderItem={({item}) => renderItem(item)}
@@ -122,7 +159,7 @@ export default function Messages({route}) {
         </Modal>
     }
 
-    const [chatIDs, setChatIDs] = useState([])
+
     const [err, setErr] = useState("open your messages above")
 
     return (
@@ -130,7 +167,6 @@ export default function Messages({route}) {
             <Button title={"open chats"} onPress={() => {
                 setChatIDs([])
                 let ids = profile.acceptedRequests.concat(profile.myRequests);
-                console.log("message ids",ids)
                 ids.length == 0 ? setErr("It appears you have no open or accepted requests!")
                     :
                     ids.forEach((id)=> getChatHeaders(id,setChatIDs))
@@ -157,17 +193,16 @@ export default function Messages({route}) {
                     :
                     chatIDs.map((request, index) => {
                         return <TouchableOpacity key={index} onPress={() => {
-                            setOpenChat(request.id)
+                            setOpenChat(index)
                             setModalVisible(true)
                         }}>
-                            {console.log(request)}
                             <ContactCard info={request}/>
                         </TouchableOpacity>
                     })
                 }
             </ScrollView>
             <StatusBar style="auto"/>
-            {openChat ? <MessagingModal/> : null}
+            {openChat!=null ? <MessagingModal/> : null}
         </View>
     );
 }

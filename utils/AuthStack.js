@@ -61,6 +61,10 @@ function SignInScreen({navigation}) {
                 </View>
                 <Button title="Sign in" onPress={() => signIn()}/>
                 <Button title="Sign up" onPress={() => navigation.navigate("sign up")}/>
+                <Button title="Sign in as Jareth" onPress={() =>
+                    signInWithEmailAndPassword(auth, "jarethgaskin@gmail.com", "123456").then()}/>
+                <Button title="Sign in as Wane" onPress={() =>
+                    signInWithEmailAndPassword(auth, "waneking@gmail.com", "123456").then()}/>
             </View>
         </View>
     );

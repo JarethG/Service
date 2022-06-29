@@ -71,6 +71,7 @@ export async function pushMessage(chatID, message, userID) {
 
 export async function createChatHeader(chatID, data) {
     await set(ref(rtdb, 'chatHeaders/' + chatID), {
+        isComplete:"",
         acceptingUser: "",
         client: data.name,
         jobTitle: data.title,
@@ -80,14 +81,33 @@ export async function createChatHeader(chatID, data) {
     console.log("done")
 }
 
+export async function proposeJobCompleted(requestID,userEmail){
+    await update(ref(rtdb, 'chatHeaders/' + requestID), {
+        isComplete:userEmail
+    });
+}
+
 export async function getChatHeaders(chatID,callback) {
-    console.log(chatID)
     onValue(ref(rtdb, 'chatHeaders/' + chatID), (snapshot) => {
-        if(snapshot.exists()) {
+        if (snapshot.exists()) {
             let header = snapshot.val()
             header.id = chatID
-            callback(old => [...old, header])
+            // callback(old => [...old, header])
+            let found = false
+            callback(old => old.map((id)=> {
+                if(id.id != chatID){
+                    return id
+                } else {
+                    found = true;
+                    return header
+                }
+            }))
+            if(!found)callback(old => [...old, header])
+            // callback(old => [...old, header])
+
+
         }
+
     })
 }
 
@@ -155,7 +175,7 @@ export async function acceptRequest(requestID, userEmail) {
     await update(ref(rtdb, 'chatHeaders/' + requestID), {
        acceptingUser:userEmail
     });
-    console.log("done")
+    console.log("request accepted")
 
 }
 
