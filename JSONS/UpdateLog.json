@@ -14,6 +14,14 @@
     "messenger now implemented to create chats between people that have accepted job."
   ],
   "toDo": [
+    "clean up code",
+    "turn off listners when logging out",
+    "remove model closed from messenger screen.",
+    "add back button to messenger modal",
+    "text in messenger not clearing",
+    "request page not reloading/clearing when request is accepted",
+    "accepting the request needs to navigate to messenger",
+    "messenger needs to auto load chat head listeners.",
     "updating profile information doesnt recall data that has been posted.",
     "clicking request gives user chat id",
     "on message board, user can click on chathead to open messages",

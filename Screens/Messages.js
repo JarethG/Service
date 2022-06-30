@@ -18,6 +18,7 @@ import dummy from '../JSONS/Contacts.json'
 import {Ionicons} from "@expo/vector-icons";
 import messages from '../JSONS/Messages.json'
 import {
+    acceptJobCompletion,
     createChatHeader,
     getChatHeaders,
     getMessage,
@@ -102,36 +103,30 @@ export default function Messages({route}) {
 
 
                     {chatIDs[openChat].isComplete === "" ?
-                        <Button title={"Request completed"} onPress={()=>{
-                            proposeJobCompleted(chatIDs[openChat].id,profile.name).then()
+                        <Button title={"Request completed"} onPress={() => {
+                            proposeJobCompleted(chatIDs[openChat].id, profile.name).then()
                         }}/>
                         :
-                        <>
-                        {
-                            chatIDs[openChat].isComplete === profile.name ?
 
+
+                        chatIDs[openChat].isComplete === profile.name ?
+                            <>
                                 <Text>you have suggested that this job is finished, waiting for confirmation</Text>
-                                :
+                                <Button title={"revoke completion"} onPress={() => {
+                                    proposeJobCompleted(chatIDs[openChat].id, "").then()
+                                }}/>
+                            </>
+                            : <>
                                 <Text>{chatIDs[openChat].isComplete} has suggested that this job is finished, do you
                                     agree?</Text>
+                                <Button title={"accept completion"} onPress={() => {
+                                    setOpenChat(null)
+                                    acceptJobCompletion(chatIDs[openChat]).then(console.log("job done"))
+                                }}/>
+                            </>
 
 
-                        }
-                            <Button title={"revoke completion"} onPress={()=>{
-                                proposeJobCompleted(chatIDs[openChat].id,"").then()
-                            }}/>
-                        </>
-                        }
-
-
-
-
-
-
-
-
-
-
+                    }
 
 
                     <View style={{width: "100%", flex: 1}}>
@@ -169,7 +164,7 @@ export default function Messages({route}) {
                 let ids = profile.acceptedRequests.concat(profile.myRequests);
                 ids.length == 0 ? setErr("It appears you have no open or accepted requests!")
                     :
-                    ids.forEach((id)=> getChatHeaders(id,setChatIDs))
+                    ids.forEach((id) => getChatHeaders(id, setChatIDs))
             }
             }/>
             <View style={{flexDirection: "row", padding: 12}}>
@@ -189,20 +184,20 @@ export default function Messages({route}) {
             <ScrollView style={{width: "100%"}}>
                 {
                     chatIDs.length == 0 ?
-                    <Text style={styles.header}>{err}</Text>
-                    :
-                    chatIDs.map((request, index) => {
-                        return <TouchableOpacity key={index} onPress={() => {
-                            setOpenChat(index)
-                            setModalVisible(true)
-                        }}>
-                            <ContactCard info={request}/>
-                        </TouchableOpacity>
-                    })
+                        <Text style={styles.header}>{err}</Text>
+                        :
+                        chatIDs.map((request, index) => {
+                            return <TouchableOpacity key={index} onPress={() => {
+                                setOpenChat(index)
+                                setModalVisible(true)
+                            }}>
+                                <ContactCard info={request}/>
+                            </TouchableOpacity>
+                        })
                 }
             </ScrollView>
             <StatusBar style="auto"/>
-            {openChat!=null ? <MessagingModal/> : null}
+            {openChat != null ? <MessagingModal/> : null}
         </View>
     );
 }

@@ -19,6 +19,7 @@ import {
 import {getDatabase, ref, onValue, set, push, update, remove} from 'firebase/database';
 import React from "react";
 import * as firebase from "firebase/app";
+import {Alert} from "react-native";
 
 const firebaseConfig = {
     apiKey: "AIzaSyC3YZcmR4Q_mHcA381qJYamGj8xsYT5cAY",
@@ -41,6 +42,9 @@ const rtdb = getDatabase(app);
 export default app;
 
 export async function deleteRequest(requestID, userEmail) {
+    //check if there is an accepting user and block if so.
+
+
     //delete the main request doc
     await deleteDoc(doc(db, "Requests",requestID));
     //delete doc reference id from profile
@@ -70,10 +74,13 @@ export async function pushMessage(chatID, message, userID) {
 }
 
 export async function createChatHeader(chatID, data) {
+    console.log(data)
     await set(ref(rtdb, 'chatHeaders/' + chatID), {
         isComplete:"",
         acceptingUser: "",
+        acceptingUserEmail: "",
         client: data.name,
+        clientEmail: data.account,
         jobTitle: data.title,
         lastMessage: "waiting for someone to accept your offer",
         lastTimeStamp: Date.now(),
@@ -85,6 +92,18 @@ export async function proposeJobCompleted(requestID,userEmail){
     await update(ref(rtdb, 'chatHeaders/' + requestID), {
         isComplete:userEmail
     });
+}
+
+export async function acceptJobCompletion(request){
+    //delter header,chat,clientreferences
+    await deleteRequest(request.id, request.clientEmail)
+    //delte accepting user reference
+    const userDoc = doc(db, "Users", request.acceptingUserEmail);
+    await updateDoc(userDoc, {
+        acceptedRequests: arrayRemove(request.id)
+    });
+    // add points
+
 }
 
 export async function getChatHeaders(chatID,callback) {
@@ -134,10 +153,6 @@ export async function getMyRequests(email) {
     return offers
 }
 
-export async function deleteMyRequest(docID) {
-    await deleteDoc(doc(db, "Requests", docID));
-}
-
 export async function getDocsByIDs(docIds) {
     let promises = docIds.map(function (key) {
         return getDoc(doc(key));
@@ -160,7 +175,7 @@ export async function newRequest(request, userEmail) {
     await createChatHeader(docRef.id, request)
 }
 
-export async function acceptRequest(requestID, userEmail) {
+export async function acceptRequest(requestID, userEmail,userName) {
     //set accepted boolean to true
     const requestDoc = doc(db,"Requests", requestID)
     await updateDoc(requestDoc, {
@@ -173,7 +188,8 @@ export async function acceptRequest(requestID, userEmail) {
     });
     //update chatHeader to reflect acceptance
     await update(ref(rtdb, 'chatHeaders/' + requestID), {
-       acceptingUser:userEmail
+       acceptingUser:userName,
+       acceptingUserEmail:userEmail
     });
     console.log("request accepted")
 

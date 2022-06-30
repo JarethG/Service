@@ -86,7 +86,7 @@ export default function Request({navigation, route}) {
 
                           <Post details={item} navButton={item.account != profile.email?
                               <Button title={"contact " + item.name} onPress={()=>{
-                                  acceptRequest(item.requestID,profile.email).then(()=> console.log("accepted"))
+                                  acceptRequest(item.requestID,profile.email,profile.name).then(()=> console.log("accepted"))
                               }}/>:<Text style={styles.headerr}>this is your request!</Text>
                           }/>
                 }

@@ -10,7 +10,7 @@ import { Authentication } from '../utils/Authentication';
 import Button from '../Components/Button'
 import ResourcePicker from "../Components/ResourcePicker";
 import {UpdateAccount} from "../utils/AccountHandler";
-import {deleteMyRequest, getDocsByIDs, getMyRequests, getOffers} from "../utils/Firebase";
+import {deleteMyRequest, deleteRequest, getDocsByIDs, getMyRequests, getOffers} from "../utils/Firebase";
 import Post from "../Components/Post";
 import ProfileContext from "../utils/profileContext";
 
@@ -105,13 +105,13 @@ const MyRequests =({profile})=> {
                 <FlatList data={requests} keyExtractor={(item, index) => index.toString()}
                           renderItem={({item,index}) => <Post details={item.doc} navButton={
                               <Button title={"delete request"} onPress={()=>{
-                                  deleteMyRequest(item.id,profile.email).then(
+                                  deleteRequest(item.id,profile.email).then(
                                       setRequests((requests) => requests.filter((_, num) => num !== index))
                                   )
                               }}/>
                           }/>}
                           />
-                :<Text>It apears you havent made any requests yet, head over to the Notice Boards tab to get started</Text>}
+                :<Text>It appears you haven't made any requests yet, head over to the Notice Boards tab to get started</Text>}
         </View>
     );
 }
