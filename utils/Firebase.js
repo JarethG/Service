@@ -42,9 +42,6 @@ const rtdb = getDatabase(app);
 export default app;
 
 export async function deleteRequest(requestID, userEmail) {
-    //check if there is an accepting user and block if so.
-
-
     //delete the main request doc
     await deleteDoc(doc(db, "Requests",requestID));
     //delete doc reference id from profile

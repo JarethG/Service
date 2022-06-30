@@ -4,9 +4,10 @@ import { Authentication } from './utils/Authentication';
 import UserStack from './utils/UserStack';
 import AuthStack from './utils/AuthStack';
 import Splash from "./Screens/Splash";
-import {LogBox} from "react-native";
-
+import { YellowBox } from "react-native";
 export default function App() {
+
+    YellowBox.ignoreWarnings([""]);
 
     const [checkingUserStatus,setCheckingUserStatus] = useState(true)
     const { user } = Authentication();
