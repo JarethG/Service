@@ -1,8 +1,7 @@
 import {createUserWithEmailAndPassword, getAuth} from "firebase/auth";
-import {newupdates, updateProfile} from "./Firebase";
+import {updateProfile} from "./Firebase";
 import {Modal, Text, TextInput, View} from "react-native";
 import {styles} from "../Styles";
-import ResourcePicker from "../Components/ResourcePicker";
 import Button from "../Components/Button";
 import React, {useState} from "react";
 import Picker from "../Components/Picker";

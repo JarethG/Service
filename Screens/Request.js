@@ -1,22 +1,18 @@
-import {Text, View, FlatList, Modal, Alert, ScrollView, Pressable, TouchableOpacity, TextInput,} from 'react-native';
+import {Text, View, FlatList, Pressable,TextInput,} from 'react-native';
 import {styles} from "../Styles";
 import React, {useEffect, useState} from "react";
-import RequestCard from "../Components/RequestCard";
-import {FontAwesome5, Ionicons, Entypo} from '@expo/vector-icons';
+import {FontAwesome5,Entypo} from '@expo/vector-icons';
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
-import Requests from '../JSONS/Requests.json'
-import {NoticeboardFilters} from "../Components/NoticeboardFilters";
 import NewRequestSheet from "../Components/newRequestSheet";
 import Button from "../Components/Button";
 import {acceptRequest, createChatHeader, getOffers} from "../utils/Firebase";
-import RequestFeed from "../Components/RequestFeed";
 import Post from "../Components/Post";
 import Search from "../Components/Search";
 import Picker from "../Components/Picker";
 import {Skills, Resources} from '../JSONS/Tags.json'
 import ProfileContext from "../utils/profileContext";
 
-export default function Request({navigation, route}) {
+export default function Request({navigation}) {
 
     const [feed, setFeed] = useState([])
     const [filter, setFilter] = useState({
@@ -24,25 +20,13 @@ export default function Request({navigation, route}) {
         tags: "",
     })
     const profile = React.useContext(ProfileContext)
-    // console.log("Request profile => ",profile)
 
     const Stack = createNativeStackNavigator();
 
 
-    function addContact() {
-        //will require firebaser
-        navigation.jumpTo('Messages');
-    }
-
     useEffect(() => {
         onRefresh()
     }, [])
-
-    // function loadMoreRequests() {
-    //     let newFeed = getOffers(20).then()
-    //     // setRequestCounter(requestCounter+20)
-    //     return newFeed
-    // }
 
     const [isFetching, setIsFetching] = useState(false);
 
@@ -87,7 +71,7 @@ export default function Request({navigation, route}) {
                           <Post details={item} navButton={item.account != profile.email?
                               <Button title={"contact " + item.name} onPress={()=>{
                                   acceptRequest(item.requestID,profile.email,profile.name).then(()=> console.log("accepted"))
-                              }}/>:<Text style={styles.headerr}>this is your request!</Text>
+                              }}/>:<Text style={styles.header}>this is your request!</Text>
                           }/>
                 }
                           ListFooterComponent={

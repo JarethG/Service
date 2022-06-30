@@ -1,10 +1,8 @@
 import {Modal, Text, TextInput, View} from "react-native";
 import {styles} from "../Styles";
 import React, {useState} from "react";
-import ResourcePicker from "./ResourcePicker";
 import Button from "./Button";
-import RequestCard from "./RequestCard";
-import {createChatHeader, newRequest} from "../utils/Firebase";
+import {newRequest} from "../utils/Firebase";
 import Picker from "./Picker";
 import {Resources, Skills} from "../JSONS/Tags.json";
 import ToggleButtons from "./ToggleButtons";
@@ -26,7 +24,6 @@ const NewRequestSheet = ({navigation,route}) => {
     console.log(request)
 
     const inputs = ["name", "title","description"]
-    const [visible,setVisible] = useState(false)
     const [showPreview,setShowPreview] = useState(false)
     const [toggle,switchToggle] = useState(true)
 

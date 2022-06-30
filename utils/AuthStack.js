@@ -6,7 +6,6 @@ import {createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword} fro
 import {newProfile} from "./Firebase";
 import {Text, TextInput, View, Touchable, Pressable, Modal} from "react-native";
 import {styles} from "../Styles";
-import {NoticeboardFilters} from "../Components/NoticeboardFilters";
 import Requests from "../JSONS/Requests.json";
 import Button from '../Components/Button'
 import {Skills, Resources} from '../JSONS/Tags.json'

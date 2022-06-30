@@ -1,48 +1,37 @@
 import {StatusBar} from 'expo-status-bar';
 import {
-    StyleSheet,
     Text,
     View,
     TextInput,
-    Image,
     Button,
     TouchableOpacity,
     ScrollView,
     Modal,
-    Alert, Pressable, FlatList, Keyboard, TextComponent
+    Alert, FlatList, Keyboard,
 } from 'react-native';
 import {styles} from "../Styles";
 import {FontAwesome} from '@expo/vector-icons';
 import {useContext, useEffect, useState} from "react";
-import dummy from '../JSONS/Contacts.json'
-import {Ionicons} from "@expo/vector-icons";
-import messages from '../JSONS/Messages.json'
 import {
     acceptJobCompletion,
-    createChatHeader,
     getChatHeaders,
     getMessage,
-    getMyRequests, proposeJobCompleted,
+    proposeJobCompleted,
     pushMessage,
-    sendMessage
 } from "../utils/Firebase";
 import ProfileContext from "../utils/profileContext";
-import {isCompositeComponent} from "react-dom/test-utils";
 
-export default function Messages({route}) {
+export default function Messages() {
 
     const profile = useContext(ProfileContext)
     const [searchText, setSearchText] = useState();
 
-    const [modalData, setModalData] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
 
-    const [openMessages, setOpenMessages] = useState()
     const [openChat, setOpenChat] = useState()
     const [chatIDs, setChatIDs] = useState([])
 
     const ContactCard = ({info}) => {
-        // console.log(info)
         return (
             <View style={[styles.skillsTheme, {margin: 10, borderRadius: 10, padding: 7,}]}>
                 <View style={{flexDirection: "row"}}>
@@ -97,18 +86,14 @@ export default function Messages({route}) {
             }}
         >
             <View style={styles.background}>
-                <View style={[styl.modalView, {flex: 1}]}>
+                <View style={[styles.modalView, {flex: 1}]}>
                     {/*<Ionicons name="return-up-back" size={24} color="black" onPress={() => setModalVisible(false)}/>*/}
                     <Button title={"back"} onPress={() => setModalVisible(false)}/>
-
-
                     {chatIDs[openChat].isComplete === "" ?
                         <Button title={"Request completed"} onPress={() => {
                             proposeJobCompleted(chatIDs[openChat].id, profile.name).then()
                         }}/>
                         :
-
-
                         chatIDs[openChat].isComplete === profile.name ?
                             <>
                                 <Text>you have suggested that this job is finished, waiting for confirmation</Text>
@@ -124,11 +109,7 @@ export default function Messages({route}) {
                                     acceptJobCompletion(chatIDs[openChat]).then(console.log("job done"))
                                 }}/>
                             </>
-
-
                     }
-
-
                     <View style={{width: "100%", flex: 1}}>
                         <FlatList data={messages} keyExtractor={(item, index) => index.toString()}
                                   renderItem={({item}) => renderItem(item)}
@@ -145,10 +126,10 @@ export default function Messages({route}) {
                             <FontAwesome name="send-o" size={24} color="black" onPress={() => {
                                 sendMessage()
                                 Keyboard.dismiss()
+                                setText("")
                             }}/>
                         </View>
                     </View>
-
                 </View>
             </View>
         </Modal>
@@ -201,22 +182,3 @@ export default function Messages({route}) {
         </View>
     );
 }
-
-const styl = StyleSheet.create({
-    modalView: {
-        margin: 10,
-        backgroundColor: "white",
-        borderRadius: 20,
-        // padding: 35,
-        alignItems: "center",
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
-        // flex:1
-    }
-});

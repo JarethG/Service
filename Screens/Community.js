@@ -1,4 +1,4 @@
-import { Text, View,  TouchableOpacity,ScrollView} from 'react-native';
+import { Text, View,ScrollView} from 'react-native';
 import {styles} from "../Styles";
 import {useState} from "react";
 import EventCard from "../Components/EventCard";

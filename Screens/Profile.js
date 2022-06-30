@@ -1,30 +1,22 @@
-import {StyleSheet, Text, View, TextInput, Image, TouchableOpacity, ScrollView, Modal, FlatList} from 'react-native';
+import {Text, View,ScrollView,FlatList} from 'react-native';
 import {styles} from "../Styles";
 import React, {useContext, useEffect, useState} from "react";
 import {AntDesign} from '@expo/vector-icons';
-import RequestCard from "../Components/RequestCard";
 import ToggleButtons from "../Components/ToggleButtons";
-import SkillSearch from "../Components/SkillSearch";
 import { signOut, getAuth } from 'firebase/auth';
-import { Authentication } from '../utils/Authentication';
 import Button from '../Components/Button'
-import ResourcePicker from "../Components/ResourcePicker";
 import {UpdateAccount} from "../utils/AccountHandler";
-import {deleteMyRequest, deleteRequest, getDocsByIDs, getMyRequests, getOffers} from "../utils/Firebase";
+import { deleteRequest,getMyRequests} from "../utils/Firebase";
 import Post from "../Components/Post";
 import ProfileContext from "../utils/profileContext";
 
 export default function Profile() {
 
-    const profile = React.useContext(ProfileContext)
+    const profile = useContext(ProfileContext)
     const auth = getAuth();
 
     const [profileToggle, setProfileToggle] = useState(true)
-    const [myRequests,setMyRequests] = useState(getRequests)
 
-    async function getRequests(){
-        getMyRequests(profile.email).then(r=>console.log(r.myRequests))
-    }
     return (
         <View style={[styles.background,{alignItems: 'center'}]}>
             <View style={{width: 150, height: 150, borderRadius: 75, backgroundColor: "#ffffff"}}/>
@@ -44,21 +36,12 @@ export default function Profile() {
                 <AboutMe profile={profile}/> : <MyRequests profile={profile}/>
             }
             <Button title="Sign Out" style={styles.button} onPress={() => signOut(auth)} />
-
-
-
-
-
         </View>
-
-
     );
 }
 
 const AboutMe =({profile})=> {
     const auth = getAuth();
-    // console.log("anout me => ",profile)
-
     return (
         <View style={{width: "100%", padding: 15, flex: 1}}>
             <Text style={styles.header}>About</Text>
@@ -87,7 +70,6 @@ const AboutMe =({profile})=> {
 const MyRequests =({profile})=> {
 
     const [requests, setRequests] = useState([])
-    console.log("requests => ",requests)
     useEffect(() => {
         get().then(r => {
             setRequests(r)
@@ -96,7 +78,6 @@ const MyRequests =({profile})=> {
 
     function get() {
         let newFeed = getMyRequests(profile.email).then()
-        // setRequestCounter(requestCounter+20)
         return newFeed
     }
     return (
@@ -104,6 +85,7 @@ const MyRequests =({profile})=> {
             {requests?
                 <FlatList data={requests} keyExtractor={(item, index) => index.toString()}
                           renderItem={({item,index}) => <Post details={item.doc} navButton={
+                              item.accepted?null:
                               <Button title={"delete request"} onPress={()=>{
                                   deleteRequest(item.id,profile.email).then(
                                       setRequests((requests) => requests.filter((_, num) => num !== index))

@@ -11,6 +11,7 @@
     "Added Skills to profile creation.",
     "My Requests can now be deleted",
     "reload page after myRequests has been deleted to remove deleted request",
+    "text in messenger not clearing",
     "messenger now implemented to create chats between people that have accepted job."
   ],
   "toDo": [
@@ -18,7 +19,6 @@
     "turn off listners when logging out",
     "remove model closed from messenger screen.",
     "add back button to messenger modal",
-    "text in messenger not clearing",
     "request page not reloading/clearing when request is accepted",
     "accepting the request needs to navigate to messenger",
     "messenger needs to auto load chat head listeners.",

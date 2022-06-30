@@ -107,5 +107,19 @@ export const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 7,
         backgroundColor: 'rgb(253,135,31)',
+    },
+    modalView: {
+        margin: 10,
+        backgroundColor: "white",
+        borderRadius: 20,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
     }
 });
