@@ -5,7 +5,6 @@ import {styles} from "../Styles";
 import Button from "../Components/Button";
 import React, {useState} from "react";
 import Picker from "../Components/Picker";
-import Requests from "../JSONS/Requests.json";
 import {Resources, Skills} from "../JSONS/Tags.json";
 
 

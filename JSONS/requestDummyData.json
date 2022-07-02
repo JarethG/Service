@@ -1,0 +1,132 @@
+[
+  {
+    "key": "JoB1",
+    "account": "jarethgaskin@gmail.com",
+    "type": "skill",
+    "name": "Riggs Hendricks",
+    "tags": [
+      " Tax Support",
+      " Caretaker",
+      " Tax Support"
+    ],
+    "title": "esse ullamco incididunt anim",
+    "description": "reprehenderit cupidatat fugiat aute ullamco sint elit nisi aliquip id mollit non deserunt non veniam"
+  },
+  {
+    "key": "JoB2",
+    "account": "jarethgaskin@gmail.com",
+    "type": "skill",
+    "name": "Jennings Romero",
+    "tags": [
+      " Digital Support",
+      " Photography",
+      " IT Skills"
+    ],
+    "title": "enim commodo ea non",
+    "description": "labore anim aliquip Lorem ut deserunt culpa culpa magna sunt exercitation dolore reprehenderit sunt nulla"
+  },
+  {
+    "key": "JoB3",
+    "account": "jarethgaskin@gmail.com",
+    "type": "resource",
+    "name": "Mckinney Webster",
+    "tags": [
+      " Tax Support",
+      " Writing",
+      " Videography"
+    ],
+    "title": "sunt labore id reprehenderit",
+    "description": "consequat sint laboris veniam dolore qui exercitation proident ex officia velit irure eu laboris eu"
+  },
+  {
+    "key": "JoB4",
+    "account": "jarethgaskin@gmail.com",
+    "type": "skill",
+    "name": "Donna Bray",
+    "tags": [
+      " Website Building",
+      " Digital Support",
+      " Digital Support"
+    ],
+    "title": "minim pariatur consectetur aliquip",
+    "description": "consectetur aute fugiat labore minim labore culpa eiusmod duis id quis officia consectetur commodo ut"
+  },
+  {
+    "key": "JoB5",
+    "account": "jarethgaskin@gmail.com",
+    "type": "skill",
+    "name": "Christi Rios",
+    "tags": [
+      " Website Building",
+      " Photography",
+      " Digital Support"
+    ],
+    "title": "deserunt esse ut in",
+    "description": "reprehenderit ad elit veniam occaecat velit occaecat aliquip laborum nostrud cillum voluptate excepteur nisi minim"
+  },
+  {
+    "key": "JoB6",
+    "account": "jarethgaskin@gmail.com",
+    "type": "skill",
+    "name": "Mcleod Ferrell",
+    "tags": [
+      " Writing",
+      " Photography",
+      " Digital Support"
+    ],
+    "title": "ea cupidatat dolor dolore",
+    "description": "pariatur elit cillum eiusmod sunt mollit qui irure nulla cupidatat deserunt tempor enim aliqua fugiat"
+  },
+  {
+    "key": "JoB7",
+    "account": "jarethgaskin@gmail.com",
+    "type": "resource",
+    "name": "Schroeder Wilcox",
+    "tags": [
+      " Website Building",
+      " Carpenter",
+      " Writing"
+    ],
+    "title": "deserunt voluptate est ut",
+    "description": "culpa sint qui consectetur ipsum dolor labore officia mollit deserunt excepteur mollit exercitation ut cillum"
+  },
+  {
+    "key": "JoB8",
+    "account": "jarethgaskin@gmail.com",
+    "type": "resource",
+    "name": "Iva Hooper",
+    "tags": [
+      " Caretaker",
+      " Plumber",
+      " Website Building"
+    ],
+    "title": "culpa minim laborum ut",
+    "description": "Lorem ad aute pariatur nostrud in ipsum consequat eiusmod tempor ullamco labore sunt velit aliquip"
+  },
+  {
+    "key": "JoB9",
+    "account": "jarethgaskin@gmail.com",
+    "type": "skill",
+    "name": "Jerri Watkins",
+    "tags": [
+      " Sewing",
+      " Photography",
+      " Sewing"
+    ],
+    "title": "occaecat minim sunt deserunt",
+    "description": "irure culpa amet aliqua Lorem aute esse quis est consectetur ut occaecat laboris ex nisi"
+  },
+  {
+    "key": "JoB10",
+    "account": "jarethgaskin@gmail.com",
+    "type": "resource",
+    "name": "Burt Sanchez",
+    "tags": [
+      " Website Building",
+      " Senior Support",
+      " Plumber"
+    ],
+    "title": "esse eiusmod excepteur labore",
+    "description": "anim pariatur est anim dolor ut ut nulla sunt aliqua ex fugiat ipsum occaecat exercitation"
+  }
+]

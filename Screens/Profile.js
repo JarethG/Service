@@ -1,14 +1,15 @@
-import {Text, View,ScrollView,FlatList} from 'react-native';
+import {Text, View, ScrollView, FlatList} from 'react-native';
 import {styles} from "../Styles";
 import React, {useContext, useEffect, useState} from "react";
 import {AntDesign} from '@expo/vector-icons';
 import ToggleButtons from "../Components/ToggleButtons";
-import { signOut, getAuth } from 'firebase/auth';
+import {signOut, getAuth} from 'firebase/auth';
 import Button from '../Components/Button'
 import {UpdateAccount} from "../utils/AccountHandler";
 import {addPoints, deleteRequest, getMyRequests} from "../utils/Firebase";
 import Post from "../Components/Post";
 import ProfileContext from "../utils/profileContext";
+import {AdminFunctions} from "../utils/AdminFunctions";
 
 export default function Profile() {
 
@@ -18,12 +19,12 @@ export default function Profile() {
     const [profileToggle, setProfileToggle] = useState(true)
 
     return (
-        <View style={[styles.background,{alignItems: 'center'}]}>
+        <View style={[styles.background, {alignItems: 'center'}]}>
             <View style={{width: 150, height: 150, borderRadius: 75, backgroundColor: "#ffffff"}}/>
             <Text style={styles.header}>{profile.name}</Text>
             <Text>{profile.title}</Text>
             <Text> Total Points: {profile.points}</Text>
-            <Button title={"increment"} onPress={()=>addPoints(profile.email)}/>
+            <Button title={"increment"} onPress={() => addPoints(profile.email)}/>
             {/*<View style={{flexDirection: "row"}}>*/}
             {/*    <AntDesign name="star" size={24} color="black"/>*/}
             {/*    <AntDesign name="star" size={24} color="black"/>*/}
@@ -37,30 +38,33 @@ export default function Profile() {
             {profileToggle ?
                 <AboutMe profile={profile}/> : <MyRequests profile={profile}/>
             }
-            <Button title="Sign Out" style={styles.button} onPress={() => signOut(auth)} />
+            <View style={{flexDirection: "row"}}>
+                <AdminFunctions/>
+                <Button title="Sign Out" style={styles.button} onPress={() => signOut(auth)}/>
+            </View>
         </View>
     );
 }
 
-const AboutMe =({profile})=> {
+const AboutMe = ({profile}) => {
     const auth = getAuth();
     return (
         <View style={{width: "100%", padding: 15, flex: 1}}>
             <Text style={styles.header}>About</Text>
             <Text>{profile.about}</Text>
-                <Text style={styles.header}>Skills</Text>
+            <Text style={styles.header}>Skills</Text>
             <View>
                 <ScrollView horizontal>
                     {profile.skills.map((skill, index) => {
-                        return <Text style={[styles.tags,styles.skillsTheme]} key={index}>{skill}</Text>
+                        return <Text style={[styles.tags, styles.skillsTheme]} key={index}>{skill}</Text>
                     })}
                 </ScrollView>
             </View>
-                <Text style={styles.header}>Resources</Text>
+            <Text style={styles.header}>Resources</Text>
             <View>
                 <ScrollView horizontal>
                     {profile.resources.map((skill, index) => {
-                        return <Text style={[styles.tags,styles.resourceTheme]} key={index}>{skill}</Text>
+                        return <Text style={[styles.tags, styles.resourceTheme]} key={index}>{skill}</Text>
                     })}
                 </ScrollView>
             </View>
@@ -69,7 +73,7 @@ const AboutMe =({profile})=> {
     );
 }
 
-const MyRequests =({profile})=> {
+const MyRequests = ({profile}) => {
 
     const [requests, setRequests] = useState([])
     useEffect(() => {
@@ -82,20 +86,22 @@ const MyRequests =({profile})=> {
         let newFeed = getMyRequests(profile.email).then()
         return newFeed
     }
+
     return (
         <View style={{flex: 1}}>
-            {requests?
+            {requests ?
                 <FlatList data={requests} keyExtractor={(item, index) => index.toString()}
-                          renderItem={({item,index}) => <Post details={item.doc} navButton={
-                              item.accepted?null:
-                              <Button title={"delete request"} onPress={()=>{
-                                  deleteRequest(item.id,profile.email).then(
-                                      setRequests((requests) => requests.filter((_, num) => num !== index))
-                                  )
-                              }}/>
+                          renderItem={({item, index}) => <Post details={item.doc} navButton={
+                              item.accepted ? null :
+                                  <Button title={"delete request"} onPress={() => {
+                                      deleteRequest(item.id, profile.email).then(
+                                          setRequests((requests) => requests.filter((_, num) => num !== index))
+                                      )
+                                  }}/>
                           }/>}
-                          />
-                :<Text>It appears you haven't made any requests yet, head over to the Notice Boards tab to get started</Text>}
+                />
+                : <Text>It appears you haven't made any requests yet, head over to the Notice Boards tab to get
+                    started</Text>}
         </View>
     );
 }

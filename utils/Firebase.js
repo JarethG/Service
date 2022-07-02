@@ -19,6 +19,7 @@ import {
 } from 'firebase/firestore';
 import {getDatabase, ref, onValue, set, push, update, remove} from 'firebase/database';
 import React from "react";
+
 const firebaseConfig = {
     apiKey: "AIzaSyC3YZcmR4Q_mHcA381qJYamGj8xsYT5cAY",
     authDomain: "community-exchange-36fb6.firebaseapp.com",
@@ -39,12 +40,15 @@ const rtdb = getDatabase(app);
 
 export default app;
 
+function getUserDoc(userEmail) {
+    return doc(db, "Users", userEmail);
+}
+
 export async function deleteRequest(requestID, userEmail) {
     //delete the main request doc
-    await deleteDoc(doc(db, "Requests",requestID));
+    await deleteDoc(doc(db, "Requests", requestID));
     //delete doc reference id from profile
-    const userDoc = doc(db, "Users", userEmail);
-    await updateDoc(userDoc, {
+    await updateDoc(getUserDoc(userEmail), {
         myRequests: arrayRemove(requestID)
     });
     //delete chat and chat head references
@@ -52,17 +56,8 @@ export async function deleteRequest(requestID, userEmail) {
     await remove(ref(rtdb, 'chats/' + requestID))
 }
 
-export async function sendMessage(chatID, message, userID) {
-    await set(ref(rtdb, 'chats/' + chatID), {
-        userID: userID,
-        message: "hello,World!",
-        timestamp: Date.now()
-    });
-}
-
-export async function addPoints(userEmail){
-    const userDoc = doc(db, "Users", userEmail);
-    await updateDoc(userDoc, {
+export async function addPoints(userEmail) {
+    await updateDoc(getUserDoc(userEmail), {
         points: increment(1)
     });
 }
@@ -76,9 +71,8 @@ export async function pushMessage(chatID, message, userID) {
 }
 
 export async function createChatHeader(chatID, data) {
-    console.log(data)
     await set(ref(rtdb, 'chatHeaders/' + chatID), {
-        isComplete:"",
+        isComplete: "",
         acceptingUser: "",
         acceptingUserEmail: "",
         client: data.name,
@@ -87,21 +81,19 @@ export async function createChatHeader(chatID, data) {
         lastMessage: "waiting for someone to accept your offer",
         lastTimeStamp: Date.now(),
     });
-    console.log("done")
 }
 
-export async function proposeJobCompleted(requestID,userEmail){
+export async function proposeJobCompleted(requestID, userEmail) {
     await update(ref(rtdb, 'chatHeaders/' + requestID), {
-        isComplete:userEmail
+        isComplete: userEmail
     });
 }
 
-export async function acceptJobCompletion(request){
-    //delter header,chat,clientreferences
+export async function acceptJobCompletion(request) {
+    //delete header,chat,client references
     await deleteRequest(request.id, request.clientEmail)
-    //delte accepting user reference
-    const userDoc = doc(db, "Users", request.acceptingUserEmail);
-    await updateDoc(userDoc, {
+    //delete accepting user reference
+    await updateDoc(getUserDoc(request.acceptingUserEmail), {
         acceptedRequests: arrayRemove(request.id)
     });
     // add points
@@ -109,25 +101,21 @@ export async function acceptJobCompletion(request){
     await addPoints(request.acceptingUserEmail)
 }
 
-export async function getChatHeaders(chatID,callback) {
+export async function getChatHeaders(chatID, callback) {
     onValue(ref(rtdb, 'chatHeaders/' + chatID), (snapshot) => {
         if (snapshot.exists()) {
             let header = snapshot.val()
             header.id = chatID
-            // callback(old => [...old, header])
             let found = false
-            callback(old => old.map((id)=> {
-                if(id.id != chatID){
+            callback(old => old.map((id) => {
+                if (id.id != chatID) {
                     return id
                 } else {
                     found = true;
                     return header
                 }
             }))
-            if(!found)callback(old => [...old, header])
-            // callback(old => [...old, header])
-
-
+            if (!found) callback(old => [...old, header])
         }
 
     })
@@ -138,7 +126,6 @@ export function getMessage(chatID, userID, callback) {
         let list = [];
         snapshot.forEach(snap => {
             const issue = snap.val();
-            console.log(issue);
             list.push(issue)
         })
         callback(list)
@@ -146,56 +133,34 @@ export function getMessage(chatID, userID, callback) {
 }
 
 export async function getMyRequests(email) {
-    console.log("starting")
     const q = query(collection(db, "Requests"), where("account", "==", email));
     const querySnapshot = await getDocs(q);
     let offers = querySnapshot.docs.map((doc) => {
         return {id: doc.id, doc: doc.data()}
     })
-    console.log(offers)
     return offers
 }
 
-export async function getDocsByIDs(docIds) {
-    let promises = docIds.map(function (key) {
-        return getDoc(doc(key));
+export async function acceptRequest(requestID, userEmail) {
+    await updateDoc(getUserDoc(userEmail), {
+        acceptedRequests: arrayUnion(requestID)
     });
-    Promise.all(promises).then(function (snapshots) {
-        snapshots.forEach(function (snapshot) {
-            console.log(snapshot.key + ": " + snapshot.val());
-        });
-    });
-}
-
-export async function newRequest(request, userEmail) {
-    const docRef = await addDoc(collection(db, "Requests"), request);
-    const userDoc = doc(db, "Users", userEmail);
-
-// Atomically add a new region to the "regions" array field.
-    await updateDoc(userDoc, {
-        myRequests: arrayUnion(docRef.id)
-    });
-    await createChatHeader(docRef.id, request)
-}
-
-export async function acceptRequest(requestID, userEmail,userName) {
-    //set accepted boolean to true
-    const requestDoc = doc(db,"Requests", requestID)
+    const requestDoc = doc(db, "Requests", requestID);
     await updateDoc(requestDoc, {
         accepted: true
     });
-    //add request to accepting users account
-    const userDoc = doc(db, "Users", userEmail);
-    await updateDoc(userDoc, {
-        acceptedRequests: arrayUnion(requestID)
-    });
-    //update chatHeader to reflect acceptance
-    await update(ref(rtdb, 'chatHeaders/' + requestID), {
-       acceptingUser:userName,
-       acceptingUserEmail:userEmail
-    });
-    console.log("request accepted")
 
+}
+
+
+export async function newRequest(request, userEmail) {
+    const docRef = await addDoc(collection(db, "Requests"), request);
+
+// Atomically add a new region to the "regions" array field.
+    await updateDoc(getUserDoc(userEmail), {
+        myRequests: arrayUnion(docRef.id)
+    });
+    await createChatHeader(docRef.id, request)
 }
 
 export async function newProfile(userEmail, profileData) {
@@ -207,7 +172,7 @@ export async function newProfile(userEmail, profileData) {
         title: profileData.title,
         acceptedRequests: [],
         myRequests: [],
-        points:0
+        points: 0
     });
 }
 
@@ -221,9 +186,9 @@ export async function updateProfile(userEmail, profileData) {
     });
 }
 
-export async function getProfile(email,callback) {
+export async function getProfile(email, callback) {
     const docRef = doc(db, "Users", email);
-    const docSnap = await onSnapshot(docRef,(doc)=> {
+    const docSnap = await onSnapshot(docRef, (doc) => {
         let profileData = doc.data()
         profileData["email"] = email
         console.log("Firebase/getprofile/ => profile reloaded")
@@ -240,7 +205,7 @@ export async function getProfile(email,callback) {
 }
 
 export async function getOffers(max) {
-    const q = query(collection(db, "Requests"), limit(max),where("accepted", "==", false))
+    const q = query(collection(db, "Requests"), limit(max), where("accepted", "==", false))
     const querySnapshot = await getDocs(q);
     let offers = querySnapshot.docs.map((doc) => {
         let offer = doc.data();
@@ -249,4 +214,29 @@ export async function getOffers(max) {
         return offer
     })
     return offers
+}
+
+export async function createDummyData(data) {
+    data.map(async (item) => {
+        const request = {
+            accepted: false,
+            account: item.account,
+            type: item.type,
+            name: item.name,
+            tags: item.tags,
+            title: item.title,
+            description: item.description
+        }
+        await setDoc(doc(db, "Requests", item.key), request).then(console.log("done =>", item.key))
+        await updateDoc(getUserDoc(item.account), {
+            myRequests: arrayUnion(item.key)
+        });
+        await createChatHeader(item.key, request)
+    });
+}
+
+export async function deleteDummyData(data) {
+    data.map(async (item) => {
+        await deleteRequest(item.key,item.account)
+    });
 }

@@ -6,7 +6,6 @@ import {createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword} fro
 import {newProfile} from "./Firebase";
 import {Text, TextInput, View, Touchable, Pressable, Modal, Image} from "react-native";
 import {styles} from "../Styles";
-import Requests from "../JSONS/Requests.json";
 import Button from '../Components/Button'
 import {Skills, Resources} from '../JSONS/Tags.json'
 import Picker from "../Components/Picker";
@@ -129,8 +128,6 @@ function NewProfileScreen({navigation, route}) {
         skills: [],
         title: ""
     })
-    const [filteredResults, setFilteredResults] = useState(Requests)
-    const [filtering, setFiltering] = useState(false)
     const [stage,setStage] = useState(0)
 
 

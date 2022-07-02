@@ -15,7 +15,7 @@ const Post = ({details,navButton}) => {
                 {/*{expand?<Settings data={details}/>:null}*/}
                 <View style={{flexDirection: "row",flex:1}}>
                     <View style={styles.cardProfilePicture}/>
-                    <View>
+                    <View style={{flex:1}}>
                         <View style={{flexDirection: "row", alignItems: "center"}}>
                             <Text style={styles.header}>{details.name}</Text>
                             <AntDesign name="star" size={18} color="white"/>
