@@ -6,7 +6,7 @@ import ToggleButtons from "../Components/ToggleButtons";
 import { signOut, getAuth } from 'firebase/auth';
 import Button from '../Components/Button'
 import {UpdateAccount} from "../utils/AccountHandler";
-import { deleteRequest,getMyRequests} from "../utils/Firebase";
+import {addPoints, deleteRequest, getMyRequests} from "../utils/Firebase";
 import Post from "../Components/Post";
 import ProfileContext from "../utils/profileContext";
 
@@ -22,14 +22,16 @@ export default function Profile() {
             <View style={{width: 150, height: 150, borderRadius: 75, backgroundColor: "#ffffff"}}/>
             <Text style={styles.header}>{profile.name}</Text>
             <Text>{profile.title}</Text>
-            <View style={{flexDirection: "row"}}>
-                <AntDesign name="star" size={24} color="black"/>
-                <AntDesign name="star" size={24} color="black"/>
-                <AntDesign name="star" size={24} color="black"/>
-                <AntDesign name="star" size={24} color="black"/>
-                <AntDesign name="staro" size={24} color="black"/>
-                <Text>(8)</Text>
-            </View>
+            <Text> Total Points: {profile.points}</Text>
+            <Button title={"increment"} onPress={()=>addPoints(profile.email)}/>
+            {/*<View style={{flexDirection: "row"}}>*/}
+            {/*    <AntDesign name="star" size={24} color="black"/>*/}
+            {/*    <AntDesign name="star" size={24} color="black"/>*/}
+            {/*    <AntDesign name="star" size={24} color="black"/>*/}
+            {/*    <AntDesign name="star" size={24} color="black"/>*/}
+            {/*    <AntDesign name="staro" size={24} color="black"/>*/}
+            {/*    <Text>(8)</Text>*/}
+            {/*</View>*/}
             <ToggleButtons titleLeft={"About Me"} titleRight={"My Request"}
                            onToggle={(r) => setProfileToggle(r)}/>
             {profileToggle ?

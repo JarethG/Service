@@ -14,13 +14,11 @@ import {
     arrayUnion,
     where,
     onSnapshot,
-    arrayRemove
+    arrayRemove,
+    increment
 } from 'firebase/firestore';
 import {getDatabase, ref, onValue, set, push, update, remove} from 'firebase/database';
 import React from "react";
-import * as firebase from "firebase/app";
-import {Alert} from "react-native";
-
 const firebaseConfig = {
     apiKey: "AIzaSyC3YZcmR4Q_mHcA381qJYamGj8xsYT5cAY",
     authDomain: "community-exchange-36fb6.firebaseapp.com",
@@ -62,6 +60,13 @@ export async function sendMessage(chatID, message, userID) {
     });
 }
 
+export async function addPoints(userEmail){
+    const userDoc = doc(db, "Users", userEmail);
+    await updateDoc(userDoc, {
+        points: increment(1)
+    });
+}
+
 export async function pushMessage(chatID, message, userID) {
     await push(ref(rtdb, 'chats/' + chatID), {
         userID: userID,
@@ -100,7 +105,8 @@ export async function acceptJobCompletion(request){
         acceptedRequests: arrayRemove(request.id)
     });
     // add points
-
+    await addPoints(request.clientEmail)
+    await addPoints(request.acceptingUserEmail)
 }
 
 export async function getChatHeaders(chatID,callback) {
@@ -200,7 +206,8 @@ export async function newProfile(userEmail, profileData) {
         skills: profileData.skills,
         title: profileData.title,
         acceptedRequests: [],
-        myRequests: []
+        myRequests: [],
+        points:0
     });
 }
 
