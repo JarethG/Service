@@ -9,22 +9,24 @@ export const styles = StyleSheet.create({
     background: {
         width: "100%",
         height: "100%",
-        backgroundColor:"#eae2b7"
+        backgroundColor: "#eae2b7",
+        padding:7,
+        alignItems:"center"
     },
-    button:{
+    button: {
         alignItems: 'center',
         justifyContent: 'center',
         paddingVertical: 12,
         paddingHorizontal: 32,
-        borderRadius: 6,
-        elevation: 3,
+        margin:5,
+        borderRadius: 20,
         backgroundColor: 'rgba(255,255,255,0.5)',
     },
-    buttonText:{
+    buttonText: {
         fontSize: 16,
-        lineHeight: 21,
+        // lineHeight: 21,
         fontWeight: 'bold',
-        letterSpacing: 0.25,
+        // letterSpacing: 0.25,
         color: 'black',
     },
     toggleButtonSelected: {
@@ -47,7 +49,8 @@ export const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 7
     },
-    transparentContainer :{
+    transparentContainer: {
+        width:"100%",
         backgroundColor: 'rgba(255,255,255,0.5)',
         borderRadius: 10,
         margin: 5,
@@ -56,7 +59,7 @@ export const styles = StyleSheet.create({
     resourceTheme: {
         backgroundColor: 'rgb(65,138,167)',
     },
-    skillsTheme:{
+    skillsTheme: {
         backgroundColor: 'rgb(253,135,31)',
     },
     cardProfilePicture: {
@@ -77,10 +80,10 @@ export const styles = StyleSheet.create({
         padding: 5,
         color: "#ffffff",
         fontSize: 12,
-        alignSelf:"flex-start"
+        alignSelf: "flex-start"
     },
     cardText: {
-        color:'#ffffff'
+        color: '#ffffff'
     },
     menuItem: {
         flexDirection: "row",
@@ -103,7 +106,7 @@ export const styles = StyleSheet.create({
     messageBubble: {
         marginLeft: 15,
         marginRight: 15,
-        marginBottom:3,
+        marginBottom: 3,
         borderRadius: 10,
         padding: 7,
         backgroundColor: 'rgb(253,135,31)',
@@ -121,5 +124,14 @@ export const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
+    },
+    logo: {
+        width: "50%",
+        aspectRatio: 1,
+        borderRadius: 200,
+        alignSelf: "center"
+    },
+    navigationHeader: {
+        backgroundColor: '#386540'
     }
 });

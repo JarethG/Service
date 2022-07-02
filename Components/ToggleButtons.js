@@ -5,7 +5,7 @@ import {useState} from "react";
 export default function ToggleButtons({titleLeft,titleRight, onToggle}) {
     const [toggle,setToggle] = useState(true)
     return (
-        <View style={{flexDirection: "row", padding: 12}}>
+        <View style={{flexDirection: "row"}}>
             <TouchableOpacity style={toggle ? styles.toggleButtonSelected : styles.toggleButtonUnselected}
                               onPress={() => {
                                   setToggle(true)

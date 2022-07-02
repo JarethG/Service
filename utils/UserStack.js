@@ -53,7 +53,7 @@ function UserStack(user) {
                 <NavigationContainer>
                     <Tab.Navigator
                         screenOptions={{
-                            headerStyle: {backgroundColor: '#2e5d37'},
+                            headerStyle: styles.navigationHeader,
                             headerTintColor: '#fff',
                             headerTitleAlign: 'center',
                             headerTitleStyle: {fontWeight: 'bold'},

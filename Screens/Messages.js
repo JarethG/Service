@@ -31,19 +31,22 @@ export default function Messages() {
     const [openChat, setOpenChat] = useState()
     const [chatIDs, setChatIDs] = useState([])
 
+
+
     const ContactCard = ({info}) => {
+        const date = new Date(info.lastTimeStamp);
         return (
             <View style={[styles.skillsTheme, {margin: 10, borderRadius: 10, padding: 7,}]}>
                 <View style={{flexDirection: "row"}}>
                     <View style={{width: 70, height: 70, borderRadius: 35, backgroundColor: "#ffffff"}}></View>
                     <View style={{flex: 1}}>
                         <View style={{flexDirection: "row", justifyContent: "space-between"}}>
-                            <Text style={styles.title}>{info.acceptingUser}</Text>
-                            <Text>{info.jobTitle}</Text>
+                            <Text style={styles.title}>
+                                {info.acceptingUserEmail==profile.email? info.client:info.acceptingUser}
+                            </Text>
+                            <Text>{date.toLocaleTimeString()}</Text>
                         </View>
-                        <View style={{flexDirection: "row", alignItems: "center"}}>
-                            <Text>{info.client}</Text>
-                        </View>
+                        <Text>{info.jobTitle}</Text>
                         <Text>{info.lastMessage}</Text>
                     </View>
                 </View>

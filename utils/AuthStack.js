@@ -4,7 +4,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import {createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword} from "firebase/auth";
 import {newProfile} from "./Firebase";
-import {Text, TextInput, View, Touchable, Pressable, Modal} from "react-native";
+import {Text, TextInput, View, Touchable, Pressable, Modal, Image} from "react-native";
 import {styles} from "../Styles";
 import Requests from "../JSONS/Requests.json";
 import Button from '../Components/Button'
@@ -41,8 +41,10 @@ function SignInScreen({navigation}) {
 
     return (
         <View style={styles.background}>
+            <Image source={require('../assets/logo.png')} style={styles.logo}/>
+            <Text style={[styles.header,{alignSelf:"center",padding:10}]}>Share your skills and resources</Text>
             {!!value.error && <View style={styles.error}><Text>{value.error}</Text></View>}
-            <View style={styles.controls}>
+
                 <View style={styles.transparentContainer}>
                     <TextInput
                         placeholder='Email'
@@ -60,11 +62,11 @@ function SignInScreen({navigation}) {
                 </View>
                 <Button title="Sign in" onPress={() => signIn()}/>
                 <Button title="Sign up" onPress={() => navigation.navigate("sign up")}/>
-                <Button title="Sign in as Jareth" onPress={() =>
-                    signInWithEmailAndPassword(auth, "jarethgaskin@gmail.com", "123456").then()}/>
-                <Button title="Sign in as Wane" onPress={() =>
-                    signInWithEmailAndPassword(auth, "waneking@gmail.com", "123456").then()}/>
-            </View>
+                {/*<Button title="Sign in as Jareth" onPress={() =>*/}
+                {/*    signInWithEmailAndPassword(auth, "jarethgaskin@gmail.com", "123456").then()}/>*/}
+                {/*<Button title="Sign in as Wane" onPress={() =>*/}
+                {/*    signInWithEmailAndPassword(auth, "waneking@gmail.com", "123456").then()}/>*/}
+
         </View>
     );
 }
@@ -224,7 +226,7 @@ const Stack = createNativeStackNavigator();
 function AuthStack() {
     return (
         <NavigationContainer>
-            <Stack.Navigator>
+            <Stack.Navigator screenOptions={{headerShown: false}}>
                 {/*<Stack.Screen name="Welcome" component={WelcomeScreen} />*/}
                 <Stack.Screen name="sign in" component={SignInScreen}/>
                 <Stack.Screen name="sign up" component={SignUpScreen}/>

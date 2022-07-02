@@ -65,6 +65,7 @@ export default function Request({navigation}) {
                             }}/>
                 </View>
                 {feed.length!=0?
+                    <View>
                 <FlatList data={feed} keyExtractor={(item, index) => index.toString()}
                           renderItem={({item}) =>
 
@@ -80,7 +81,8 @@ export default function Request({navigation}) {
                           onRefresh={onRefresh}
                           refreshing={isFetching}
                 />
-                    : <Text>no list</Text>}
+                    </View>
+                    : <Text style={styles.header}>There are currently no requests in the community</Text>}
             </View>
         )
     }

@@ -1,5 +1,5 @@
 import {styles} from "../Styles";
-import {View, Text, Pressable} from "react-native";
+import {View, Text, Pressable, ScrollView, FlatList} from "react-native";
 import React, {useState} from "react";
 import {AntDesign} from "@expo/vector-icons";
 import Settings from "./Settings";
@@ -10,10 +10,10 @@ const Post = ({details,navButton}) => {
     const theme = details.type === "skill"
     const [expand, setExpand] = useState(false)
     return (
-        <Pressable onPress={() => setExpand(!expand)}>
+
             <View style={[styles.container, theme ? styles.skillsTheme : styles.resourceTheme]}>
                 {/*{expand?<Settings data={details}/>:null}*/}
-                <View style={{flexDirection: "row"}}>
+                <View style={{flexDirection: "row",flex:1}}>
                     <View style={styles.cardProfilePicture}/>
                     <View>
                         <View style={{flexDirection: "row", alignItems: "center"}}>
@@ -22,9 +22,10 @@ const Post = ({details,navButton}) => {
                             <Text style={{color: "white", fontSize: 12}}>4.68</Text>
 
                         </View>
-                        <View style={{flexDirection: "row"}}>
-                            {details.tags.map((tag, key) =>
-                                <Text key={key}style={styles.tags}>{tag}</Text>)}
+                        <View style={{flexDirection:"row"}}>
+                            <FlatList data={details.tags} keyExtractor={(item ) => item}
+                                      style={{flex:1}}
+                                      horizontal={true} renderItem={({item})=><Text style={styles.tags}>{item}</Text>}/>
                         </View>
                     </View>
                 </View>
@@ -35,8 +36,13 @@ const Post = ({details,navButton}) => {
                     {navButton}
 
                 </>:<Text style={styles.text}>{details.description.substr(0, 100)}</Text>}
+                <Pressable onPress={() => setExpand(!expand)}>
+                    <View style={{alignItems:"center"}}>
+                        <AntDesign name={expand ? "caretup" : "caretdown"} size={24} color="black" />
+                    </View>
+                </Pressable>
             </View>
-        </Pressable>
+
     )
 }
 export default Post

@@ -11,7 +11,6 @@ import Post from "./Post";
 const NewRequestSheet = ({navigation,route}) => {
 
     const profile = route.params
-    console.log(profile)
     const [request, setRequest] = useState({
         accepted:false,
         account:profile.email,
@@ -21,7 +20,6 @@ const NewRequestSheet = ({navigation,route}) => {
         title: "",
         description: ""
     })
-    console.log(request)
 
     const inputs = ["name", "title","description"]
     const [showPreview,setShowPreview] = useState(false)
@@ -57,12 +55,10 @@ const NewRequestSheet = ({navigation,route}) => {
                     buttonTitle={"Select " + (toggle? "Skills":"Resources")}
                     apply={(r) => setRequest({...request, tags: r})
                     }/>
-            <View style={styles.transparentContainer}>
+            <View>
                 {request.tags?.map((resource, index) => {
                     return <Text key={index}>{resource}</Text>
                 })}
-
-
             </View>
             {showPreview? <Modal
                     onRequestClose={() => {
