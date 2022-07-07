@@ -44,81 +44,12 @@ function getUserDoc(userEmail) {
     return doc(db, "Users", userEmail);
 }
 
-export async function deleteRequest(requestID, userEmail) {
-    //delete the main request doc
-    await deleteDoc(doc(db, "Requests", requestID));
-    //delete doc reference id from profile
-    await updateDoc(getUserDoc(userEmail), {
-        myRequests: arrayRemove(requestID)
-    });
-    //delete chat and chat head references
-    await remove(ref(rtdb, 'chatHeaders/' + requestID))
-    await remove(ref(rtdb, 'chats/' + requestID))
-}
-
-export async function addPoints(userEmail) {
-    await updateDoc(getUserDoc(userEmail), {
-        points: increment(1)
-    });
-}
-
 export async function pushMessage(chatID, message, userID) {
     await push(ref(rtdb, 'chats/' + chatID), {
         userID: userID,
         message: message,
         timestamp: Date.now()
     });
-}
-
-export async function createChatHeader(chatID, data) {
-    await set(ref(rtdb, 'chatHeaders/' + chatID), {
-        isComplete: "",
-        acceptingUser: "",
-        acceptingUserEmail: "",
-        client: data.name,
-        clientEmail: data.account,
-        jobTitle: data.title,
-        lastMessage: "waiting for someone to accept your offer",
-        lastTimeStamp: Date.now(),
-    });
-}
-
-export async function proposeJobCompleted(requestID, userEmail) {
-    await update(ref(rtdb, 'chatHeaders/' + requestID), {
-        isComplete: userEmail
-    });
-}
-
-export async function acceptJobCompletion(request) {
-    //delete header,chat,client references
-    await deleteRequest(request.id, request.clientEmail)
-    //delete accepting user reference
-    await updateDoc(getUserDoc(request.acceptingUserEmail), {
-        acceptedRequests: arrayRemove(request.id)
-    });
-    // add points
-    await addPoints(request.clientEmail)
-    await addPoints(request.acceptingUserEmail)
-}
-
-export async function getChatHeaders(chatID, callback) {
-    onValue(ref(rtdb, 'chatHeaders/' + chatID), (snapshot) => {
-        if (snapshot.exists()) {
-            let header = snapshot.val()
-            header.id = chatID
-            let found = false
-            callback(old => old.map((id) => {
-                if (id.id != chatID) {
-                    return id
-                } else {
-                    found = true;
-                    return header
-                }
-            }))
-            if (!found) callback(old => [...old, header])
-        }
-
-    })
 }
 
 export function getMessage(chatID, userID, callback) {
@@ -132,6 +63,90 @@ export function getMessage(chatID, userID, callback) {
     })
 }
 
+export async function setChatState(chatID, data) {
+    await set(ref(rtdb, 'chatState/' + chatID), {
+        isComplete: "",
+        acceptingUser: "",
+        acceptingUserEmail: "",
+        client: data.name,
+        clientEmail: data.account,
+        jobTitle: data.title
+    });
+}
+
+export async function getChatState(chatID, callback){
+    onValue(ref(rtdb, 'chatState/' + chatID), (snapshot) => {
+        if (snapshot.exists()) {
+            callback(snapshot.val())
+        }
+    })
+}
+
+export async function setChatHeader(chatID, data) {
+    await set(ref(rtdb, 'chatHeaders/'+ chatID), {
+        client: data.name,
+        jobTitle:data.title,
+        lastMessage: "waiting for someone to accept your offer",
+        lastTimeStamp: Date.now(),
+    });
+}
+
+export async function getChatHeaders(chatID, callback) {
+    console.log("called")
+    await onValue(ref(rtdb, 'chatHeaders/' + chatID), (snapshot) => {
+        let header = snapshot.val()
+        console.log("firebase header = +>",header)
+        header.id = chatID
+        callback(old =>[...old,header])
+    }, {
+        onlyOnce: true
+    })
+}
+
+export async function getOffers(max) {
+    const q = query(collection(db, "Requests"), limit(max), where("accepted", "==", false))
+    const querySnapshot = await getDocs(q);
+    let offers = querySnapshot.docs.map((doc) => {
+        let offer = doc.data();
+        // console.log("docid == ", doc.id)
+        offer.requestID = doc.id
+        return offer
+    })
+    return offers
+}
+
+export async function proposeJobCompleted(requestID, userEmail) {
+    await update(ref(rtdb, 'chatState/' + requestID), {
+        isComplete: userEmail
+    });
+}
+
+export async function acceptJobCompletion(requestID,request) {
+    console.log(request)
+    //delete header,chat,client references
+    await deleteRequest(requestID, request.clientEmail)
+    //delete accepting user reference
+    await updateDoc(getUserDoc(request.acceptingUserEmail), {
+        acceptedRequests: arrayRemove(requestID )
+    });
+    // add points
+    await addPoints(request.clientEmail)
+    await addPoints(request.acceptingUserEmail)
+}
+
+export async function deleteRequest(requestID, userEmail) {
+    //delete the main request doc
+    await deleteDoc(doc(db, "Requests", requestID));
+    //delete doc reference id from profile
+    await updateDoc(getUserDoc(userEmail), {
+        myRequests: arrayRemove(requestID)
+    });
+    //delete chat and chat head references
+    await remove(ref(rtdb, 'chatHeaders/' + requestID))
+    await remove(ref(rtdb, 'chatState/' + requestID))
+    await remove(ref(rtdb, 'chats/' + requestID))
+}
+
 export async function getMyRequests(email) {
     const q = query(collection(db, "Requests"), where("account", "==", email));
     const querySnapshot = await getDocs(q);
@@ -141,17 +156,25 @@ export async function getMyRequests(email) {
     return offers
 }
 
-export async function acceptRequest(requestID, userEmail) {
-    await updateDoc(getUserDoc(userEmail), {
-        acceptedRequests: arrayUnion(requestID)
-    });
-    const requestDoc = doc(db, "Requests", requestID);
+export async function acceptRequest(requestID, userEmail,userName) {
+    //set accepted boolean to true
+    const requestDoc = doc(db,"Requests", requestID)
     await updateDoc(requestDoc, {
         accepted: true
     });
+    //add request to accepting users account
+    const userDoc = doc(db, "Users", userEmail);
+    await updateDoc(userDoc, {
+        acceptedRequests: arrayUnion(requestID)
+    });
+    //update chatHeader to reflect acceptance
+    await update(ref(rtdb, 'chatState/' + requestID), {
+        acceptingUser:userName,
+        acceptingUserEmail:userEmail
+    });
+    console.log("request accepted")
 
 }
-
 
 export async function newRequest(request, userEmail) {
     const docRef = await addDoc(collection(db, "Requests"), request);
@@ -160,7 +183,8 @@ export async function newRequest(request, userEmail) {
     await updateDoc(getUserDoc(userEmail), {
         myRequests: arrayUnion(docRef.id)
     });
-    await createChatHeader(docRef.id, request)
+    await setChatHeader(docRef.id, request)
+    await setChatState(docRef.id, request)
 }
 
 export async function newProfile(userEmail, profileData) {
@@ -173,16 +197,6 @@ export async function newProfile(userEmail, profileData) {
         acceptedRequests: [],
         myRequests: [],
         points: 0
-    });
-}
-
-export async function updateProfile(userEmail, profileData) {
-    await updateDoc(doc(db, "Users", userEmail.toLowerCase()), {
-        about: profileData.about,
-        name: profileData.name,
-        resources: profileData.resources,
-        skills: profileData.skills,
-        title: profileData.title,
     });
 }
 
@@ -204,16 +218,14 @@ export async function getProfile(email, callback) {
     }
 }
 
-export async function getOffers(max) {
-    const q = query(collection(db, "Requests"), limit(max), where("accepted", "==", false))
-    const querySnapshot = await getDocs(q);
-    let offers = querySnapshot.docs.map((doc) => {
-        let offer = doc.data();
-        // console.log("docid == ", doc.id)
-        offer.requestID = doc.id
-        return offer
-    })
-    return offers
+export async function updateProfile(userEmail, profileData) {
+    await updateDoc(doc(db, "Users", userEmail.toLowerCase()), {
+        about: profileData.about,
+        name: profileData.name,
+        resources: profileData.resources,
+        skills: profileData.skills,
+        title: profileData.title,
+    });
 }
 
 export async function createDummyData(data) {
@@ -231,12 +243,19 @@ export async function createDummyData(data) {
         await updateDoc(getUserDoc(item.account), {
             myRequests: arrayUnion(item.key)
         });
-        await createChatHeader(item.key, request)
+        await setChatHeader(item.key, request)
+        await setChatState(item.key,request)
     });
 }
 
 export async function deleteDummyData(data) {
     data.map(async (item) => {
         await deleteRequest(item.key,item.account)
+    });
+}
+
+export async function addPoints(userEmail) {
+    await updateDoc(getUserDoc(userEmail), {
+        points: increment(1)
     });
 }

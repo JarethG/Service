@@ -5,27 +5,11 @@ import React, {useState} from "react";
 import Button from "../Components/Button";
 import {createDummyData, deleteDummyData} from "./Firebase";
 import requests from "../JSONS/requestDummyData.json"
+import ButtonModal from "../Components/ButtonModal";
 
 export const AdminFunctions = () => {
 
-    const ButtonModal = ({children}) => {
-        const [isVisible, setIsVisible] = useState(false)
-        return isVisible?
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                >
-                    <Pressable style={[styles.background, {backgroundColor: 'rgba(114,114,114,0.5)',}]}
-                               onPress={() => setIsVisible(!isVisible)}/>
-                    <View style={styles.settingsModule} onPress={e => e.stopPropagation()}>
-                        {children}
-                    </View>
-                </Modal>
-            :
-            <Button title={"Admin"} onPress={() => setIsVisible(true)}/>
 
-
-    }
 
     return (
         <ButtonModal>

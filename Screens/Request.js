@@ -1,11 +1,11 @@
-import {Text, View, FlatList, Pressable,TextInput,} from 'react-native';
+import {Text, View, FlatList, Pressable, TextInput,} from 'react-native';
 import {styles} from "../Styles";
 import React, {useEffect, useState} from "react";
-import {FontAwesome5,Entypo} from '@expo/vector-icons';
+import {FontAwesome5, Entypo} from '@expo/vector-icons';
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import NewRequestSheet from "../Components/newRequestSheet";
 import Button from "../Components/Button";
-import {acceptRequest, createChatHeader, getOffers} from "../utils/Firebase";
+import {acceptRequest, setChatHeader, getOffers} from "../utils/Firebase";
 import Post from "../Components/Post";
 import Search from "../Components/Search";
 import Picker from "../Components/Picker";
@@ -31,7 +31,7 @@ export default function Request({navigation}) {
     const [isFetching, setIsFetching] = useState(false);
 
     const fetchData = () => {
-        getOffers(20).then((r)=>setFeed(r))
+        getOffers(20).then((r) => setFeed(r))
         setIsFetching(false);
     };
 
@@ -59,28 +59,30 @@ export default function Request({navigation}) {
                     {/*<AntDesign name="filter" size={24} color="black"*/}
                     {/*           style={{borderWidth: 1, borderColor: "black", margin: 10}}*/}
                     {/*           onPress={() => setFiltering(true)}/>*/}
+                    <Button title={"refresh"} onPress={()=>onRefresh()}/>
                     <Entypo name="new-message" size={24} color="black"
                             onPress={() => {
                                 navigation.navigate("NewRequest")
                             }}/>
                 </View>
-                {feed.length!=0?
-                    <View>
-                <FlatList data={feed} keyExtractor={(item, index) => index.toString()}
-                          renderItem={({item}) =>
+                {feed.length != 0 ?
+                    <View style={{width:"100%"}}>
+                        <FlatList data={feed} keyExtractor={(item, index) => index.toString()}
+                                  style={{backgroundColor: "black"}}
+                                  renderItem={({item}) =>
 
-                          <Post details={item} navButton={item.account != profile.email?
-                              <Button title={"contact " + item.name} onPress={()=>{
-                                  acceptRequest(item.requestID,profile.email,profile.name).then(()=> console.log("accepted"))
-                              }}/>:<Text style={styles.header}>this is your request!</Text>
-                          }/>
-                }
-                          ListFooterComponent={
-                              <Button title={"load more"} onPress={() => onRefresh()}/>
-                          }
-                          onRefresh={onRefresh}
-                          refreshing={isFetching}
-                />
+                                      <Post details={item} navButton={item.account != profile.email ?
+                                          <Button title={"contact " + item.name} onPress={() => {
+                                              acceptRequest(item.requestID, profile.email, profile.name).then(() => navigation.navigate("Messages"))
+                                          }}/> : <Text style={styles.header}>this is your request!</Text>
+                                      }/>
+                                  }
+                                  // ListFooterComponent={
+                                  //     <Button title={"load more"} onPress={() => onRefresh()}/>
+                                  // }
+                                  onRefresh={onRefresh}
+                                  refreshing={isFetching}
+                        />
                     </View>
                     : <Text style={styles.header}>There are currently no requests in the community</Text>}
             </View>
@@ -96,8 +98,8 @@ export default function Request({navigation}) {
         function updateList(option) {
             setFilter({...filter, type: option})
             option === "All" ? setTags(Skills.concat(Resources)) :
-                option === "Skills"? setTags(Skills) :
-                setTags(Resources)
+                option === "Skills" ? setTags(Skills) :
+                    setTags(Resources)
         }
 
         return (

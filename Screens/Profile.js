@@ -1,4 +1,4 @@
-import {Text, View, ScrollView, FlatList} from 'react-native';
+import {Text, View, ScrollView, FlatList, Image} from 'react-native';
 import {styles} from "../Styles";
 import React, {useContext, useEffect, useState} from "react";
 import {AntDesign} from '@expo/vector-icons';
@@ -20,11 +20,12 @@ export default function Profile() {
 
     return (
         <View style={[styles.background, {alignItems: 'center'}]}>
-            <View style={{width: 150, height: 150, borderRadius: 75, backgroundColor: "#ffffff"}}/>
+            {/*<View style={{width: 150, height: 150, borderRadius: 75, backgroundColor: "#ffffff"}}/>*/}
+            <Image source={require('../assets/Avatars/avataaars_1.png')} style={{width: 150, height: 150}}/>
             <Text style={styles.header}>{profile.name}</Text>
             <Text>{profile.title}</Text>
             <Text> Total Points: {profile.points}</Text>
-            <Button title={"increment"} onPress={() => addPoints(profile.email)}/>
+            {/*<Button title={"increment"} onPress={() => addPoints(profile.email)}/>*/}
             {/*<View style={{flexDirection: "row"}}>*/}
             {/*    <AntDesign name="star" size={24} color="black"/>*/}
             {/*    <AntDesign name="star" size={24} color="black"/>*/}
@@ -88,7 +89,7 @@ const MyRequests = ({profile}) => {
     }
 
     return (
-        <View style={{flex: 1}}>
+        <View style={{flex: 1,width:"100%"}}>
             {requests ?
                 <FlatList data={requests} keyExtractor={(item, index) => index.toString()}
                           renderItem={({item, index}) => <Post details={item.doc} navButton={
