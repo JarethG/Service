@@ -1,18 +1,18 @@
 [
   {
+    "isComplete": true,
     "key": "JoB1",
     "account": "jarethgaskin@gmail.com",
     "type": "skill",
     "name": "Riggs Hendricks",
     "tags": [
-      " Tax Support",
-      " Caretaker",
-      " Tax Support"
+      "Tax Support"
     ],
-    "title": "esse ullamco incididunt anim",
-    "description": "reprehenderit cupidatat fugiat aute ullamco sint elit nisi aliquip id mollit non deserunt non veniam"
+    "title": "Ird Help",
+    "description": "its come to the end of the financial year and I need help with the tax from my private business"
   },
   {
+    "isComplete": false,
     "key": "JoB2",
     "account": "jarethgaskin@gmail.com",
     "type": "skill",
@@ -22,111 +22,109 @@
       " Photography",
       " IT Skills"
     ],
-    "title": "enim commodo ea non",
-    "description": "labore anim aliquip Lorem ut deserunt culpa culpa magna sunt exercitation dolore reprehenderit sunt nulla"
+    "title": "Adobe Photoshop",
+    "description": "As part of a personal project, I want to learn Photoshop. is there anyone that might be able to help me learn the basics?"
   },
   {
+    "isComplete": false,
     "key": "JoB3",
     "account": "jarethgaskin@gmail.com",
     "type": "resource",
     "name": "Mckinney Webster",
     "tags": [
-      " Tax Support",
-      " Writing",
-      " Videography"
+      "Videography"
     ],
-    "title": "sunt labore id reprehenderit",
-    "description": "consequat sint laboris veniam dolore qui exercitation proident ex officia velit irure eu laboris eu"
+    "title": "Sony FE 24-105mm F4 G OSS Lens",
+    "description": "Hey, just been asked to take some macro photos and dont have a particular lense. Can I borrow on for a weekend trip?"
   },
   {
+    "isComplete": false,
     "key": "JoB4",
     "account": "jarethgaskin@gmail.com",
     "type": "skill",
     "name": "Donna Bray",
     "tags": [
       " Website Building",
-      " Digital Support",
       " Digital Support"
     ],
-    "title": "minim pariatur consectetur aliquip",
-    "description": "consectetur aute fugiat labore minim labore culpa eiusmod duis id quis officia consectetur commodo ut"
+    "title": "Personal Online Portfolio",
+    "description": "Im a recent design graduate that wants to make an online portfolio for myself. Need someone who can do the coding!"
   },
   {
+    "isComplete": false,
     "key": "JoB5",
     "account": "jarethgaskin@gmail.com",
-    "type": "skill",
+    "type": "resource",
     "name": "Christi Rios",
     "tags": [
-      " Website Building",
-      " Photography",
-      " Digital Support"
+      "Gardening Equipment",
+      "Pots"
     ],
-    "title": "deserunt esse ut in",
-    "description": "reprehenderit ad elit veniam occaecat velit occaecat aliquip laborum nostrud cillum voluptate excepteur nisi minim"
+    "title": "Help!!",
+    "description": "I have recently germinated some fruit seeds following a TikTok,now i need some pots so they can keep growing."
   },
   {
+    "isComplete": false,
     "key": "JoB6",
     "account": "jarethgaskin@gmail.com",
     "type": "skill",
     "name": "Mcleod Ferrell",
     "tags": [
-      " Writing",
-      " Photography",
-      " Digital Support"
+      " Writing"
     ],
-    "title": "ea cupidatat dolor dolore",
-    "description": "pariatur elit cillum eiusmod sunt mollit qui irure nulla cupidatat deserunt tempor enim aliqua fugiat"
+    "title": "Novella",
+    "description": "I have recently written a spin-off series and would like someone to read over and give their opinion"
   },
   {
+    "isComplete": false,
     "key": "JoB7",
     "account": "jarethgaskin@gmail.com",
     "type": "resource",
     "name": "Schroeder Wilcox",
     "tags": [
-      " Website Building",
-      " Carpenter",
-      " Writing"
+      "Screwdrivers",
+      "Power Tools",
+      "Measuring Tape"
     ],
-    "title": "deserunt voluptate est ut",
-    "description": "culpa sint qui consectetur ipsum dolor labore officia mollit deserunt excepteur mollit exercitation ut cillum"
+    "title": "DIY project",
+    "description": "Hello, I am putting together a Kit-Set shelf and need to borrow some tools for the afternoon."
   },
   {
+    "isComplete": false,
     "key": "JoB8",
     "account": "jarethgaskin@gmail.com",
     "type": "resource",
     "name": "Iva Hooper",
     "tags": [
-      " Caretaker",
-      " Plumber",
-      " Website Building"
+      "Plumber"
     ],
-    "title": "culpa minim laborum ut",
-    "description": "Lorem ad aute pariatur nostrud in ipsum consequat eiusmod tempor ullamco labore sunt velit aliquip"
+    "title": "Suspected Leak",
+    "description": "Help!, There is a patch of wooden floor in our house that has gone damp and rotting, need someone who will come and confirm in case a plumber is needed to be payed for. "
   },
   {
+    "isComplete": false,
     "key": "JoB9",
     "account": "jarethgaskin@gmail.com",
     "type": "skill",
     "name": "Jerri Watkins",
     "tags": [
-      " Sewing",
-      " Photography",
       " Sewing"
     ],
-    "title": "occaecat minim sunt deserunt",
-    "description": "irure culpa amet aliqua Lorem aute esse quis est consectetur ut occaecat laboris ex nisi"
+    "title": "New Beginner",
+    "description": "Wanting to take up Sewing as a hobbie and have lots of materials to practice on. I have recently purchased all the gear and would like someone who has good experience to take some time to teach me."
   },
   {
+    "isComplete": false,
     "key": "JoB10",
     "account": "jarethgaskin@gmail.com",
     "type": "resource",
     "name": "Burt Sanchez",
     "tags": [
-      " Website Building",
-      " Senior Support",
-      " Plumber"
+      "Trailer",
+      "Van",
+      "Car"
     ],
-    "title": "esse eiusmod excepteur labore",
-    "description": "anim pariatur est anim dolor ut ut nulla sunt aliqua ex fugiat ipsum occaecat exercitation"
+    "title": "Moving Flats",
+    "description": "Need to move a small amount of furniture (chairs, desks) that cant be carried down the street. Two trips at most."
   }
 ]

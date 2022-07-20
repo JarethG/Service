@@ -1,4 +1,4 @@
-import {Text, View, FlatList, Pressable, TextInput,} from 'react-native';
+import {Text, View, FlatList, Pressable, TextInput, StatusBar,} from 'react-native';
 import {styles} from "../Styles";
 import React, {useEffect, useState} from "react";
 import {FontAwesome5, Entypo} from '@expo/vector-icons';
@@ -68,7 +68,7 @@ export default function Request({navigation}) {
                 {feed.length != 0 ?
                     <View style={{width:"100%"}}>
                         <FlatList data={feed} keyExtractor={(item, index) => index.toString()}
-                                  style={{backgroundColor: "black"}}
+                                  // style={{backgroundColor: "black"}}
                                   renderItem={({item}) =>
 
                                       <Post details={item} navButton={item.account != profile.email ?
@@ -77,14 +77,15 @@ export default function Request({navigation}) {
                                           }}/> : <Text style={styles.header}>this is your request!</Text>
                                       }/>
                                   }
-                                  // ListFooterComponent={
-                                  //     <Button title={"load more"} onPress={() => onRefresh()}/>
-                                  // }
+                                  ListFooterComponent={
+                                      <Button title={"load more"} onPress={() => onRefresh()}/>
+                                  }
                                   onRefresh={onRefresh}
                                   refreshing={isFetching}
                         />
                     </View>
                     : <Text style={styles.header}>There are currently no requests in the community</Text>}
+                <StatusBar style="auto" />
             </View>
         )
     }

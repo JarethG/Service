@@ -32,13 +32,16 @@ const Post = ({details,navButton}) => {
                 <Text style={[styles.text, {fontWeight: "bold"}]}>{details.title}</Text>
                 {expand?<>
                     <Text style={styles.text}>{details.description}</Text>
-                    <View style={[styles.container, {height: 200, backgroundColor: "white"}]}/>
+                    <View style={[styles.container, {height: 200, backgroundColor: "white"}]}>
+                        <Text style={{alignSelf:"center"}}>image not available</Text>
+                    </View>
                     {navButton}
 
                 </>:<Text style={styles.text}>{details.description.substr(0, 100)}</Text>}
                 <Pressable onPress={() => setExpand(!expand)}>
-                    <View style={{alignItems:"center"}}>
-                        <AntDesign name={expand ? "caretup" : "caretdown"} size={24} color="black" />
+                    <View style={[styles.tags]}>
+                        <Text>{expand?"minimise":"expand"}</Text>
+                        {/*<AntDesign name={expand ? "caretup" : "caretdown"} size={24} color="black" />*/}
                     </View>
                 </Pressable>
             </View>

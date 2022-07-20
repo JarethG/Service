@@ -66,7 +66,6 @@ export function getMessage(chatID, userID, callback) {
 export async function setChatState(chatID, data) {
     await set(ref(rtdb, 'chatState/' + chatID), {
         isComplete: "",
-        acceptingUser: "",
         acceptingUserEmail: "",
         client: data.name,
         clientEmail: data.account,
@@ -83,9 +82,12 @@ export async function getChatState(chatID, callback){
 }
 
 export async function setChatHeader(chatID, data) {
+    console.log(data)
     await set(ref(rtdb, 'chatHeaders/'+ chatID), {
+        isComplete:data.isComplete,
         client: data.name,
         jobTitle:data.title,
+        acceptingUser: "",
         lastMessage: "waiting for someone to accept your offer",
         lastTimeStamp: Date.now(),
     });
@@ -121,8 +123,13 @@ export async function proposeJobCompleted(requestID, userEmail) {
     });
 }
 
-export async function acceptJobCompletion(requestID,request) {
-    console.log(request)
+export async function acceptJobCompletion(requestID) {
+    await update(ref(rtdb, 'chatHeader/' + requestID), {
+        isComplete: true
+    });
+}
+
+export async function completeJob(requestID,request){
     //delete header,chat,client references
     await deleteRequest(requestID, request.clientEmail)
     //delete accepting user reference
@@ -132,6 +139,12 @@ export async function acceptJobCompletion(requestID,request) {
     // add points
     await addPoints(request.clientEmail)
     await addPoints(request.acceptingUserEmail)
+}
+
+export async function postReview(userName,review){
+    review.from=userName
+    console.log(review)
+    await addDoc(collection(db, "Reviews"), review);
 }
 
 export async function deleteRequest(requestID, userEmail) {
@@ -196,7 +209,7 @@ export async function newProfile(userEmail, profileData) {
         title: profileData.title,
         acceptedRequests: [],
         myRequests: [],
-        points: 0
+        points: Math.random(100)
     });
 }
 
@@ -231,6 +244,7 @@ export async function updateProfile(userEmail, profileData) {
 export async function createDummyData(data) {
     data.map(async (item) => {
         const request = {
+            isComplete: item.isComplete,
             accepted: false,
             account: item.account,
             type: item.type,
@@ -251,6 +265,25 @@ export async function createDummyData(data) {
 export async function deleteDummyData(data) {
     data.map(async (item) => {
         await deleteRequest(item.key,item.account)
+    });
+}
+
+export async function deleteCollection(collectionPath, batchSize) {
+    const q = query(collection(db, collectionPath), limit(batchSize))
+    return new Promise((resolve, reject) => {
+        deleteQueryBatch(q, resolve).catch(reject);
+    });
+}
+
+ async function deleteQueryBatch(query, resolve) {
+     const snapshot = await getDocs(query);
+    const batchSize = snapshot.size;
+    if (batchSize === 0) {
+        resolve();
+        return;
+    }
+    snapshot.docs.forEach((doc) => {
+        deleteDoc(doc.ref);
     });
 }
 

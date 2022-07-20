@@ -4,8 +4,10 @@ import {acceptJobCompletion, getChatState, getMessage, proposeJobCompleted, push
 import {FontAwesome} from "@expo/vector-icons";
 import profileContext from "../utils/profileContext";
 import {useContext, useEffect, useState} from "react";
+import {StatusBar} from "expo-status-bar";
 
-const MessagingModal = ({chatId, onClose}) => {
+const MessagingModal = ({navigation,route}) => {
+    const chatId = route.params.requestID;
     const profile=useContext(profileContext)
     const renderItem = (item) => {
         return <Text style={item.userID == profile.email ?
@@ -31,7 +33,7 @@ const MessagingModal = ({chatId, onClose}) => {
                         <Text>{chatState.isComplete} has suggested that this job is finished, do you
                             agree?</Text>
                         <Button title={"accept completion"} onPress={() => {
-                            acceptJobCompletion(chatId, chatState).then(onClose)
+                            acceptJobCompletion(chatId).then(onClose)
                         }}/>
                     </>
         )
@@ -62,7 +64,8 @@ const MessagingModal = ({chatId, onClose}) => {
     >
         <View style={styles.background}>
             <View style={{backgroundColor:"white",flex:1,width:"100%"}}>
-                <Button title={"back"} onPress={() => onClose()}/>
+                <View style={{paddingTop:50}}></View>
+                <Button title={"back"} onPress={() => navigation.goBack()}/>
                 {chatState? completion():<Text>Loading</Text>}
                 <View style={{margin:10, flex: 1}}>
                     <FlatList data={messages} keyExtractor={(item, index) => index.toString()}
@@ -86,6 +89,7 @@ const MessagingModal = ({chatId, onClose}) => {
                 </View>
             </View>
         </View>
+        <StatusBar style="auto" />
     </Modal>
 
 }

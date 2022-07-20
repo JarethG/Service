@@ -10,42 +10,17 @@ import {useContext, useEffect, useState} from "react";
 import {getChatHeaders,} from "../utils/Firebase";
 import ProfileContext from "../utils/profileContext";
 import MessagingModal from "../Components/MessagingModal";
+import {ContactItem} from "../Components/MessagingComponents/ContactItem";
+import {createNativeStackNavigator} from "@react-navigation/native-stack";
+import NewRequestSheet from "../Components/newRequestSheet";
+import ReviewSheet from "../Components/ReviewSheet";
+import {ReviewCard} from "../Components/ReviewCard";
 
 export default function Messages() {
 
     const profile = useContext(ProfileContext)
 
-    const [openChat, setOpenChat] = useState()
     const [chatIDs, setChatIDs] = useState([])
-
-    const ContactCard = ({info}) => {
-        const date = new Date(info.lastTimeStamp);
-        return (
-            <View style={[styles.skillsTheme, {margin: 10, borderRadius: 10, padding: 7,}]}>
-                <View style={{flexDirection: "row"}}>
-                    <View style={{width: 70, height: 70, borderRadius: 35, backgroundColor: "#ffffff"}}></View>
-                    <View style={{flex: 1}}>
-                        <View style={{flexDirection: "row", justifyContent: "space-between"}}>
-                            <Text style={styles.title}>
-                                {console.log(info)}
-                                {info.client === ""?
-                                    "pending acceptance":
-                                        info.client === profile.name?
-                                            info.client:
-                                            info.name
-                                }
-                                {info.acceptingUserEmail == profile.email ? info.client : info.acceptingUser}
-                            </Text>
-                            <Text>{date.toLocaleTimeString()}</Text>
-                        </View>
-                        <Text>{info.jobTitle}</Text>
-                        <Text>{info.lastMessage}</Text>
-                    </View>
-                </View>
-            </View>
-        );
-    }
-
     const [err, setErr] = useState("Loading Messages")
 
     useEffect(() => {
@@ -54,15 +29,12 @@ export default function Messages() {
         ids.length == 0 ? setErr("It appears you have no open or accepted requests!")
             :
            ids.forEach((id)=>{
-               getChatHeaders(id,setChatIDs)
+               getChatHeaders(id, setChatIDs).then()
            })
     }, [profile])
 
-    {
-        // console.log(chatIDs)
-    }
-    return (
-        <View style={styles.background}>
+    const MessageLanding=({navigation})=> {
+        return <View style={styles.background}>
             <ScrollView style={{width: "100%"}}>
                 {
                     chatIDs.length == 0 ?
@@ -70,14 +42,32 @@ export default function Messages() {
                         :
                         chatIDs.map((request, index) => {
                             return <TouchableOpacity key={index} onPress={() => {
-                                setOpenChat(request.id)
+                                request.isComplete?
+                                navigation.navigate("ReviewSheet", {request:request}):
+                                navigation.navigate("MessagingModal", {requestID:request.id})
                             }}>
-                                <ContactCard info={request}/>
+                                {request.isComplete ?
+                                    <ReviewCard info={request}/> :
+                                    <ContactItem info={request}/>}
                             </TouchableOpacity>
                         })
                 }
             </ScrollView>
-            {openChat != null ? <MessagingModal chatId={openChat} onClose={() => setOpenChat(null)}/> : null}
         </View>
+    }
+
+    const Stack = createNativeStackNavigator();
+
+    return (
+        <Stack.Navigator
+            screenOptions={{
+                headerShown: false
+            }}>
+            <Stack.Screen name={"MessageLanding"} component={MessageLanding}/>
+            <Stack.Screen name={"MessagingModal"} component={MessagingModal}/>
+            <Stack.Screen name={"ReviewSheet"} component={ReviewSheet}/>
+            {/*<Stack.Screen name={"Search"} component={Search}/>*/}
+        </Stack.Navigator>
+
     );
 }

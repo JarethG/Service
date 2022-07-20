@@ -78,7 +78,7 @@ export const styles = StyleSheet.create({
         borderRadius: 15,
         margin: 3,
         padding: 5,
-        color: "#ffffff",
+        color: "#000000",
         fontSize: 12,
         alignSelf: "flex-start"
     },
