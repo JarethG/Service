@@ -17,6 +17,7 @@ export const AdminFunctions = () => {
             <Button title={"Create Dummy Data"} onPress={()=>createDummyData(requests).then(()=>console.log("done"))}/>
             <Button title={"Delete Dummy Data"} onPress={()=>deleteDummyData(requests).then(()=>console.log("done"))}/>
             <Button title={"Clear Reviews"} onPress={()=>deleteCollection("Reviews",10).then(()=>console.log("reviews cleared"))}/>
+            <Button title={"Clear Requests"} onPress={()=>deleteCollection("Requests",10).then(()=>console.log("reviews cleared"))}/>
             </View>
         </ButtonModal>
     )

@@ -92,8 +92,9 @@ const MyRequests = ({profile}) => {
         <View style={{flex: 1,width:"100%"}}>
             {requests ?
                 <FlatList data={requests} keyExtractor={(item, index) => index.toString()}
-                          renderItem={({item, index}) => <Post details={item.doc} navButton={
-                              item.accepted ? null :
+                          renderItem={({item, index}) =>
+                              <Post details={item.doc} navButton={
+                              item.doc.accepted ? <Text> sorry, you cant delete an accepted offer</Text> :
                                   <Button title={"delete request"} onPress={() => {
                                       deleteRequest(item.id, profile.email).then(
                                           setRequests((requests) => requests.filter((_, num) => num !== index))

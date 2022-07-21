@@ -6,7 +6,7 @@ import {
     ScrollView,
 } from 'react-native';
 import {styles} from "../Styles";
-import {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {getChatHeaders,} from "../utils/Firebase";
 import ProfileContext from "../utils/profileContext";
 import MessagingModal from "../Components/MessagingModal";
@@ -15,32 +15,38 @@ import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import NewRequestSheet from "../Components/newRequestSheet";
 import ReviewSheet from "../Components/ReviewSheet";
 import {ReviewCard} from "../Components/ReviewCard";
+import Button from "../Components/Button";
 
 export default function Messages() {
 
     const profile = useContext(ProfileContext)
 
-    const [chatIDs, setChatIDs] = useState([])
+    const [chatHeaders, setChatHeaders] = useState([])
     const [err, setErr] = useState("Loading Messages")
 
-    useEffect(() => {
-        setChatIDs([])
+    function reload()  {
+        setChatHeaders([])
         let ids = profile.acceptedRequests.concat(profile.myRequests);
         ids.length == 0 ? setErr("It appears you have no open or accepted requests!")
             :
-           ids.forEach((id)=>{
-               getChatHeaders(id, setChatIDs).then()
-           })
-    }, [profile])
+            ids.forEach((id)=>{
+                getChatHeaders(id, setChatHeaders).then()
+            })
+    }
+
+    useEffect(() => {
+        reload()
+    }, [])
 
     const MessageLanding=({navigation})=> {
         return <View style={styles.background}>
+            <Button title={"refresh"} onPress={()=>reload()}/>
             <ScrollView style={{width: "100%"}}>
                 {
-                    chatIDs.length == 0 ?
+                    chatHeaders.length == 0 ?
                         <Text style={styles.header}>{err}</Text>
                         :
-                        chatIDs.map((request, index) => {
+                        chatHeaders.map((request, index) => {
                             return <TouchableOpacity key={index} onPress={() => {
                                 request.isComplete?
                                 navigation.navigate("ReviewSheet", {request:request}):

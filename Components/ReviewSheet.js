@@ -11,7 +11,7 @@ const ReviewSheet = ({navigation,route}) => {
     const profile = useContext(ProfileContext)
     const stars = [1, 2, 3, 4, 5]
     const [rating, setRating] = useState(0)
-    const [review, setReview] = useState()
+    const [review, setReview] = useState("")
 
     return (
         <View style={styles.background}>
@@ -39,8 +39,7 @@ const ReviewSheet = ({navigation,route}) => {
                 multiline={true}
             />
             <Button title={"submit"} onPress={()=> {
-                postReview(profile.name, {"rating":rating, "review":review}).then(()=> {
-
+                postReview( {"rating":rating, "review":review, "from":profile.name},request,profile.email).then(()=> {
                     navigation.goBack()})
             }}/>
         </View>

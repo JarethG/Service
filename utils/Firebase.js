@@ -17,7 +17,7 @@ import {
     arrayRemove,
     increment
 } from 'firebase/firestore';
-import {getDatabase, ref, onValue, set, push, update, remove} from 'firebase/database';
+import {getDatabase, ref, onValue, set, push, update, remove,get,child} from 'firebase/database';
 import React from "react";
 
 const firebaseConfig = {
@@ -84,7 +84,8 @@ export async function getChatState(chatID, callback){
 export async function setChatHeader(chatID, data) {
     console.log(data)
     await set(ref(rtdb, 'chatHeaders/'+ chatID), {
-        isComplete:data.isComplete,
+        isComplete:false,
+        reviewSubmitted:false,
         client: data.name,
         jobTitle:data.title,
         acceptingUser: "",
@@ -124,7 +125,7 @@ export async function proposeJobCompleted(requestID, userEmail) {
 }
 
 export async function acceptJobCompletion(requestID) {
-    await update(ref(rtdb, 'chatHeader/' + requestID), {
+    await update(ref(rtdb, 'chatHeaders/' + requestID), {
         isComplete: true
     });
 }
@@ -141,19 +142,34 @@ export async function completeJob(requestID,request){
     await addPoints(request.acceptingUserEmail)
 }
 
-export async function postReview(userName,review){
-    review.from=userName
-    console.log(review)
+export async function postReview(review,request,userEmail){
+    console.log(request)
     await addDoc(collection(db, "Reviews"), review);
+
+    if(request.reviewSubmitted==false) {
+        //notify header that the first review has been submitted
+        await update(ref(rtdb, 'chatHeaders/' + request.id), {
+            reviewSubmitted: true
+        });
+        //remove individual access to request
+        await updateDoc(getUserDoc(userEmail), {
+            myRequests: arrayRemove(request.id)
+        });
+    } else {
+        //remove all content relating to request
+        await deleteRequest(request.id,userEmail)
+    }
+
 }
 
 export async function deleteRequest(requestID, userEmail) {
     //delete the main request doc
     await deleteDoc(doc(db, "Requests", requestID));
-    //delete doc reference id from profile
+
     await updateDoc(getUserDoc(userEmail), {
         myRequests: arrayRemove(requestID)
     });
+
     //delete chat and chat head references
     await remove(ref(rtdb, 'chatHeaders/' + requestID))
     await remove(ref(rtdb, 'chatState/' + requestID))
@@ -184,6 +200,9 @@ export async function acceptRequest(requestID, userEmail,userName) {
     await update(ref(rtdb, 'chatState/' + requestID), {
         acceptingUser:userName,
         acceptingUserEmail:userEmail
+    });
+    await update(ref(rtdb, 'chatHeaders/' + requestID), {
+        acceptingUser:userName
     });
     console.log("request accepted")
 

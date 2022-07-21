@@ -33,7 +33,7 @@ const MessagingModal = ({navigation,route}) => {
                         <Text>{chatState.isComplete} has suggested that this job is finished, do you
                             agree?</Text>
                         <Button title={"accept completion"} onPress={() => {
-                            acceptJobCompletion(chatId).then(onClose)
+                            acceptJobCompletion(chatId).then(navigation.goBack())
                         }}/>
                     </>
         )
