@@ -142,9 +142,15 @@ export async function completeJob(requestID,request){
     await addPoints(request.acceptingUserEmail)
 }
 
-export async function postReview(review,request,userEmail){
-    console.log(request)
-    await addDoc(collection(db, "Reviews"), review);
+export async function postReview(review,request,userEmail,userName){
+    console.log("Firebase post review requests:",request)
+    const docRef = await addDoc(collection(db, "Reviews"), review);
+
+// Atomically add a new region to the "regions" array field.
+    await updateDoc(getUserDoc(userEmail), {
+        myReviews: arrayUnion(docRef.id)
+    });
+
 
     if(request.reviewSubmitted==false) {
         //notify header that the first review has been submitted
@@ -152,12 +158,27 @@ export async function postReview(review,request,userEmail){
             reviewSubmitted: true
         });
         //remove individual access to request
-        await updateDoc(getUserDoc(userEmail), {
-            myRequests: arrayRemove(request.id)
-        });
+        await updateDoc(getUserDoc(userEmail),
+        request.client==userName?
+            {myRequests: arrayRemove(request.id)}:
+            {acceptedRequests: arrayRemove(request.id)}
+        );
     } else {
+
+        await updateDoc(getUserDoc(userEmail),
+            request.client==userName?
+                {myRequests: arrayRemove(request.id)}:
+                {acceptedRequests: arrayRemove(request.id)}
+        );
         //remove all content relating to request
-        await deleteRequest(request.id,userEmail)
+        console.log(request.id)
+        await deleteDoc(doc(db, "Requests", request.id));
+        console.log(request.id)
+        await remove(ref(rtdb, 'chatHeaders/' + request.id))
+        console.log(request.id)
+        await remove(ref(rtdb, 'chatState/' + request.id))
+        console.log(request.id)
+        await remove(ref(rtdb, 'chats/' + request.id))
     }
 
 }

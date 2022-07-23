@@ -39,7 +39,7 @@ const ReviewSheet = ({navigation,route}) => {
                 multiline={true}
             />
             <Button title={"submit"} onPress={()=> {
-                postReview( {"rating":rating, "review":review, "from":profile.name},request,profile.email).then(()=> {
+                postReview( {"rating":rating, "review":review, "from":profile.name},request,profile.email,profile.name).then(()=> {
                     navigation.goBack()})
             }}/>
         </View>
