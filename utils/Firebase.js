@@ -130,18 +130,6 @@ export async function acceptJobCompletion(requestID) {
     });
 }
 
-export async function completeJob(requestID,request){
-    //delete header,chat,client references
-    await deleteRequest(requestID, request.clientEmail)
-    //delete accepting user reference
-    await updateDoc(getUserDoc(request.acceptingUserEmail), {
-        acceptedRequests: arrayRemove(requestID )
-    });
-    // add points
-    await addPoints(request.clientEmail)
-    await addPoints(request.acceptingUserEmail)
-}
-
 export async function postReview(review,request,userEmail,userName){
     console.log("Firebase post review requests:",request)
     const docRef = await addDoc(collection(db, "Reviews"), review);

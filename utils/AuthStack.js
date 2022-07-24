@@ -90,7 +90,9 @@ function SignUpScreen({navigation}) {
     }
 
     return (
-        <View style={styles.background}>
+        <View style={[styles.background,{justifyContent:"center"}]}>
+        <View style={{width:"50%"}}>
+            <Button title={"back"} onPress={()=>navigation.goBack()}/>
             <Text style={styles.header}> Email </Text>
 
             {!!value.error && <View style={styles.error}><Text>{value.error}</Text></View>}
@@ -114,6 +116,7 @@ function SignUpScreen({navigation}) {
                 </View>
 
                 <Button title="Next" onPress={signUp}/>
+            </View>
             </View>
         </View>
     );
@@ -144,11 +147,13 @@ function NewProfileScreen({navigation, route}) {
     }
 
     return (
-        <View style={styles.background}>
+        <View style={[styles.background,{justifyContent:"center"}]}>
+        <View>
             {stage == 0 ?
                 <View style={styles.container}>
+                    <Button title={"back"} onPress={()=>navigation.goBack()}/>
                     <Text style={styles.header}>Welcome!</Text>
-                    <Text style={styles.cardText}>let continue the creation of your account.</Text>
+                    <Text>let continue the creation of your account.</Text>
                     <Text style={styles.cardText}>All of this information can be changed later, dont worry too much
                         about
                         the
@@ -213,6 +218,7 @@ function NewProfileScreen({navigation, route}) {
                     }/>
                 </View>
             }
+        </View>
         </View>
     )
 }

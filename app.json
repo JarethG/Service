@@ -24,7 +24,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.gaskinjare.Community_Exchange"
     },
     "web": {
       "favicon": "./assets/favicon.png"
