@@ -9,7 +9,7 @@ import {styles} from "../Styles";
 import React, {useContext, useEffect, useState} from "react";
 import {getChatHeaders,} from "../utils/Firebase";
 import ProfileContext from "../utils/profileContext";
-import MessagingModal from "../Components/MessagingModal";
+import MessagingModal from "../Components/MessagingComponents/MessagingModal";
 import {ContactItem} from "../Components/MessagingComponents/ContactItem";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import NewRequestSheet from "../Components/newRequestSheet";

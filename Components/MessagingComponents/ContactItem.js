@@ -8,12 +8,11 @@ export const ContactItem = ({info}) => {
     const profile = useContext(ProfileContext)
     const date = new Date(info.lastTimeStamp);
     return (
-        <View style={[styles.skillsTheme, {margin: 10, borderRadius: 10, padding: 7,flexDirection: "row"}]}>
+        <View style={[styles.midColour,styles.container,{flexDirection: "row"}]}>
             <View style={{width: 70, height: 70, borderRadius: 35, backgroundColor: "#ffffff"}}></View>
             <View style={{flex: 1}}>
                 <View style={{flexDirection: "row", justifyContent: "space-between"}}>
-                    <Text style={styles.title}>
-                        {console.log(info)}
+                    <Text style={styles.text}>
                         {info.acceptingUser === ""?
                             "pending acceptance":
                             info.client === profile.name?
@@ -21,10 +20,10 @@ export const ContactItem = ({info}) => {
                                 info.name
                         }
                     </Text>
-                    <Text>{date.toLocaleTimeString()}</Text>
+                    <Text style={styles.text}>{date.toLocaleTimeString()}</Text>
                 </View>
-                <Text>{info.jobTitle}</Text>
-                <Text>{info.lastMessage}</Text>
+                <Text style={styles.text}>{info.jobTitle}</Text>
+                <Text style={styles.text}>{info.lastMessage}</Text>
             </View>
         </View>
     );

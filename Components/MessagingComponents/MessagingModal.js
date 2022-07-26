@@ -1,19 +1,20 @@
-import {Button, FlatList, Keyboard, Modal, Text, TextInput, View} from "react-native";
-import {styles} from "../Styles";
-import {acceptJobCompletion, getChatState, getMessage, proposeJobCompleted, pushMessage} from "../utils/Firebase";
+import {FlatList, Keyboard, Modal, Text, TextInput, View} from "react-native";
+import {styles} from "../../Styles";
+import {acceptJobCompletion, getChatState, getMessage, proposeJobCompleted, pushMessage} from "../../utils/Firebase";
 import {FontAwesome} from "@expo/vector-icons";
-import profileContext from "../utils/profileContext";
+import profileContext from "../../utils/profileContext";
 import {useContext, useEffect, useState} from "react";
 import {StatusBar} from "expo-status-bar";
+import Button from "../Button";
 
 const MessagingModal = ({navigation,route}) => {
     const chatId = route.params.requestID;
     const profile=useContext(profileContext)
     const renderItem = (item) => {
         return <Text style={item.userID == profile.email ?
-            [styles.messageBubble, {alignSelf: "flex-end"}]
+            [styles.messageBubble, {alignSelf: "flex-end",backgroundColor: 'rgba(0,255,0,0.5)'}]
             :
-            [styles.messageBubble, {alignSelf: "flex-start"}]}>{item.message}</Text>
+            [styles.messageBubble, {alignSelf: "flex-start",backgroundColor: 'rgba(0,255,255,0.5)'}]}>{item.message}</Text>
     }
 
     function completion () {
@@ -63,8 +64,8 @@ const MessagingModal = ({navigation,route}) => {
         visible={true}
     >
         <View style={styles.background}>
-            <View style={{backgroundColor:"white",flex:1,width:"100%"}}>
-                <View style={{paddingTop:50}}></View>
+            <View style={[styles.container,styles.midColour,{width:"100%",flex:1}]}>
+                {/*<View style={{paddingTop:50}}></View>*/}
                 <Button title={"back"} onPress={() => navigation.goBack()}/>
                 {chatState? completion():<Text>Loading</Text>}
                 <View style={{margin:10, flex: 1}}>
@@ -74,7 +75,6 @@ const MessagingModal = ({navigation,route}) => {
                     <View style={[styles.transparentContainer, {
                         flexDirection: "row",
                         justifyContent: "space-between",
-                        backgroundColor: "grey"
                     }]}>
                         <TextInput
                             placeholder="Type you message..."
@@ -89,7 +89,6 @@ const MessagingModal = ({navigation,route}) => {
                 </View>
             </View>
         </View>
-        <StatusBar style="auto" />
     </Modal>
 
 }

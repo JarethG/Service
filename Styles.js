@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
     background: {
         width: "100%",
         height: "100%",
-        backgroundColor: "#eae2b7",
+        backgroundColor: "#dbe6f9",
         padding:7,
         alignItems:"center"
     },
@@ -24,9 +24,7 @@ export const styles = StyleSheet.create({
     },
     buttonText: {
         fontSize: 16,
-        // lineHeight: 21,
         fontWeight: 'bold',
-        // letterSpacing: 0.25,
         color: 'black',
     },
     toggleButtonSelected: {
@@ -43,6 +41,7 @@ export const styles = StyleSheet.create({
         borderRadius: 5,
         borderColor: "#386540",
         borderWidth: 1,
+        backgroundColor: 'rgb(39,84,102)'
     },
     container: {
         margin: 5,
@@ -56,11 +55,11 @@ export const styles = StyleSheet.create({
         margin: 5,
         padding: 7,
     },
-    resourceTheme: {
-        backgroundColor: 'rgb(65,138,167)',
+    midColour: {
+        backgroundColor: 'rgb(22,154,199)',
     },
-    skillsTheme: {
-        backgroundColor: 'rgb(253,135,31)',
+    darkColour: {
+        backgroundColor: 'rgb(39,84,102)',
     },
     cardProfilePicture: {
         width: 70,
@@ -68,21 +67,15 @@ export const styles = StyleSheet.create({
         borderRadius: 35,
         backgroundColor: "#ffffff"
     },
-    title: {
-        fontSize: 16,
-        fontWeight: "bold",
-        color: "white"
-    },
     tags: {
-        backgroundColor: 'rgba(255,255,255,0.5)',
         borderRadius: 15,
         margin: 3,
         padding: 5,
-        color: "#000000",
+        color: "#fff",
         fontSize: 12,
         alignSelf: "flex-start"
     },
-    cardText: {
+    text: {
         color: '#ffffff'
     },
     menuItem: {
@@ -109,7 +102,6 @@ export const styles = StyleSheet.create({
         marginBottom: 3,
         borderRadius: 10,
         padding: 7,
-        backgroundColor: 'rgb(253,135,31)',
     },
     modalView: {
         margin: 10,
@@ -133,5 +125,5 @@ export const styles = StyleSheet.create({
     },
     navigationHeader: {
         backgroundColor: '#386540'
-    }
+    },
 });

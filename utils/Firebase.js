@@ -237,7 +237,7 @@ export async function newProfile(userEmail, profileData) {
         title: profileData.title,
         acceptedRequests: [],
         myRequests: [],
-        points: Math.random(100)
+        points: Math.floor(Math.random()*100)
     });
 }
 

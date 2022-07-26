@@ -53,26 +53,27 @@ function UserStack(user) {
                 <NavigationContainer>
                     <Tab.Navigator
                         screenOptions={{
-                            headerStyle: styles.navigationHeader,
-                            headerTintColor: '#fff',
-                            headerTitleAlign: 'center',
-                            headerTitleStyle: {fontWeight: 'bold'},
-                            tabBarIcon: () => {
-
-                            }
+                            headerShown:false
+                            // headerStyle: styles.navigationHeader,
+                            // headerTintColor: '#fff',
+                            // headerTitleAlign: 'center',
+                            // headerTitleStyle: {fontWeight: 'bold'},
+                            // tabBarIcon: () => {
+                            //
+                            // }
                         }}>
                         {console.log("UserStack/profile => ",profile)}
                         <Tab.Screen name="Notice Board" component={Request} initialParams={profile}
-                                    options={{tabBarIcon: () => <FontAwesome5 name="sign" size={24} color="gray"/>}}/>
+                                    options={{tabBarIcon: () => <FontAwesome5 name="sign" size={24} color="orange"/>}}/>
                         <Tab.Screen name="Messages" component={Messages} initialParams={profile}
                                     options={{
-                                        tabBarIcon: () => <Ionicons name="chatbubbles" size={24} color="gray"/>
+                                        tabBarIcon: () => <Ionicons name="chatbubbles" size={24} color="orange"/>
                                     }}/>
                         {/*<Tab.Screen name="Community" component={Community}*/}
-                        {/*            options={{tabBarIcon: () => <FontAwesome5 name="medal" size={24} color="gray"/>}}/>*/}
+                        {/*            options={{tabBarIcon: () => <FontAwesome5 name="medal" size={24} color="orange"/>}}/>*/}
                         <Tab.Screen name="Profile" component={Profile} initialParams={profile}
                                     options={{
-                                        tabBarIcon: () => <Ionicons name="person-circle" size={24} color="gray"/>
+                                        tabBarIcon: () => <Ionicons name="person-circle" size={24} color="orange"/>
                                     }}/>
                     </Tab.Navigator>
                 </NavigationContainer>

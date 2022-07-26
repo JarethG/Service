@@ -126,5 +126,17 @@
     ],
     "title": "Moving Flats",
     "description": "Need to move a small amount of furniture (chairs, desks) that cant be carried down the street. Two trips at most."
+  },
+  {
+    "isComplete": false,
+    "key": "JoB11",
+    "account": "jarethgaskin@gmail.com",
+    "type": "resource",
+    "name": "Barno NoE",
+    "tags": [
+      "Gardening Equipment"
+    ],
+    "title": "Wheelbarrow and spade",
+    "description": "Need to borrow a wheelbarrow and a spade for a day this weekend"
   }
 ]

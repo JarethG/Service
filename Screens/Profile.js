@@ -1,7 +1,7 @@
-import {Text, View, ScrollView, FlatList, Image} from 'react-native';
+import {Text, View, ScrollView, FlatList, Image, Pressable} from 'react-native';
 import {styles} from "../Styles";
 import React, {useContext, useEffect, useState} from "react";
-import {AntDesign} from '@expo/vector-icons';
+import {AntDesign, FontAwesome} from '@expo/vector-icons';
 import ToggleButtons from "../Components/ToggleButtons";
 import {signOut, getAuth} from 'firebase/auth';
 import Button from '../Components/Button'
@@ -15,25 +15,25 @@ export default function Profile() {
 
     const profile = useContext(ProfileContext)
     const auth = getAuth();
+    const rating = 4;
 
     const [profileToggle, setProfileToggle] = useState(true)
 
     return (
-        <View style={[styles.background, {alignItems: 'center'}]}>
-            {/*<View style={{width: 150, height: 150, borderRadius: 75, backgroundColor: "#ffffff"}}/>*/}
-            <Image source={require('../assets/Avatars/avataaars_1.png')} style={{width: 150, height: 150}}/>
+        <View style={styles.background}>
+        <View style={[styles.container,styles.midColour,{width:"100%",flex:1,alignItems:"center"}]}>
+            <UpdateAccount email={auth.currentUser.email} oldData={profile}/>
+            <Image source={require('../assets/Avatars/avataaars_2.png')} style={{width: 150, height: 150}}/>
             <Text style={styles.header}>{profile.name}</Text>
-            <Text>{profile.title}</Text>
-            <Text> Total Points: {profile.points}</Text>
-            {/*<Button title={"increment"} onPress={() => addPoints(profile.email)}/>*/}
-            {/*<View style={{flexDirection: "row"}}>*/}
-            {/*    <AntDesign name="star" size={24} color="black"/>*/}
-            {/*    <AntDesign name="star" size={24} color="black"/>*/}
-            {/*    <AntDesign name="star" size={24} color="black"/>*/}
-            {/*    <AntDesign name="star" size={24} color="black"/>*/}
-            {/*    <AntDesign name="staro" size={24} color="black"/>*/}
-            {/*    <Text>(8)</Text>*/}
-            {/*</View>*/}
+            <Text style={styles.text}>{profile.title}</Text>
+            <Text style={styles.text}> Total Points: {profile.points}</Text>
+            <View style={{flexDirection: "row"}}>
+                { Array.from({ length: 5 }, (x, i) => {
+                   return i < rating ?
+                        <AntDesign key={i} name="star" size={24} color="rgb(255, 230, 80)"/> :
+                        <AntDesign key={i} name="staro" size={24} color='rgb(255, 230, 80)'/>
+            })}
+            </View>
             <ToggleButtons titleLeft={"About Me"} titleRight={"My Request"}
                            onToggle={(r) => setProfileToggle(r)}/>
             {profileToggle ?
@@ -44,6 +44,7 @@ export default function Profile() {
                 <Button title="Sign Out" style={styles.button} onPress={() => signOut(auth)}/>
             </View>
         </View>
+        </View>
     );
 }
 
@@ -52,12 +53,12 @@ const AboutMe = ({profile}) => {
     return (
         <View style={{width: "100%", padding: 15, flex: 1}}>
             <Text style={styles.header}>About</Text>
-            <Text>{profile.about}</Text>
+            <Text style={styles.text}>{profile.about}</Text>
             <Text style={styles.header}>Skills</Text>
             <View>
                 <ScrollView horizontal>
                     {profile.skills.map((skill, index) => {
-                        return <Text style={[styles.tags, styles.skillsTheme]} key={index}>{skill}</Text>
+                        return <Text style={[styles.tags, styles.darkColour]} key={index}>{skill}</Text>
                     })}
                 </ScrollView>
             </View>
@@ -65,11 +66,10 @@ const AboutMe = ({profile}) => {
             <View>
                 <ScrollView horizontal>
                     {profile.resources.map((skill, index) => {
-                        return <Text style={[styles.tags, styles.resourceTheme]} key={index}>{skill}</Text>
+                        return <Text style={[styles.tags, styles.darkColour]} key={index}>{skill}</Text>
                     })}
                 </ScrollView>
             </View>
-            <UpdateAccount email={auth.currentUser.email} oldData={profile}/>
         </View>
     );
 }
