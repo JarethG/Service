@@ -10,7 +10,6 @@ const Post = ({details, navButton}) => {
     const theme = details.type === "skill"
     const [expand, setExpand] = useState(false)
     return (
-
         <View style={[styles.container, theme ? styles.midColour : styles.darkColour]}>
             {/*{expand?<Settings data={details}/>:null}*/}
             <View style={{flexDirection: "row", flex: 1}}>

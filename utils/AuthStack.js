@@ -91,7 +91,7 @@ function SignUpScreen({navigation}) {
 
     return (
         <View style={[styles.background,{justifyContent:"center"}]}>
-        <View style={{width:"50%"}}>
+            <View style={[styles.container,styles.midColour,{width:"100%"}]}>
             <Button title={"back"} onPress={()=>navigation.goBack()}/>
             <Text style={styles.header}> Email </Text>
 
@@ -148,49 +148,50 @@ function NewProfileScreen({navigation, route}) {
 
     return (
         <View style={[styles.background,{justifyContent:"center"}]}>
-        <View>
+            <View style={[styles.midColour,{width:"100%"},styles.container]}>
             {stage == 0 ?
-                <View style={styles.container}>
+                <>
                     <Button title={"back"} onPress={()=>navigation.goBack()}/>
                     <Text style={styles.header}>Welcome!</Text>
-                    <Text>let continue the creation of your account.</Text>
-                    <Text style={styles.cardText}>All of this information can be changed later, dont worry too much
-                        about
-                        the
-                        specifics!</Text>
+                    <Text style={styles.text}>Lets continue the creation of your account.</Text>
+                    <Text style={styles.text}>All of this information can be changed later, do not worry too much
+                        about the specifics!</Text>
                     <Text style={styles.header}>Tell us about yourself</Text>
                     <View style={styles.transparentContainer}>
                         <TextInput
                             value={profile.about}
-                            placeholder='text...'
+                            placeholder='What sort of things might people want to know about you?'
                             onChangeText={(text) => setProfile({...profile, about: text})}
+                            multiline={true}
                         />
                     </View>
                     <Text style={styles.header}> Name </Text>
                     <View style={styles.transparentContainer}>
                         <TextInput
                             value={profile.name}
-                            placeholder='text...'
+                            placeholder='Name...'
                             onChangeText={(text) => setProfile({...profile, name: text})}
+                            multiline={true}
                         />
                     </View>
                     <Text style={styles.header}> Your personal title</Text>
                     <View style={styles.transparentContainer}>
                         <TextInput
                             value={profile.title}
-                            placeholder='i.e Teacher, student, doctor'
+                            placeholder='i.e Teacher, Student, Doctor'
                             onChangeText={(text) => setProfile({...profile, title: text})}
+                            multiline={true}
                         />
                     </View>
                     <Button title={"next"} onPress={() => {
                        setStage(1)}}/>
-                </View>
+                </>
                 :
-                <View style={styles.container}>
+                <>
                     <Button title={"back"} onPress={() => {
                         setStage(0)
                     }}/>
-                    <Text style={styles.header}>what can you provide?</Text>
+                    <Text style={styles.header}>What can you provide?</Text>
                     <Picker data={Resources}
                             buttonTitle={"Select Resource"}
                             apply={(r) => setProfile({...profile, resources: r})
@@ -216,7 +217,7 @@ function NewProfileScreen({navigation, route}) {
                         navigation.navigate("sign in")
                     }
                     }/>
-                </View>
+                </>
             }
         </View>
         </View>

@@ -1,16 +1,12 @@
 import Request from "../Screens/Request";
 import {FontAwesome5, Ionicons} from "@expo/vector-icons";
 import Messages from "../Screens/Messages";
-import Community from "../Screens/Community";
 import Profile from "../Screens/Profile";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import {NavigationContainer} from "@react-navigation/native";
 import React, {useState} from "react";
 import {getProfile} from "./Firebase";
-import {View, Text, Pressable} from "react-native";
-import {styles} from "../Styles";
 import Splash from "../Screens/Splash";
-import ExpoUpdates from "expo-updates/src/ExpoUpdates";
 import Updates from "../Components/Updates";
 import ProfileContext from "./profileContext";
 

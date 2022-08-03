@@ -8,6 +8,8 @@ import {LogBox, } from "react-native";
 export default function App() {
 
     LogBox.ignoreLogs([""]);
+    //eas build --profile production --platform android
+    //adb logcat *:S ReactNative:V ReactNativeJS:V
 
     const [checkingUserStatus,setCheckingUserStatus] = useState(true)
     const { user } = Authentication();

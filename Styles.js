@@ -55,6 +55,9 @@ export const styles = StyleSheet.create({
         margin: 5,
         padding: 7,
     },
+    lightColour: {
+        backgroundColor: '#dbe6f9',
+    },
     midColour: {
         backgroundColor: 'rgb(22,154,199)',
     },

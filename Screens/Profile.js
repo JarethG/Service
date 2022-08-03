@@ -34,7 +34,7 @@ export default function Profile() {
                         <AntDesign key={i} name="staro" size={24} color='rgb(255, 230, 80)'/>
             })}
             </View>
-            <ToggleButtons titleLeft={"About Me"} titleRight={"My Request"}
+            <ToggleButtons titleLeft={"About Me"} titleRight={"My Requests"}
                            onToggle={(r) => setProfileToggle(r)}/>
             {profileToggle ?
                 <AboutMe profile={profile}/> : <MyRequests profile={profile}/>
@@ -89,12 +89,12 @@ const MyRequests = ({profile}) => {
     }
 
     return (
-        <View style={{flex: 1,width:"100%"}}>
+        <View style={[{flex: 1,width:"100%"},styles.lightColour]}>
             {requests ?
                 <FlatList data={requests} keyExtractor={(item, index) => index.toString()}
                           renderItem={({item, index}) =>
                               <Post details={item.doc} navButton={
-                              // item.doc.accepted ? <Text> sorry, you cant delete an accepted offer</Text> :
+                              item.doc.accepted ? <Text> sorry, you cant delete an accepted offer</Text> :
                                   <Button title={"delete request"} onPress={() => {
                                       deleteRequest(item.id, profile.email).then(
                                           setRequests((requests) => requests.filter((_, num) => num !== index))

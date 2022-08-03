@@ -7,10 +7,11 @@ import Picker from "./Picker";
 import {Resources, Skills} from "../JSONS/Tags.json";
 import ToggleButtons from "./ToggleButtons";
 import Post from "./Post";
+import ProfileContext from "../utils/profileContext";
 
-const NewRequestSheet = ({navigation,route}) => {
+const NewRequestSheet = ({navigation}) => {
 
-    const profile = route.params
+    const profile = React.useContext(ProfileContext)
     const [request, setRequest] = useState({
         accepted:false,
         account:profile.email,
@@ -24,6 +25,7 @@ const NewRequestSheet = ({navigation,route}) => {
     const inputs = ["name", "title","description"]
     const [showPreview,setShowPreview] = useState(false)
     const [toggle,switchToggle] = useState(true)
+    const [blocking,setBlocking] = useState(false)
 
     const InputFrame = ({inputValue,onChange}) => {
         const [currentValue, setCurrentValue] = useState(request[inputValue]);
@@ -64,14 +66,22 @@ const NewRequestSheet = ({navigation,route}) => {
                     onRequestClose={() => {
                         setShowPreview(false);
                     }}>
-                <Post details={request} navButton={null}/>
-                    <Button title={"back"} onPress={()=>setShowPreview(false)}></Button>
+                <View style={styles.background}>
+                <Post details={request} navButton={<Button title={"back"} onPress={()=>setShowPreview(false)}/>}/>
+                    <Button title={"back"} onPress={()=>setShowPreview(false)}/>
+                </View>
                 </Modal> :
-                <Button title={"show preview"} onPress={()=>setShowPreview(true)}></Button>}
+                <Button title={"show preview"} onPress={()=>setShowPreview(true)}/>}
 
             <Button title={"Post"} onPress={()=>{
                 console.log("posting")
-                newRequest(request,profile.email).then(() =>  navigation.navigate("NoticeBoard"))
+                if(!blocking) {
+                    setBlocking(true);
+                    newRequest(request, profile.email).then(() => {
+                        setBlocking(false);
+                        navigation.navigate("NoticeBoard");
+                    })
+                }
             }}/>
         </View>
 
