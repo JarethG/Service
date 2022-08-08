@@ -1,13 +1,13 @@
 import {Modal, Text, TextInput, View} from "react-native";
-import {styles} from "../Styles";
+import {styles} from "../../Styles";
 import React, {useState} from "react";
-import Button from "./Button";
-import {newRequest} from "../utils/Firebase";
-import Picker from "./Picker";
-import {Resources, Skills} from "../JSONS/Tags.json";
-import ToggleButtons from "./ToggleButtons";
-import Post from "./Post";
-import ProfileContext from "../utils/profileContext";
+import Button from "../Button";
+import {newRequest} from "../../utils/Firebase";
+import Picker from "../Picker";
+import {Resources, Skills} from "../../JSONS/Tags.json";
+import ToggleButtons from "../ToggleButtons";
+import Post from "../Post";
+import ProfileContext from "../../utils/profileContext";
 
 const NewRequestSheet = ({navigation}) => {
 

@@ -12,9 +12,9 @@ import ProfileContext from "../utils/profileContext";
 import MessagingModal from "../Components/MessagingComponents/MessagingModal";
 import {ContactItem} from "../Components/MessagingComponents/ContactItem";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
-import NewRequestSheet from "../Components/newRequestSheet";
-import ReviewSheet from "../Components/ReviewSheet";
-import {ReviewCard} from "../Components/ReviewCard";
+import NewRequestSheet from "../Components/RequestComponents/newRequestSheet";
+import ReviewSheet from "../Components/MessagingComponents/ReviewSheet";
+import {ReviewCard} from "../Components/MessagingComponents/ReviewCard";
 import Button from "../Components/Button";
 
 export default function Messages() {
@@ -72,7 +72,7 @@ export default function Messages() {
             <Stack.Screen name={"MessageLanding"} component={MessageLanding}/>
             <Stack.Screen name={"MessagingModal"} component={MessagingModal}/>
             <Stack.Screen name={"ReviewSheet"} component={ReviewSheet}/>
-            {/*<Stack.Screen name={"Search"} component={Search}/>*/}
+            {/*<Stack.Screen name={"FilterSearch"} component={FilterSearch}/>*/}
         </Stack.Navigator>
 
     );

@@ -1,16 +1,17 @@
 import {Text, View, FlatList, Pressable, TextInput, StatusBar,} from 'react-native';
 import {styles} from "../Styles";
 import React, {useEffect, useState} from "react";
-import {FontAwesome5, Entypo} from '@expo/vector-icons';
+import {FontAwesome5, Entypo, AntDesign} from '@expo/vector-icons';
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
-import NewRequestSheet from "../Components/newRequestSheet";
+import NewRequestSheet from "../Components/RequestComponents/newRequestSheet";
 import Button from "../Components/Button";
 import {acceptRequest, setChatHeader, getOffers} from "../utils/Firebase";
 import Post from "../Components/Post";
-import Search from "../Components/Search";
+import FilterSearch from "../Components/RequestComponents/FilterSearch";
 import Picker from "../Components/Picker";
 import {Skills, Resources} from '../JSONS/Tags.json'
 import ProfileContext from "../utils/profileContext";
+import RequestSearchEngine from "../Components/RequestComponents/RequestSearchEngine";
 
 export default function Request({navigation}) {
 
@@ -43,10 +44,10 @@ export default function Request({navigation}) {
     const SearchBar = ({onPress}) => {
         return (
             <Pressable
-                style={{flexDirection: "row", flex: 1, borderWidth: 1, padding: 5, margin: 7}}
+                style={{flexDirection: "row", flex: 1, borderWidth: 1, padding: 5, margin: 7,backgroundColor:"white"}}
                 onPress={() => onPress()}>
                 <FontAwesome5 name="search" size={24} color="black"/>
-                <Text style={{left: 10}}>Search requests</Text>
+                <Text style={{left: 15,color:"grey",alignSelf:"center"}}>FilterSearch requests</Text>
             </Pressable>
         )
     }
@@ -55,15 +56,10 @@ export default function Request({navigation}) {
         return (
             <View style={styles.background}>
                 <View style={{alignItems: "center", justifyContent: "center", flexDirection: "row"}}>
-                    {/*<SearchBar onPress={() => navigation.navigate("Search")}/>*/}
-                    {/*<AntDesign name="filter" size={24} color="black"*/}
-                    {/*           style={{borderWidth: 1, borderColor: "black", margin: 10}}*/}
-                    {/*           onPress={() => setFiltering(true)}/>*/}
-                    <Button title={"refresh"} onPress={()=>onRefresh()}/>
-                    <Entypo name="new-message" size={24} color="black"
-                            onPress={() => {
-                                navigation.navigate("NewRequest")
-                            }}/>
+                    <SearchBar onPress={() => navigation.navigate("Search")}/>
+                    <AntDesign name="menu-fold" size={24} color="black"
+                               onPress={() => navigation.navigate("Filters")}/>
+                    {/*<Button title={"refresh"} onPress={()=>onRefresh()}/>*/}
                 </View>
                 {feed.length != 0 ?
                     <View style={{width:"100%"}}>
@@ -85,12 +81,14 @@ export default function Request({navigation}) {
                         />
                     </View>
                     : <Text style={styles.header}>There are currently no requests in the community</Text>}
+                <AntDesign style={{position: 'absolute',bottom:15,right:0,backgroundColor:"white",borderRadius:30}} name="pluscircle" size={60} color="orange"
+                           onPress={() => navigation.navigate("NewRequest")}/>
                 <StatusBar style="auto" />
             </View>
         )
     }
 
-    const Search = ({navigation}) => {
+    const FilterSearch = ({navigation}) => {
         const [input, setInput] = useState()
         const options = ["All", "Skills", "Resources"]
 
@@ -123,12 +121,12 @@ export default function Request({navigation}) {
                     })}
                 </View>
                 <TextInput
-                    placeholder='Search'
+                    placeholder='FilterSearch'
                     value={input}
                     onChangeText={(text) => setInput(text)}
                 />
                 <Picker data={tags} apply={(r) => setFilter({...filter, tags: r})}/>
-                <Button title={"Search"} onPress={() => {
+                <Button title={"FilterSearch"} onPress={() => {
                     navigation.navigate("NoticeBoard")
                 }}/>
             </>
@@ -143,7 +141,8 @@ export default function Request({navigation}) {
                 headerShown: false
             }}>
             <Stack.Screen name={"NoticeBoard"} component={NoticeBoard}/>
-            {/*<Stack.Screen name={"Search"} component={Search}/>*/}
+            <Stack.Screen name={"Filter"} component={FilterSearch}/>
+            <Stack.Screen name={"Search"} component={RequestSearchEngine}/>
             <Stack.Screen name={"NewRequest"} component={NewRequestSheet} initialParams={profile}/>
         </Stack.Navigator>
 

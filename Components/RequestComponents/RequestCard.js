@@ -1,6 +1,6 @@
 import {View, Text, Button} from "react-native";
 import {ScrollView} from "react-native";
-import {styles} from "../Styles";
+import {styles} from "../../Styles";
 
 export default function RequestCard({info}) {
 

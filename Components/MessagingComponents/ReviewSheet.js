@@ -1,10 +1,10 @@
 import {Pressable, Text, TextInput, View} from "react-native";
-import {styles} from "../Styles";
+import {styles} from "../../Styles";
 import {AntDesign} from "@expo/vector-icons";
 import {useContext, useState} from "react";
-import Button from "./Button";
-import {postReview} from "../utils/Firebase";
-import ProfileContext from "../utils/profileContext";
+import Button from "../Button";
+import {postReview} from "../../utils/Firebase";
+import ProfileContext from "../../utils/profileContext";
 
 const ReviewSheet = ({navigation,route}) => {
     const request = route.params.request;

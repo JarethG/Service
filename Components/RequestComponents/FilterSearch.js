@@ -1,9 +1,9 @@
 import {Alert, FlatList, Modal, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {AntDesign} from "@expo/vector-icons";
 import {useState} from "react";
-import lists from "../JSONS/Filters.json"
+import lists from "../../JSONS/Filters.json"
 
-export default function Search({data,text,onSearch}) {
+export default function FilterSearch({data,text,onSearch}) {
     const tools = lists.Tools
 
     const [searching, setSearching] = useState(false)

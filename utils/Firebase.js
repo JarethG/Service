@@ -115,7 +115,7 @@ export async function getOffers(max) {
         offer.requestID = doc.id
         return offer
     })
-    return offers
+    return offers.reverse()
 }
 
 export async function proposeJobCompleted(requestID, userEmail) {

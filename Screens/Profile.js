@@ -27,7 +27,7 @@ export default function Profile() {
             <Text style={styles.header}>{profile.name}</Text>
             <Text style={styles.text}>{profile.title}</Text>
             <Text style={styles.text}> Total Points: {profile.points}</Text>
-            <View style={{flexDirection: "row"}}>
+            <View style={{flexDirection: "row",padding:10}}>
                 { Array.from({ length: 5 }, (x, i) => {
                    return i < rating ?
                         <AntDesign key={i} name="star" size={24} color="rgb(255, 230, 80)"/> :
