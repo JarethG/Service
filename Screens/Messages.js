@@ -3,11 +3,11 @@ import {
     Text,
     View,
     TouchableOpacity,
-    ScrollView,
+    ScrollView, FlatList,
 } from 'react-native';
 import {styles} from "../Styles";
 import React, {useContext, useEffect, useState} from "react";
-import {getChatHeaders,} from "../utils/Firebase";
+import {acceptRequest, getChatHeaders, getOffers,} from "../utils/Firebase";
 import ProfileContext from "../utils/profileContext";
 import MessagingModal from "../Components/MessagingComponents/MessagingModal";
 import {ContactItem} from "../Components/MessagingComponents/ContactItem";
@@ -16,6 +16,7 @@ import NewRequestSheet from "../Components/RequestComponents/newRequestSheet";
 import ReviewSheet from "../Components/MessagingComponents/ReviewSheet";
 import {ReviewCard} from "../Components/MessagingComponents/ReviewCard";
 import Button from "../Components/Button";
+import Post from "../Components/Post";
 
 export default function Messages() {
 
@@ -24,41 +25,51 @@ export default function Messages() {
     const [chatHeaders, setChatHeaders] = useState([])
     const [err, setErr] = useState("Loading Messages")
 
-    function reload()  {
+
+    useEffect(() => {
+        onRefresh()
+    }, [])
+
+    const [isFetching, setIsFetching] = useState(false);
+
+    const fetchData = () => {
         setChatHeaders([])
         let ids = profile.acceptedRequests.concat(profile.myRequests);
         ids.length == 0 ? setErr("It appears you have no open or accepted requests!")
             :
-            ids.forEach((id)=>{
+            ids.forEach((id) => {
                 getChatHeaders(id, setChatHeaders).then()
             })
-    }
+        setIsFetching(false);
+    };
 
-    useEffect(() => {
-        reload()
-    }, [])
+    const onRefresh = () => {
+        setIsFetching(true);
+        fetchData();
+    };
 
-    const MessageLanding=({navigation})=> {
+    const MessageLanding = ({navigation}) => {
         return <View style={styles.background}>
-            <Button title={"refresh"} onPress={()=>reload()}/>
-            <ScrollView style={{width: "100%"}}>
-                {
-                    chatHeaders.length == 0 ?
-                        <Text style={styles.header}>{err}</Text>
-                        :
-                        chatHeaders.map((request, index) => {
-                            return <TouchableOpacity key={index} onPress={() => {
-                                request.isComplete?
-                                navigation.navigate("ReviewSheet", {request:request}):
-                                navigation.navigate("MessagingModal", {requestID:request.id})
-                            }}>
-                                {request.isComplete ?
-                                    <ReviewCard info={request}/> :
-                                    <ContactItem info={request}/>}
-                            </TouchableOpacity>
-                        })
-                }
-            </ScrollView>
+            <View style={{width: "100%"}}>
+                <FlatList data={chatHeaders} keyExtractor={(item, index) => index.toString()}
+                          renderItem={({item}) =>
+                              <TouchableOpacity onPress={() => {
+                                  item.isComplete ?
+                                      navigation.navigate("ReviewSheet", {request: item}) :
+                                      navigation.navigate("MessagingModal", {requestID: item.id})
+                              }}>
+                                  {item.isComplete ?
+                                      <ReviewCard info={item}/> :
+                                      <ContactItem info={item}/>}
+                              </TouchableOpacity>
+                          }
+                          ListFooterComponent={
+                              <Button title={"load more"} onPress={() => onRefresh()}/>
+                          }
+                          onRefresh={onRefresh}
+                          refreshing={isFetching}
+                />
+            </View>
         </View>
     }
 

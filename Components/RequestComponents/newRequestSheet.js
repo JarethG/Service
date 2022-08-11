@@ -8,6 +8,7 @@ import {Resources, Skills} from "../../JSONS/Tags.json";
 import ToggleButtons from "../ToggleButtons";
 import Post from "../Post";
 import ProfileContext from "../../utils/profileContext";
+import {Ionicons} from "@expo/vector-icons";
 
 const NewRequestSheet = ({navigation}) => {
 
@@ -15,6 +16,7 @@ const NewRequestSheet = ({navigation}) => {
     const [request, setRequest] = useState({
         accepted:false,
         account:profile.email,
+        avatar:2,
         type: "skill",
         name: profile.name,
         tags: [],
@@ -22,14 +24,16 @@ const NewRequestSheet = ({navigation}) => {
         description: ""
     })
 
-    const inputs = ["name", "title","description"]
+    console.log("Requests = ",request)
+
+    const inputs = ["Title","Description"]
     const [showPreview,setShowPreview] = useState(false)
     const [toggle,switchToggle] = useState(true)
     const [blocking,setBlocking] = useState(false)
 
     const InputFrame = ({inputValue,onChange}) => {
-        const [currentValue, setCurrentValue] = useState(request[inputValue]);
-         return <View style={styles.transparentContainer}>
+        const [currentValue, setCurrentValue] = useState(request[inputValue.toLowerCase()]);
+         return <View style={[styles.transparentContainer,{margin:10}]}>
              <Text style={styles.title}>{inputValue}</Text>
             <TextInput
                 placeholder={inputValue}
@@ -40,16 +44,21 @@ const NewRequestSheet = ({navigation}) => {
         </View>
     }
     return (
-        <View style={[styles.background,toggle?styles.skillsTheme:styles.resourceTheme]}>
-            <Button title={"Back"} onPress={()=> navigation.navigate("NoticeBoard")}/>
+        <View style={styles.background}>
+            <View style={[styles.container,styles.midColour,{width:"100%",flex:1,alignItems:"center"}]}>
+            <Ionicons name="arrow-back-outline" size={24} color="black"
+                      onPress={()=> navigation.navigate("NoticeBoard")}
+                      style={[styles.button,{alignSelf:"flex-start"}]}
+            />
+             {/*<Button title={"<"} onPress={()=> navigation.navigate("NoticeBoard")}/>*/}
             <ToggleButtons titleLeft={"Skill"} titleRight={"Resource"} onToggle={()=>{
                 setRequest({...request, type: !toggle?"skill":"resource",tags:[]});
                 switchToggle(!toggle)
             }}/>
-            <Text style={styles.header}>Create a new Request</Text>
+            <Text style={[styles.header,{margin:10}]}>Create a new Request</Text>
             {inputs.map((input,index)=> {
                 return <InputFrame key={index} inputValue={input} onChange={
-                    (r)=>setRequest({...request, [input]: r})
+                    (r)=>setRequest({...request, [input.toLowerCase()]: r})
                 }/>
             })}
 
@@ -62,16 +71,6 @@ const NewRequestSheet = ({navigation}) => {
                     return <Text key={index}>{resource}</Text>
                 })}
             </View>
-            {showPreview? <Modal
-                    onRequestClose={() => {
-                        setShowPreview(false);
-                    }}>
-                <View style={styles.background}>
-                <Post details={request} navButton={<Button title={"back"} onPress={()=>setShowPreview(false)}/>}/>
-                    <Button title={"back"} onPress={()=>setShowPreview(false)}/>
-                </View>
-                </Modal> :
-                <Button title={"show preview"} onPress={()=>setShowPreview(true)}/>}
 
             <Button title={"Post"} onPress={()=>{
                 console.log("posting")
@@ -83,6 +82,7 @@ const NewRequestSheet = ({navigation}) => {
                     })
                 }
             }}/>
+        </View>
         </View>
 
     )

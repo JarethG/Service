@@ -67,15 +67,13 @@ export const styles = StyleSheet.create({
     cardProfilePicture: {
         width: 70,
         height: 70,
-        borderRadius: 35,
-        backgroundColor: "#ffffff"
     },
     tags: {
         borderRadius: 15,
         margin: 3,
-        padding: 5,
+        padding: 3,
         color: "#fff",
-        fontSize: 12,
+        fontSize: 10,
         alignSelf: "flex-start"
     },
     text: {
@@ -88,6 +86,15 @@ export const styles = StyleSheet.create({
         padding: 10,
         borderColor: "grey",
         borderBottomWidth: 1,
+    },
+    pickerItem: {
+        flexDirection: "row",
+        alignItems: "center",
+        padding: 10,
+        borderColor: "#dbe6f9",
+        borderBottomWidth: 1,
+        borderRadius:5,
+        margin:3
     },
     settingsModule: {
         height: '50%',

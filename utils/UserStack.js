@@ -24,7 +24,7 @@ function UserStack(user) {
         // Fetch the token from storage then navigate to our appropriate place
         const getUserProfile = async () => {
             //check if profile exists in storage, if not check online
-            let profileDoc = await getProfile(user.user.email,setProfile)
+            let profileDoc = await getProfile(user.user.email, setProfile)
             // console.log("profile at effect", profileDoc)
             //need to persist profile
             // profileDoc["email"] = user.user.email
@@ -32,7 +32,7 @@ function UserStack(user) {
 
             //let them into page
         };
-        getUserProfile().then(()=> {
+        getUserProfile().then(() => {
             // setProfile(r)
             setLoading(false)
         })
@@ -47,33 +47,40 @@ function UserStack(user) {
                 Splash("fetching profile")
                 :
                 <ProfileContext.Provider value={profile}>
-                <NavigationContainer>
-                    <Tab.Navigator
-                        screenOptions={{
-                            headerShown:false
-                            // headerStyle: styles.navigationHeader,
-                            // headerTintColor: '#fff',
-                            // headerTitleAlign: 'center',
-                            // headerTitleStyle: {fontWeight: 'bold'},
-                            // tabBarIcon: () => {
-                            //
-                            // }
-                        }}>
-                        {console.log("UserStack/profile => ",profile)}
-                        <Tab.Screen name="Notice Board" component={Request} initialParams={profile}
-                                    options={{tabBarIcon: () => <FontAwesome5 name="sign" size={24} color="orange"/>}}/>
-                        <Tab.Screen name="Messages" component={Messages} initialParams={profile}
-                                    options={{
-                                        tabBarIcon: () => <Ionicons name="chatbubbles" size={24} color="orange"/>
-                                    }}/>
-                        <Tab.Screen name="Community" component={Community}
-                                    options={{tabBarIcon: () => <FontAwesome5 name="medal" size={24} color="orange"/>}}/>
-                        <Tab.Screen name="Profile" component={Profile} initialParams={profile}
-                                    options={{
-                                        tabBarIcon: () => <Ionicons name="person-circle" size={24} color="orange"/>
-                                    }}/>
-                    </Tab.Navigator>
-                </NavigationContainer>
+                    <NavigationContainer>
+                        <Tab.Navigator
+                            screenOptions={{
+                                headerShown: false,
+                                // headerStyle: styles.navigationHeader,
+                                // headerTintColor: '#fff',
+                                // headerTitleAlign: 'center',
+                                // headerTitleStyle: {fontWeight: 'bold'},
+                                tabBarActiveTintColor: "orange",
+                                tabBarInactiveTintColor: "grey",
+                                tabBarActiveBackgroundColor:"#0c9eb5",
+                            }}>
+                            {console.log("UserStack/profile => ", profile)}
+                            <Tab.Screen name="Notice Board" component={Request} initialParams={profile}
+                                        options={{
+                                            tabBarIcon: ({color}) => <FontAwesome5 name="sign" size={24} color={color}/>
+                                        }}/>
+                            <Tab.Screen name="Messages" component={Messages} initialParams={profile}
+                                        options={{
+                                            tabBarIcon: ({color}) => <Ionicons name="chatbubbles" size={24}
+                                                                               color={color}/>
+                                        }}/>
+                            <Tab.Screen name="Community" component={Community}
+                                        options={{
+                                            tabBarIcon: ({color}) => <FontAwesome5 name="medal" size={24}
+                                                                                   color={color}/>
+                                        }}/>
+                            <Tab.Screen name="Profile" component={Profile} initialParams={profile}
+                                        options={{
+                                            tabBarIcon: ({color}) => <Ionicons name="person-circle" size={24}
+                                                                               color={color}/>
+                                        }}/>
+                        </Tab.Navigator>
+                    </NavigationContainer>
                 </ProfileContext.Provider>
     )
 }

@@ -45,10 +45,16 @@ function getUserDoc(userEmail) {
 }
 
 export async function pushMessage(chatID, message, userID) {
+    let now = Date.now()
     await push(ref(rtdb, 'chats/' + chatID), {
         userID: userID,
         message: message,
-        timestamp: Date.now()
+        timestamp: now
+    });
+
+    await update(ref(rtdb, 'chatHeaders/' + chatID), {
+        lastMessage:message,
+        lastTimeStamp: now
     });
 }
 
@@ -213,8 +219,8 @@ export async function acceptRequest(requestID, userEmail,userName) {
     await update(ref(rtdb, 'chatHeaders/' + requestID), {
         acceptingUser:userName
     });
-    console.log("request accepted")
-
+    pushMessage(requestID, "hey, my name is " + userName+ ". I think I can help you", userEmail)
+        .then(console.log("request accepted"))
 }
 
 export async function newRequest(request, userEmail) {
@@ -271,16 +277,7 @@ export async function updateProfile(userEmail, profileData) {
 
 export async function createDummyData(data) {
     data.map(async (item) => {
-        const request = {
-            isComplete: item.isComplete,
-            accepted: false,
-            account: item.account,
-            type: item.type,
-            name: item.name,
-            tags: item.tags,
-            title: item.title,
-            description: item.description
-        }
+        const request = item;
         await setDoc(doc(db, "Requests", item.key), request).then(console.log("done =>", item.key))
         await updateDoc(getUserDoc(item.account), {
             myRequests: arrayUnion(item.key)

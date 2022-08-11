@@ -64,11 +64,9 @@ export default function Request({navigation}) {
                 {feed.length != 0 ?
                     <View style={{width:"100%"}}>
                         <FlatList data={feed} keyExtractor={(item, index) => index.toString()}
-                                  // style={{backgroundColor: "black"}}
                                   renderItem={({item}) =>
-
                                       <Post details={item} navButton={item.account != profile.email ?
-                                          <Button title={"contact " + item.name} onPress={() => {
+                                          <Button title={"Message " + item.name} onPress={() => {
                                               acceptRequest(item.requestID, profile.email, profile.name).then(() => navigation.navigate("Messages"))
                                           }}/> : <Text style={styles.header}>this is your request!</Text>
                                       }/>
