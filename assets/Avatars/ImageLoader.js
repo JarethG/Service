@@ -1,4 +1,5 @@
 export const images = [
+    require('./avataaars_0.png'),
     require('./avataaars_1.png'),
     require('./avataaars_2.png'),
     require('./avataaars_3.png'),

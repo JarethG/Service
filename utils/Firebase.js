@@ -217,7 +217,8 @@ export async function acceptRequest(requestID, userEmail,userName) {
         acceptingUserEmail:userEmail
     });
     await update(ref(rtdb, 'chatHeaders/' + requestID), {
-        acceptingUser:userName
+        acceptingUser:userName,
+        avatar:5
     });
     pushMessage(requestID, "hey, my name is " + userName+ ". I think I can help you", userEmail)
         .then(console.log("request accepted"))

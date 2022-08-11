@@ -15,7 +15,7 @@ const Post = ({details, navButton}) => {
             {console.log(details)}
             {/*{expand?<Settings data={details}/>:null}*/}
             <View style={{flexDirection: "row", flex: 1}}>
-                <Image source={images[details.avatar-1]} style={styles.cardProfilePicture}/>
+                <Image source={images[details.avatar]} style={styles.cardProfilePicture}/>
                 <View style={{flex: 1}}>
                     <View style={{flexDirection: "row", alignItems: "center", left: 15}}>
                         <Text style={[styles.header, {fontSize: 20}]}>{details.name}</Text>

@@ -1,26 +1,28 @@
-import {Text, View} from "react-native";
+import {Image, Text, View} from "react-native";
 import {styles} from "../../Styles";
 import ProfileContext from "../../utils/profileContext";
-import {useContext} from "react";
+import React, {useContext} from "react";
+import {images} from "../../assets/Avatars/ImageLoader";
 
 
 export const ContactItem = ({info}) => {
+    console.log(info)
     const profile = useContext(ProfileContext)
     const date = new Date(info.lastTimeStamp);
     return (
         <View style={[styles.midColour,styles.container,{flexDirection: "row"}]}>
-            <View style={{width: 70, height: 70, borderRadius: 35, backgroundColor: "#ffffff"}}></View>
-            <View style={{flex: 1}}>
+            <Image source={images[info.avatar?1:0]} style={styles.cardProfilePicture}/>
+            <View style={{flex: 1,paddingHorizontal:10}}>
                 <View style={{flexDirection: "row", justifyContent: "space-between"}}>
-                    <Text style={styles.text}>
+                    <Text style={[styles.text,{fontWeight: "bold"}]}>
                         {info.acceptingUser === ""?
                             "pending acceptance":
-                            info.client === profile.name?
+                            info.acceptingUser === profile.name?
                                 info.client:
-                                info.name
+                                info.acceptingUser
                         }
                     </Text>
-                    <Text style={styles.text}>{date.toLocaleTimeString()}</Text>
+                    <Text style={styles.text}>{date.getHours() + ":" + date.getMinutes()}</Text>
                 </View>
                 <Text style={styles.text}>{info.jobTitle}</Text>
                 <Text style={styles.text}>{info.lastMessage}</Text>

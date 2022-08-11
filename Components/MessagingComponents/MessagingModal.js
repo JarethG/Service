@@ -1,9 +1,9 @@
 import {FlatList, Keyboard, Modal, Text, TextInput, View} from "react-native";
 import {styles} from "../../Styles";
 import {acceptJobCompletion, getChatState, getMessage, proposeJobCompleted, pushMessage} from "../../utils/Firebase";
-import {FontAwesome} from "@expo/vector-icons";
+import {FontAwesome, Ionicons} from "@expo/vector-icons";
 import profileContext from "../../utils/profileContext";
-import {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {StatusBar} from "expo-status-bar";
 import Button from "../Button";
 
@@ -66,7 +66,11 @@ const MessagingModal = ({navigation,route}) => {
         <View style={styles.background}>
             <View style={[styles.container,styles.midColour,{width:"100%",flex:1}]}>
                 {/*<View style={{paddingTop:50}}></View>*/}
-                <Button title={"back"} onPress={() => navigation.goBack()}/>
+                <Ionicons name="arrow-back-outline" size={24} color="black"
+                          onPress={() => navigation.goBack()}
+                          style={[styles.button,{alignSelf:"flex-start"}]}
+                />
+
                 {chatState? completion():<Text>Loading</Text>}
                 <View style={{margin:10, flex: 1}}>
                     <FlatList data={messages} keyExtractor={(item, index) => index.toString()}

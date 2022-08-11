@@ -58,7 +58,7 @@ export default function Request({navigation}) {
                 <View style={{alignItems: "center", justifyContent: "center", flexDirection: "row"}}>
                     <SearchBar onPress={() => navigation.navigate("Search")}/>
                     <AntDesign name="menu-fold" size={24} color="black"
-                               onPress={() => navigation.navigate("Filters")}/>
+                               onPress={() => navigation.navigate("Filter")}/>
                     {/*<Button title={"refresh"} onPress={()=>onRefresh()}/>*/}
                 </View>
                 {feed.length != 0 ?
