@@ -51,15 +51,10 @@ function UserStack(user) {
                         <Tab.Navigator
                             screenOptions={{
                                 headerShown: false,
-                                // headerStyle: styles.navigationHeader,
-                                // headerTintColor: '#fff',
-                                // headerTitleAlign: 'center',
-                                // headerTitleStyle: {fontWeight: 'bold'},
                                 tabBarActiveTintColor: "orange",
                                 tabBarInactiveTintColor: "grey",
                                 tabBarActiveBackgroundColor:"#0c9eb5",
                             }}>
-                            {console.log("UserStack/profile => ", profile)}
                             <Tab.Screen name="Notice Board" component={Request} initialParams={profile}
                                         options={{
                                             tabBarIcon: ({color}) => <FontAwesome5 name="sign" size={24} color={color}/>

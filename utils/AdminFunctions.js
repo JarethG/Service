@@ -12,7 +12,7 @@ export const AdminFunctions = () => {
 
 
     return (
-        <ButtonModal>
+        <ButtonModal title={"settings"}>
             <View style={{backgroundColor:'#950dda'}}>
             <Button title={"Create Dummy Data"} onPress={()=>createDummyData(requests).then(()=>console.log("done"))}/>
             <Button title={"Delete Dummy Data"} onPress={()=>deleteDummyData(requests).then(()=>console.log("done"))}/>

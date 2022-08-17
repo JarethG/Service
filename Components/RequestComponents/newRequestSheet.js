@@ -24,10 +24,7 @@ const NewRequestSheet = ({navigation}) => {
         description: ""
     })
 
-    console.log("Requests = ",request)
-
     const inputs = ["Title","Description"]
-    const [showPreview,setShowPreview] = useState(false)
     const [toggle,switchToggle] = useState(true)
     const [blocking,setBlocking] = useState(false)
 
@@ -50,7 +47,7 @@ const NewRequestSheet = ({navigation}) => {
                       onPress={()=> navigation.navigate("NoticeBoard")}
                       style={[styles.button,{alignSelf:"flex-start"}]}
             />
-             {/*<Button title={"<"} onPress={()=> navigation.navigate("NoticeBoard")}/>*/}
+                <View style={{height:30}}></View>
             <ToggleButtons titleLeft={"Skill"} titleRight={"Resource"} onToggle={()=>{
                 setRequest({...request, type: !toggle?"skill":"resource",tags:[]});
                 switchToggle(!toggle)
@@ -68,7 +65,7 @@ const NewRequestSheet = ({navigation}) => {
                     }/>
             <View>
                 {request.tags?.map((resource, index) => {
-                    return <Text key={index}>{resource}</Text>
+                    return <Text style={styles.header} key={index}>{" * " +resource}</Text>
                 })}
             </View>
 

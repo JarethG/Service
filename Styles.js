@@ -136,4 +136,18 @@ export const styles = StyleSheet.create({
     navigationHeader: {
         backgroundColor: '#386540'
     },
+    sidebarMenu: {
+        height:"100%",
+        width:"70%",
+        padding:10
+    },
+    sidebarOff: {
+        backgroundColor: 'rgba(114,114,114,0.5)',
+        height:"100%",
+        width:"30%"
+    },
+    sidebarMenuItem: {
+        flexDirection:"row",
+        margin:10
+    }
 });
