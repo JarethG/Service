@@ -16,10 +16,7 @@ import RequestSearchEngine from "../Components/RequestComponents/RequestSearchEn
 export default function Request({navigation}) {
 
     const [feed, setFeed] = useState([])
-    const [filter, setFilter] = useState({
-        type: "All",
-        tags: "",
-    })
+    const [filter, setFilter] = useState();
     const profile = React.useContext(ProfileContext)
 
     const Stack = createNativeStackNavigator();
@@ -27,12 +24,12 @@ export default function Request({navigation}) {
 
     useEffect(() => {
         onRefresh()
-    }, [])
+    }, [filter])
 
     const [isFetching, setIsFetching] = useState(false);
 
     const fetchData = () => {
-        getOffers(20).then((r) => setFeed(r))
+        getOffers(20,filter).then((r) => setFeed(r))
         setIsFetching(false);
     };
 
@@ -57,10 +54,11 @@ export default function Request({navigation}) {
             <View style={styles.background}>
                 <View style={{alignItems: "center", justifyContent: "center", flexDirection: "row"}}>
                     <SearchBar onPress={() => navigation.navigate("Search")}/>
-                    <AntDesign name="menu-fold" size={24} color="black"
-                               onPress={() => navigation.navigate("Filter")}/>
+                    {/*<AntDesign name="menu-fold" size={24} color="black"*/}
+                    {/*           onPress={() => navigation.navigate("Filter")}/>*/}
                     {/*<Button title={"refresh"} onPress={()=>onRefresh()}/>*/}
                 </View>
+                <Text> curent filter : "{filter}"</Text>
                 {feed.length == 0 ? <>
                     <Text style={styles.header}>There are currently no requests in the community</Text>
                     <Button title={"reload"} onPress={() => onRefresh()}/>
@@ -88,61 +86,59 @@ export default function Request({navigation}) {
         )
     }
 
-    const FilterSearch = ({navigation}) => {
-        const [input, setInput] = useState()
-        const options = ["All", "Skills", "Resources"]
+    // const FilterSearch = ({navigation}) => {
+    {/*    const [input, setInput] = useState()*/}
+    {/*    const options = ["All", "Skills", "Resources"]*/}
 
-        const [tags, setTags] = useState(Skills.concat(Resources))
+    {/*    const [tags, setTags] = useState(Skills.concat(Resources))*/}
 
-        function updateList(option) {
-            setFilter({...filter, type: option})
-            option === "All" ? setTags(Skills.concat(Resources)) :
-                option === "Skills" ? setTags(Skills) :
-                    setTags(Resources)
-        }
-
-        return (
-            <>
-                <Button title={"Back"} onPress={() => {
-                    navigation.navigate("NoticeBoard")
-                }}/>
-                <Text> Type | {filter.type} </Text>
-                <Text> Tags | {filter.tags}</Text>
-                <View style={{flexDirection: "row", justifyContent: "space-around"}}>
-                    {options.map((option, index) => {
-                        return (
-                            <Pressable key={index} style={[styles.transparentContainer, {
-                                width: 100,
-                                height: 40
-                            }, option === filter.type ? {backgroundColor: "green"} : {backgroundColor: "red"}]}
-                                       onPress={() => updateList(option)}>
-                                <Text style={{alignSelf: "center"}}>{option}</Text></Pressable>
-                        )
-                    })}
-                </View>
-                <TextInput
-                    placeholder='FilterSearch'
-                    value={input}
-                    onChangeText={(text) => setInput(text)}
-                />
-                <Picker data={tags} apply={(r) => setFilter({...filter, tags: r})}/>
-                <Button title={"FilterSearch"} onPress={() => {
-                    navigation.navigate("NoticeBoard")
-                }}/>
-            </>
-        )
-    }
+    {/*    function updateList(option) {*/}
+    //         setFilter({...filter, type: option})
+    //         option === "All" ? setTags(Skills.concat(Resources)) :
+    //             option === "Skills" ? setTags(Skills) :
+    //                 setTags(Resources)
+    //     }
+    //
+    //     return (
+    //         <>
+    //             <Button title={"Back"} onPress={() => {
+    //                 navigation.navigate("NoticeBoard")
+    //             }}/>
+    //             <Text> Type | {filter.type} </Text>
+    //             <Text> Tags | {filter.tags}</Text>
+    //             <View style={{flexDirection: "row", justifyContent: "space-around"}}>
+    //                 {options.map((option, index) => {
+    //                     return (
+    //                         <Pressable key={index} style={[styles.transparentContainer, {
+    //                             width: 100,
+    //                             height: 40
+    //                         }, option === filter.type ? {backgroundColor: "green"} : {backgroundColor: "red"}]}
+    //                                    onPress={() => updateList(option)}>
+    //                             <Text style={{alignSelf: "center"}}>{option}</Text></Pressable>
+    {/*                    )*/}
+    {/*                })}*/}
+    {/*            </View>*/}
+    {/*            <TextInput*/}
+    //                 placeholder='FilterSearch'
+    //                 value={input}
+    //                 onChangeText={(text) => setInput(text)}
+    //             />
+    //             <Picker data={tags} apply={(r) => setFilter({...filter, tags: r})}/>
+    //             <Button title={"FilterSearch"} onPress={() => {
+    //                 navigation.navigate("NoticeBoard")
+    //             }}/>
+    //         </>
+    //     )
+    // }
 
     return (
-
-
         <Stack.Navigator
             screenOptions={{
                 headerShown: false
             }}>
             <Stack.Screen name={"NoticeBoard"} component={NoticeBoard}/>
-            <Stack.Screen name={"Filter"} component={FilterSearch}/>
-            <Stack.Screen name={"Search"} component={RequestSearchEngine}/>
+            {/*<Stack.Screen name={"Filter"} component={FilterSearch}/>*/}
+            <Stack.Screen name={"Search"} component={RequestSearchEngine} initialParams={{setFilter: setFilter}}/>
             <Stack.Screen name={"NewRequest"} component={NewRequestSheet} initialParams={profile}/>
         </Stack.Navigator>
 

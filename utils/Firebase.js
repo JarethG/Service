@@ -112,8 +112,11 @@ export async function getChatHeaders(chatID, callback) {
     })
 }
 
-export async function getOffers(max) {
-    const q = query(collection(db, "Requests"), limit(max), where("accepted", "==", false))
+export async function getOffers(max,filter) {
+
+    const q = filter?
+        query(collection(db, "Requests"), limit(max), where("accepted", "==", false),where("tags" , "array-contains",filter))
+        :query(collection(db, "Requests"), limit(max), where("accepted", "==", false))
     const querySnapshot = await getDocs(q);
     let offers = querySnapshot.docs.map((doc) => {
         let offer = doc.data();
@@ -121,6 +124,7 @@ export async function getOffers(max) {
         offer.requestID = doc.id
         return offer
     })
+    console.log("returning review with filter : ",filter)
     return offers.reverse()
 }
 
