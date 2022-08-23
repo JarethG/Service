@@ -115,7 +115,7 @@ export async function getChatHeaders(chatID, callback) {
 export async function getOffers(max,filter) {
 
     const q = filter?
-        query(collection(db, "Requests"), limit(max), where("accepted", "==", false),where("tags" , "array-contains",filter))
+        query(collection(db, "Requests"), limit(max), where("accepted", "==", false),where("tags" , "array-contains",filter)    )
         :query(collection(db, "Requests"), limit(max), where("accepted", "==", false))
     const querySnapshot = await getDocs(q);
     let offers = querySnapshot.docs.map((doc) => {
@@ -268,7 +268,7 @@ export async function newProfile(userEmail, profileData) {
         title: profileData.title,
         acceptedRequests: [],
         myRequests: [],
-        points: Math.floor(Math.random()*100)
+        points: profileData.points
     });
 }
 

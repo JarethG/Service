@@ -3,7 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import {createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword} from "firebase/auth";
-import {newProfile} from "./Firebase";
+import {newProfile, setPublicUserInfo} from "./Firebase";
 import {Text, TextInput, View, Touchable, Pressable, Modal, Image} from "react-native";
 import {styles} from "../Styles";
 import Button from '../Components/Button'
@@ -129,7 +129,8 @@ function NewProfileScreen({navigation, route}) {
         name: "",
         resources: [],
         skills: [],
-        title: ""
+        title: "",
+        points: Math.floor(Math.random()*100)
     })
     const [stage,setStage] = useState(0)
 
@@ -139,7 +140,9 @@ function NewProfileScreen({navigation, route}) {
     async function createNewAccount() {
         try {
             await createUserWithEmailAndPassword(auth, route.params.value.email, route.params.value.password);
+
             newProfile(route.params.value.email, profile).then(r => console.log("new profile created"))
+            await setPublicUserInfo({name: profile.name, avatar: 0, points: profile.points},auth.currentUser.uid)
             navigation.navigate('sign in');
         } catch (error) {
             console.log("Massive errors", error)
