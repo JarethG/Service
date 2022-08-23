@@ -7,12 +7,13 @@ import Button from "./Button";
 import {images} from "../assets/Avatars/ImageLoader";
 
 const Post = ({details, navButton}) => {
+
     // console.log("details" ,details)
     const theme = details.type === "skill"
     const [expand, setExpand] = useState(false)
     return (
         <Pressable style={[styles.container, styles.midColour]} onPress={()=> {setExpand(!expand)}}>
-            {console.log(details)}
+            {/*{console.log(details)}*/}
             {/*{expand?<Settings data={details}/>:null}*/}
             <View style={{flexDirection: "row", flex: 1}}>
                 <Image source={images[details.avatar]} style={styles.cardProfilePicture}/>

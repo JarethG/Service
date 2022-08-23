@@ -17,7 +17,7 @@ import {
     arrayRemove,
     increment
 } from 'firebase/firestore';
-import {getDatabase, ref, onValue, set, push, update, remove,get,child} from 'firebase/database';
+import {getDatabase, ref, onValue, set, push, update, remove,get,child,orderByChild,limitToLast} from 'firebase/database';
 import React from "react";
 
 const firebaseConfig = {
@@ -88,7 +88,7 @@ export async function getChatState(chatID, callback){
 }
 
 export async function setChatHeader(chatID, data) {
-    console.log(data)
+    // console.log(data)
     await set(ref(rtdb, 'chatHeaders/'+ chatID), {
         isComplete:false,
         reviewSubmitted:false,
@@ -101,10 +101,10 @@ export async function setChatHeader(chatID, data) {
 }
 
 export async function getChatHeaders(chatID, callback) {
-    console.log("called")
+    // console.log("called")
     await onValue(ref(rtdb, 'chatHeaders/' + chatID), (snapshot) => {
         let header = snapshot.val()
-        console.log("firebase header = +>",header)
+        // console.log("firebase header = +>",header)
         header.id = chatID
         callback(old =>[...old,header])
     }, {
@@ -137,26 +137,29 @@ export async function acceptJobCompletion(requestID) {
 }
 
 export async function postReview(review,request,userEmail,userName){
-    console.log("Firebase post review requests:",request)
+    console.log("Firebase post review requests:",review)
     const docRef = await addDoc(collection(db, "Reviews"), review);
-
+    console.log("mark 0")
 // Atomically add a new region to the "regions" array field.
     await updateDoc(getUserDoc(userEmail), {
         myReviews: arrayUnion(docRef.id)
     });
-
+console.log("mark 1")
 
     if(request.reviewSubmitted==false) {
+        console.log("mark 2")
         //notify header that the first review has been submitted
         await update(ref(rtdb, 'chatHeaders/' + request.id), {
             reviewSubmitted: true
         });
+        console.log("mark 3")
         //remove individual access to request
         await updateDoc(getUserDoc(userEmail),
         request.client==userName?
             {myRequests: arrayRemove(request.id)}:
             {acceptedRequests: arrayRemove(request.id)}
         );
+        console.log("mark 4")
     } else {
 
         await updateDoc(getUserDoc(userEmail),
@@ -165,13 +168,13 @@ export async function postReview(review,request,userEmail,userName){
                 {acceptedRequests: arrayRemove(request.id)}
         );
         //remove all content relating to request
-        console.log(request.id)
+        // console.log(request.id)
         await deleteDoc(doc(db, "Requests", request.id));
-        console.log(request.id)
+        // console.log(request.id)
         await remove(ref(rtdb, 'chatHeaders/' + request.id))
-        console.log(request.id)
+        // console.log(request.id)
         await remove(ref(rtdb, 'chatState/' + request.id))
-        console.log(request.id)
+        // console.log(request.id)
         await remove(ref(rtdb, 'chats/' + request.id))
     }
 
@@ -198,6 +201,23 @@ export async function getMyRequests(email) {
         return {id: doc.id, doc: doc.data()}
     })
     return offers
+}
+
+export async function getMyReviews(email,from,to) {
+    console.log(email)
+    const q = query(collection(db, "Reviews"), where("fromAccount", "==", email) );
+    const q2 = query(collection(db, "Reviews"), where("toAccount", "==", email) );
+    const querySnapshot = await getDocs(q);
+    const querySnapshot2 = await getDocs(q2);
+    let reviews = querySnapshot.docs.map((doc) => {
+        return {id: doc.id, doc: doc.data()}
+    })
+
+    let reviews2 = querySnapshot2.docs.map((doc) => {
+        return {id: doc.id, doc: doc.data()}
+    })
+    from(reviews)
+    to(reviews2)
 }
 
 export async function acceptRequest(requestID, userEmail,userName) {
@@ -253,16 +273,16 @@ export async function getProfile(email, callback) {
     const docSnap = await onSnapshot(docRef, (doc) => {
         let profileData = doc.data()
         profileData["email"] = email
-        console.log("Firebase/getprofile/ => profile reloaded")
+        // console.log("Firebase/getprofile/ => profile reloaded")
         callback(profileData)
     });
 
     if (docSnap) {
         // console.log("Document data:", docSnap.data());
-        console.log("success");
+        // console.log("success");
     } else {
         // doc.data() will be undefined in this case
-        console.log("No such document!");
+        // console.log("No such document!");
     }
 }
 
@@ -318,3 +338,36 @@ export async function addPoints(userEmail) {
         points: increment(1)
     });
 }
+
+export async function setPoints(points,authToken) {
+    await set(ref(rtdb, 'points/' + authToken), {
+        "points":points
+    });;
+}
+
+export async function setPublicUserInfo(data,authToken){
+    console.log("called")
+    await set(ref(rtdb, 'public/' + authToken), {
+        "name": data.name,
+        "points":data.points,
+        "avatar": data.avatar
+    });
+}
+
+export async function getLeaderBoard(callback){
+    const q = query(ref(rtdb,'public'),
+        orderByChild("points"),
+        limitToLast(10)
+    )
+    await onValue(q, (snapshot) => {
+        let leaders = [];
+        snapshot.forEach((item)=> {
+            // console.log(item.val().points)
+            leaders.push(item.val())
+        })
+        callback(leaders.reverse())
+    }, {
+        onlyOnce: true
+    })
+}
+

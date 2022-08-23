@@ -1,10 +1,12 @@
-import { Text, View,ScrollView} from 'react-native';
+import {Text, View, ScrollView, Button, FlatList} from 'react-native';
 import {styles} from "../Styles";
 import {useState} from "react";
 import EventCard from "../Components/EventCard";
 import LeaderboardCard from "../Components/LeaderboardCard";
 import {FontAwesome} from '@expo/vector-icons';
 import ToggleButtons from "../Components/ToggleButtons";
+import {deleteRequest, getLeaderBoard} from "../utils/Firebase";
+import Post from "../Components/Post";
 
 export default function Community() {
 
@@ -12,9 +14,11 @@ export default function Community() {
 
     return (
         <View style={styles.background}>
-            <ToggleButtons titleLeft={"Events"} titleRight={"Leaderboard"} onToggle={(r)=> setCommunityToggle(r)}/>
-            {communityToggle?
-            <Events/>:<Leaderboard/>}
+            {/*<ToggleButtons titleLeft={"Events"} titleRight={"Leaderboard"} onToggle={(r)=> setCommunityToggle(r)}/>*/}
+            {/*{communityToggle?*/}
+            {/*<Events/>:*/}
+                <Leaderboard/>
+            {/*}*/}
         </View>
 
 
@@ -30,6 +34,8 @@ export default function Community() {
         {name:"Luke Ross",place:5,points:2},
         {name:"George Hitt",place:6,points:1},
     ]
+
+     const [leaders,setLeaders] = useState([])
     return (
         <View style={{width: "100%", padding: 15,flex:1}}>
             <Text style={{fontWeight: "bold", fontSize: 24, color: "#fff"}}>Leaderboard</Text>
@@ -39,15 +45,19 @@ export default function Community() {
                 <Text style={{flex:1}}>Points</Text>
             </View>
 
-            <ScrollView>
-                {Events.map((name, index) => {
-                    return <LeaderboardCard info={name} key={index}/>
-                })}
-            </ScrollView>
+
+            <FlatList data={leaders} keyExtractor={(item, index) => index.toString()}
+                      renderItem={({item, index}) =>
+                          <LeaderboardCard info={item} place={index+1}/>
+            }/>
+
             <View style={{flexDirection: "row", padding: 10}}>
                 <FontAwesome name="plus" size={24} color="white" style={{top: 5}}/>
                 <Text style={{fontWeight: "bold", fontSize: 24, color: "#fff", left: 10}}>Invite Your Friends</Text>
             </View>
+            <Button title={"get"} onPress={() => {
+                getLeaderBoard(setLeaders).then()
+            }}/>
         </View>
     );
 }

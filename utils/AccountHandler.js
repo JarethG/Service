@@ -9,39 +9,31 @@ import {Resources, Skills} from "../JSONS/Tags.json";
 import {FontAwesome} from "@expo/vector-icons";
 
 
-export const UpdateAccount = ({email, oldData}) => {
+export const UpdateAccount = ({oldData,callback}) => {
 
     const [stage, setStage] = useState(0)
-    const [visible, setVisible] = useState(false)
     const [updates, setUpdates] = React.useState(oldData)
+    const [loading, setLoading] = useState(false)
 
 
     async function apply() {
         try {
-            updateProfile(email, updates).then(r => console.log("updates hase been updated"))
-            setVisible(false)
+            updateProfile(oldData.email, updates).then(setLoading(false))
         } catch (error) {
             console.log("updates errors : ", error)
         }
     }
 
     return (
-        visible ? <Modal
-                onRequestClose={() => {
-                    setVisible(false);
-                }}>
-                <View style={[styles.background,{justifyContent:"center"}]}>
-                <View style={[styles.midColour,styles.container,{width:"100%"}]}>
-                    {stage == 0 ?
+
+                    stage == 0 ?
                         <>
-                            <Button title={"back"} onPress={() => {
-                                setVisible(false)
-                            }}/>
                             <Text style={styles.header}>About</Text>
                             <View style={styles.transparentContainer}>
                                 <TextInput
                                     value={updates.about}
                                     placeholder='text...'
+                                    multiline={true}
                                     onChangeText={(text) => setUpdates({...updates, about: text})}
                                 />
                             </View>
@@ -92,17 +84,14 @@ export const UpdateAccount = ({email, oldData}) => {
 
                             </View>
                             <Button title={"Apply Changes"} onPress={() => {
-                                apply().then(r => console.log("finished"))
+                                if(!loading) {
+                                    setLoading(true)
+                                    apply().then(callback)
+                                }
                             }
                             }/>
                         </>
-                    }
-                </View>
-                </View>
-            </Modal> :
-            <Pressable onPress={() => setVisible(true)} style={{alignSelf: "flex-end"}}>
-                <FontAwesome name="pencil" size={24} color="white"/>
-            </Pressable>
+
 
     )
 }

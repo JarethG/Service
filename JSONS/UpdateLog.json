@@ -15,6 +15,9 @@
     "messenger now implemented to create chats between people that have accepted job."
   ],
   "toDo": [
+    "needs to reload message",
+    "need to reformat review card and add photo?",
+    "need blocking submit on the review sheet",
     "clean up code",
     "turn off listners when logging out",
     "remove model closed from messenger screen.",

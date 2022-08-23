@@ -44,10 +44,10 @@ export default function Request({navigation}) {
     const SearchBar = ({onPress}) => {
         return (
             <Pressable
-                style={{flexDirection: "row", flex: 1, borderWidth: 1, padding: 5, margin: 7,backgroundColor:"white"}}
+                style={{flexDirection: "row", flex: 1, borderWidth: 1, padding: 5, margin: 7, backgroundColor: "white"}}
                 onPress={() => onPress()}>
                 <FontAwesome5 name="search" size={24} color="black"/>
-                <Text style={{left: 15,color:"grey",alignSelf:"center"}}>FilterSearch requests</Text>
+                <Text style={{left: 15, color: "grey", alignSelf: "center"}}>FilterSearch requests</Text>
             </Pressable>
         )
     }
@@ -61,27 +61,29 @@ export default function Request({navigation}) {
                                onPress={() => navigation.navigate("Filter")}/>
                     {/*<Button title={"refresh"} onPress={()=>onRefresh()}/>*/}
                 </View>
-                {feed.length != 0 ?
-                    <View style={{width:"100%"}}>
-                        <FlatList data={feed} keyExtractor={(item, index) => index.toString()}
-                                  renderItem={({item}) =>
-                                      <Post details={item} navButton={item.account != profile.email ?
-                                          <Button title={"Message " + item.name.split(" ")[0]} onPress={() => {
-                                              acceptRequest(item.requestID, profile.email, profile.name).then(() => navigation.navigate("Messages"))
-                                          }}/> : <Text style={styles.header}>this is your request!</Text>
-                                      }/>
-                                  }
-                                  ListFooterComponent={
-                                      <Button title={"load more"} onPress={() => onRefresh()}/>
-                                  }
-                                  onRefresh={onRefresh}
-                                  refreshing={isFetching}
-                        />
-                    </View>
-                    : <Text style={styles.header}>There are currently no requests in the community</Text>}
-                <AntDesign style={{position: 'absolute',bottom:15,right:0,backgroundColor:"white",borderRadius:30}} name="pluscircle" size={60} color="orange"
-                           onPress={() => navigation.navigate("NewRequest")}/>
-                <StatusBar style="auto" />
+                {feed.length == 0 ? <>
+                    <Text style={styles.header}>There are currently no requests in the community</Text>
+                    <Button title={"reload"} onPress={() => onRefresh()}/>
+                    </>:
+                    null}
+                <View style={{width: "100%"}}>
+                    <FlatList data={feed} keyExtractor={(item, index) => index.toString()}
+                              renderItem={({item}) =>
+                                  <Post details={item} navButton={item.account != profile.email ?
+                                      <Button title={"Message " + item.name.split(" ")[0]} onPress={() => {
+                                          acceptRequest(item.requestID, profile.email, profile.name).then(() => navigation.navigate("Messages"))
+                                      }}/> : <Text style={styles.header}>this is your request!</Text>
+                                  }/>
+                              }
+                              onRefresh={onRefresh}
+                              refreshing={isFetching}
+                    />
+                </View>
+                <AntDesign
+                    style={{position: 'absolute', bottom: 15, right: 0, backgroundColor: "white", borderRadius: 30}}
+                    name="pluscircle" size={60} color="orange"
+                    onPress={() => navigation.navigate("NewRequest")}/>
+                <StatusBar style="auto"/>
             </View>
         )
     }

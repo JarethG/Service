@@ -1,0 +1,24 @@
+[
+  {
+    "avatar": 1,
+    "name":"bob",
+    "points": 17
+  },{
+    "avatar": 0,
+    "name":"jim",
+    "points": 124
+  },{
+    "avatar": 5,
+    "name":"dave",
+    "points": 4
+  },{
+    "avatar": 3,
+    "name":"deniece",
+    "points": 29
+  },
+  {
+    "avatar": 2,
+    "name": "denefiew",
+    "points": 32
+  }
+]

@@ -63,9 +63,6 @@ export default function Messages() {
                                       <ContactItem info={item}/>}
                               </TouchableOpacity>
                           }
-                          ListFooterComponent={
-                              <Button title={"load more"} onPress={() => onRefresh()}/>
-                          }
                           onRefresh={onRefresh}
                           refreshing={isFetching}
                 />

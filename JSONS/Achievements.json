@@ -1,0 +1,76 @@
+{
+  "achievement_list" : [
+    "green_finger",
+    "so_it_begins",
+    "a_helping_hand",
+    "jack_of_all_trades",
+    "tool_box",
+    "she_sells_sea_shells",
+    "pointy",
+    "good_service"
+  ],
+  "requirements": {
+    "green_finger": {
+      "description":  "complete 10 requests to do with plants.",
+      "required": 10,
+      "progress": 0,
+      "title": "Green Finger",
+      "tags": [
+        "Gardening Equipment",
+        "Pots",
+        "Soil"
+      ]
+    },
+    "so_it_begins":  {
+      "description":  "Make your first request",
+      "required": 1,
+      "progress": 0,
+      "title": "So it begins!",
+      "tags": []
+
+    },
+    "a_helping_hand": {
+      "description":  "Complete a request made by someone else",
+      "required": 1,
+      "progress": 0,
+      "title": "A helping hand",
+      "tags": []
+
+    },
+    "jack_of_all_trades":  {
+      "description":  "complete a request in five different categories",
+      "required": 5,
+      "progress": 0,
+      "title": "Jack of all trades",
+      "tags": []
+    },
+    "tool_box":{
+      "description":  "Let people use your tools 10 times",
+      "required": 10,
+      "progress": 0,
+      "title": "Toolbox",
+      "tags": []
+    },
+    "she_sells_sea_shells": {
+      "description":  "Make your first request",
+      "required": 1,
+      "progress": 0,
+      "title": "So it begins!",
+      "tags": ["Languages"]
+    },
+    "pointy": {
+      "description":  "Reach 100 points",
+      "required": 10,
+      "progress": 0,
+      "title": "Pointy!",
+      "tags": []
+    },
+    "good_service": {
+      "description":  "Receive a five star rating",
+      "required": 1,
+      "progress": 0,
+      "title": "Good service!",
+      "tags": []
+    }
+  }
+}
