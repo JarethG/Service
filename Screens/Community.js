@@ -34,7 +34,7 @@ export default function Community() {
                 <View style={{backgroundColor: "#f6d14f", borderRadius: 5,flexDirection:"row"}}>
                     <Text style={{flex:1}}>Rank</Text>
                     <Text style={{flex:3}}>User </Text>
-                    <Text style={{flex:1}}>Points</Text>
+                    <Text style={{flex:2}}>Points this week</Text>
                 </View>
 
 
@@ -46,10 +46,10 @@ export default function Community() {
                           refreshing={isFetching}
                 />
 
-                <View style={{flexDirection: "row", padding: 10}}>
-                    <FontAwesome name="plus" size={24} color="white" style={{top: 5}}/>
-                    <Text style={{fontWeight: "bold", fontSize: 24, color: "#fff", left: 10}}>Invite Your Friends</Text>
-                </View>
+                {/*<View style={{flexDirection: "row", padding: 10}}>*/}
+                {/*    <FontAwesome name="plus" size={24} color="white" style={{top: 5}}/>*/}
+                {/*    <Text style={{fontWeight: "bold", fontSize: 24, color: "#fff", left: 10}}>Invite Your Friends</Text>*/}
+                {/*</View>*/}
             </View>
         </View>
     );

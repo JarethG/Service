@@ -29,7 +29,7 @@ export default function Request({navigation}) {
     const [isFetching, setIsFetching] = useState(false);
 
     const fetchData = () => {
-        getOffers(20,filter).then((r) => setFeed(r))
+        getOffers(20, filter).then((r) => setFeed(r))
         setIsFetching(false);
     };
 
@@ -58,11 +58,17 @@ export default function Request({navigation}) {
                     {/*           onPress={() => navigation.navigate("Filter")}/>*/}
                     {/*<Button title={"refresh"} onPress={()=>onRefresh()}/>*/}
                 </View>
-                <Text> curent filter : "{filter}"</Text>
+                {filter ?
+                    <View style={[styles.transparentContainer,{flexDirection:"row",justifyContent:"space-between"}]}>
+                        <Text> current filter : "{filter}"</Text>
+                        <AntDesign name="closecircle" size={24} color="black" onPress={()=>setFilter(undefined)}/>
+                    </View>
+                    : null
+                }
                 {feed.length == 0 ? <>
-                    <Text style={styles.header}>There are currently no requests in the community</Text>
-                    <Button title={"reload"} onPress={() => onRefresh()}/>
-                    </>:
+                        <Text style={styles.header}>There are currently no requests in the community</Text>
+                        <Button title={"reload"} onPress={() => onRefresh()}/>
+                    </> :
                     null}
                 <View style={{width: "100%"}}>
                     <FlatList data={feed} keyExtractor={(item, index) => index.toString()}
@@ -87,12 +93,16 @@ export default function Request({navigation}) {
     }
 
     // const FilterSearch = ({navigation}) => {
-    {/*    const [input, setInput] = useState()*/}
-    {/*    const options = ["All", "Skills", "Resources"]*/}
+    {/*    const [input, setInput] = useState()*/
+    }
+    {/*    const options = ["All", "Skills", "Resources"]*/
+    }
 
-    {/*    const [tags, setTags] = useState(Skills.concat(Resources))*/}
+    {/*    const [tags, setTags] = useState(Skills.concat(Resources))*/
+    }
 
-    {/*    function updateList(option) {*/}
+    {/*    function updateList(option) {*/
+    }
     //         setFilter({...filter, type: option})
     //         option === "All" ? setTags(Skills.concat(Resources)) :
     //             option === "Skills" ? setTags(Skills) :
@@ -115,10 +125,14 @@ export default function Request({navigation}) {
     //                         }, option === filter.type ? {backgroundColor: "green"} : {backgroundColor: "red"}]}
     //                                    onPress={() => updateList(option)}>
     //                             <Text style={{alignSelf: "center"}}>{option}</Text></Pressable>
-    {/*                    )*/}
-    {/*                })}*/}
-    {/*            </View>*/}
-    {/*            <TextInput*/}
+    {/*                    )*/
+    }
+    {/*                })}*/
+    }
+    {/*            </View>*/
+    }
+    {/*            <TextInput*/
+    }
     //                 placeholder='FilterSearch'
     //                 value={input}
     //                 onChangeText={(text) => setInput(text)}

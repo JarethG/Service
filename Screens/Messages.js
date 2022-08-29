@@ -50,8 +50,12 @@ export default function Messages() {
 
     const MessageLanding = ({navigation}) => {
         return <View style={styles.background}>
+            <View style={[styles.container, styles.midColour, {width: "100%", flex: 1, alignItems: "center"}]}>
+            <Text style={styles.header}>Messages</Text>
+            {chatHeaders?null:
+            <Text style={styles.text}>It appears you have no messages</Text>}
             <View style={{width: "100%"}}>
-                <FlatList data={chatHeaders} keyExtractor={(item, index) => index.toString()}
+                <FlatList style={{height:"100%"}} data={chatHeaders} keyExtractor={(item, index) => index.toString()}
                           renderItem={({item}) =>
                               <TouchableOpacity onPress={() => {
                                   item.isComplete ?
@@ -67,6 +71,7 @@ export default function Messages() {
                           refreshing={isFetching}
                 />
             </View>
+        </View>
         </View>
     }
 

@@ -354,7 +354,9 @@ export async function setPublicUserInfo(data,authToken){
     await set(ref(rtdb, 'public/' + authToken), {
         "name": data.name,
         "points":data.points,
-        "avatar": data.avatar
+        "monthlyPoints":data.points,
+        "avatar": data.avatar,
+        "rank":"bronze"
     });
 }
 
@@ -366,10 +368,23 @@ export async function getLeaderBoard(callback){
     await onValue(q, (snapshot) => {
         let leaders = [];
         snapshot.forEach((item)=> {
-            // console.log(item.val().points)
+            console.log(item.val())
             leaders.push(item.val())
         })
         callback(leaders.reverse())
+    }, {
+        onlyOnce: true
+    })
+}
+
+export async function addNewInfoRTDB(path,key,value){
+    const q = query(ref(rtdb,path))
+    await onValue(q, (snapshot) => {
+        snapshot.forEach((item)=> {
+            let payLoad = {}
+            payLoad[key]=value
+            update(ref(rtdb, path +'/' + item.key), payLoad);
+        })
     }, {
         onlyOnce: true
     })

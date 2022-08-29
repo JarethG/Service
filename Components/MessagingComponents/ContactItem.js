@@ -10,7 +10,7 @@ export const ContactItem = ({info}) => {
     const profile = useContext(ProfileContext)
     const date = new Date(info.lastTimeStamp);
     return (
-        <View style={[styles.midColour,styles.container,{flexDirection: "row"}]}>
+        <View style={[styles.darkColour,styles.container,{flexDirection: "row"}]}>
             <Image source={images[info.avatar?1:0]} style={styles.cardProfilePicture}/>
             <View style={{flex: 1,paddingHorizontal:10}}>
                 <View style={{flexDirection: "row", justifyContent: "space-between"}}>

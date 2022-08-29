@@ -52,8 +52,7 @@ function UserStack(user) {
                             screenOptions={{
                                 headerShown: false,
                                 tabBarActiveTintColor: "orange",
-                                tabBarInactiveTintColor: "grey",
-                                tabBarActiveBackgroundColor:"#0c9eb5",
+                                tabBarInactiveTintColor: "grey"
                             }}>
                             <Tab.Screen name="Notice Board" component={Request} initialParams={profile}
                                         options={{

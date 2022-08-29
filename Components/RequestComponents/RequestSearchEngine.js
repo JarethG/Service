@@ -34,7 +34,7 @@ export default function RequestSearchEngine({navigation,route}) {
         <View style={styles.background}>
             <Button title={"back"} onPress={()=> {navigation.goBack()}}/>
             <Button title={"clear Filter"} onPress={()=> {
-                route.params.setFilter("")
+                route.params.setFilter(undefined)
                 navigation.goBack()}}/>
             {SearchBar()}
             <FlatList data={searchResults} keyExtractor={(item, index) => index.toString()}
