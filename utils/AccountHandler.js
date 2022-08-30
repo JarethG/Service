@@ -1,5 +1,5 @@
 import {createUserWithEmailAndPassword, getAuth} from "firebase/auth";
-import {updateProfile} from "./Firebase";
+import {updateProfile, updatePublicUserInfo} from "./Firebase";
 import {Modal, Pressable, Text, TextInput, View} from "react-native";
 import {styles} from "../Styles";
 import Button from "../Components/Button";
@@ -7,6 +7,7 @@ import React, {useState} from "react";
 import Picker from "../Components/Picker";
 import {Resources, Skills} from "../JSONS/Tags.json";
 import {FontAwesome} from "@expo/vector-icons";
+import AvatarChooser from "../Components/AvatarChooser";
 
 
 export const UpdateAccount = ({oldData,callback}) => {
@@ -15,9 +16,9 @@ export const UpdateAccount = ({oldData,callback}) => {
     const [updates, setUpdates] = React.useState(oldData)
     const [loading, setLoading] = useState(false)
 
-
     async function apply() {
         try {
+            await updatePublicUserInfo(updates.avatar,getAuth().currentUser.uid)
             updateProfile(oldData.email, updates).then(setLoading(false))
         } catch (error) {
             console.log("updates errors : ", error)
@@ -57,7 +58,7 @@ export const UpdateAccount = ({oldData,callback}) => {
                                 setStage(1)
                             }}/>
                         </>
-                        :
+                        : stage==1?
                         <>
                             <Button title={"back"} onPress={() => {
                                 setStage(0)
@@ -80,9 +81,18 @@ export const UpdateAccount = ({oldData,callback}) => {
                                 {updates.skills?.map((resource, index) => {
                                     return <Text key={index}>{resource}</Text>
                                 })}
-
-
                             </View>
+                            <Button title={"next"} onPress={() => {
+                                setStage(2)
+                            }}/>
+
+                        </> :
+                        <>
+                            <Button title={"back"} onPress={() => {
+                                setStage(1)
+                            }}/>
+                            <Text style={styles.header}>select your avatar</Text>
+                            <AvatarChooser setter={(r)=>setUpdates({...updates, avatar: r})} old={oldData.avatar}/>
                             <Button title={"Apply Changes"} onPress={() => {
                                 if(!loading) {
                                     setLoading(true)

@@ -9,6 +9,7 @@ import {styles} from "../Styles";
 import Button from '../Components/Button'
 import {Skills, Resources} from '../JSONS/Tags.json'
 import Picker from "../Components/Picker";
+import AvatarChooser from "../Components/AvatarChooser";
 
 function SignInScreen({navigation}) {
     const auth = getAuth()
@@ -125,6 +126,7 @@ function SignUpScreen({navigation}) {
 function NewProfileScreen({navigation, route}) {
     // console.log(route.params)
     const [profile, setProfile] = React.useState({
+        avatar:0,
         about: "",
         name: "",
         resources: [],
@@ -189,7 +191,7 @@ function NewProfileScreen({navigation, route}) {
                     <Button title={"next"} onPress={() => {
                        setStage(1)}}/>
                 </>
-                :
+                : stage==1?
                 <>
                     <Button title={"back"} onPress={() => {
                         setStage(0)
@@ -215,12 +217,22 @@ function NewProfileScreen({navigation, route}) {
 
 
                     </View>
-                    <Button title={"Create Account"} onPress={() => {
-                        createNewAccount().then(r => console.log("finished"))
-                        navigation.navigate("sign in")
-                    }
-                    }/>
-                </>
+                    <Button title={"next"} onPress={() => {
+                        setStage(2)}}/>
+
+                </>:
+                    <View style={{alignItems:"center"}}>
+                        <Button title={"back"} onPress={() => {
+                            setStage(1)
+                        }}/>
+                        <Text style={styles.header}>select your avatar</Text>
+                        <AvatarChooser setter={(r)=>setProfile({...profile, avatar: r})} old={0}/>
+                        <Button title={"Create Account"} onPress={() => {
+                            createNewAccount().then(r => console.log("finished"))
+                            navigation.navigate("sign in")
+                        }
+                        }/>
+                    </View>
             }
         </View>
         </View>

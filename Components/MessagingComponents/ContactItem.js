@@ -6,7 +6,6 @@ import {images} from "../../assets/Avatars/ImageLoader";
 
 
 export const ContactItem = ({info}) => {
-    console.log(info)
     const profile = useContext(ProfileContext)
     const date = new Date(info.lastTimeStamp);
     return (

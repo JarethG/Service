@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import {styles} from "../Styles";
 import React, {useContext, useEffect, useState} from "react";
-import {acceptRequest, getChatHeaders, getOffers,} from "../utils/Firebase";
+import Firebase, {acceptRequest, getChatHeaders, getOffers,} from "../utils/Firebase";
 import ProfileContext from "../utils/profileContext";
 import MessagingModal from "../Components/MessagingComponents/MessagingModal";
 import {ContactItem} from "../Components/MessagingComponents/ContactItem";
@@ -17,55 +17,57 @@ import ReviewSheet from "../Components/MessagingComponents/ReviewSheet";
 import {ReviewCard} from "../Components/MessagingComponents/ReviewCard";
 import Button from "../Components/Button";
 import Post from "../Components/Post";
+import {getAuth} from "firebase/auth";
 
 export default function Messages() {
 
     const profile = useContext(ProfileContext)
+    const [isFetching, setIsFetching] = useState(false);
 
-    const [chatHeaders, setChatHeaders] = useState([])
-    const [err, setErr] = useState("Loading Messages")
+    const [messageIDs,setMessageIDs] = useState()
+    const [chats,setChats] = useState({})
+    const [unsubscribe,setUnsubscribe] = useState([])
 
 
     useEffect(() => {
+        console.log("useefect called")
         onRefresh()
     }, [])
-
-    const [isFetching, setIsFetching] = useState(false);
-
-    const fetchData = () => {
-        setChatHeaders([])
-        let ids = profile.acceptedRequests.concat(profile.myRequests);
-        ids.length == 0 ? setErr("It appears you have no open or accepted requests!")
-            :
-            ids.forEach((id) => {
-                getChatHeaders(id, setChatHeaders).then()
-            })
-        setIsFetching(false);
-    };
 
     const onRefresh = () => {
         setIsFetching(true);
         fetchData();
     };
 
+    const fetchData = () => {
+        let ids = profile.acceptedRequests.concat(profile.myRequests);
+        setMessageIDs(ids)
+        getChatHeaders(ids, setChats).then(r => setUnsubscribe(r))
+        setIsFetching(false);
+    };
+
+
+
     const MessageLanding = ({navigation}) => {
+        {console.log("page-reloaded")}
         return <View style={styles.background}>
             <View style={[styles.container, styles.midColour, {width: "100%", flex: 1, alignItems: "center"}]}>
             <Text style={styles.header}>Messages</Text>
-            {chatHeaders?null:
+            {chats?null:
             <Text style={styles.text}>It appears you have no messages</Text>}
             <View style={{width: "100%"}}>
-                <FlatList style={{height:"100%"}} data={chatHeaders} keyExtractor={(item, index) => index.toString()}
-                          renderItem={({item}) =>
+                <FlatList style={{height:"100%"}} data={messageIDs} keyExtractor={(item, index) => index.toString()}
+                          renderItem={({item}) => chats[item]?
                               <TouchableOpacity onPress={() => {
-                                  item.isComplete ?
+                                  chats[item].isComplete ?
                                       navigation.navigate("ReviewSheet", {request: item}) :
                                       navigation.navigate("MessagingModal", {requestID: item.id})
                               }}>
-                                  {item.isComplete ?
-                                      <ReviewCard info={item}/> :
-                                      <ContactItem info={item}/>}
-                              </TouchableOpacity>
+                                  {chats[item].isComplete ?
+                                      <ReviewCard info={chats[item]}/> :
+                                      <ContactItem info={chats[item]}/>}
+                              </TouchableOpacity>:
+                              <Text>loading...</Text>
                           }
                           onRefresh={onRefresh}
                           refreshing={isFetching}

@@ -89,8 +89,8 @@ const ProfileNavigator = ({callback}) => {
                     <MenuItem title={"Log out"} iconName={"log-out"} onPress={() => {
                         signOut(getAuth()).then()
                     }}/>
-
-                    <AdminFunctions/>
+                    {profile.role!=undefined?
+                        <AdminFunctions/>:null}
                 </View>
                 <Pressable style={styles.sidebarOff}
                            onPress={() => setIsVisible(!isVisible)}/>
@@ -121,7 +121,7 @@ const AboutMe = ({profile}) => {
 
             <View style={[styles.container, styles.midColour, {width: "100%", flex: 1, alignItems: "center"}]}>
                 {/*<UpdateAccount email={auth.currentUser.email} oldData={profile}/>*/}
-                <Image source={require('../assets/Avatars/avataaars_2.png')} style={{width: 150, height: 150}}/>
+                <Image source={images[profile.avatar]} style={{width: 150, height: 150}}/>
                 <Text style={[styles.header, {paddingTop: 10}]}>{profile.name}</Text>
                 <Text style={styles.text}>{profile.title}</Text>
                 <Text style={styles.text}> Total Points: {profile.points}</Text>

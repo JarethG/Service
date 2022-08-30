@@ -17,7 +17,7 @@ import {
     arrayRemove,
     increment
 } from 'firebase/firestore';
-import {getDatabase, ref, onValue, set, push, update, remove,get,child,orderByChild,limitToLast} from 'firebase/database';
+import {getDatabase, ref, onValue, set, push, update, remove,get,child,orderByChild,limitToLast,Unsubscribe} from 'firebase/database';
 import React from "react";
 
 const firebaseConfig = {
@@ -100,16 +100,21 @@ export async function setChatHeader(chatID, data) {
     });
 }
 
-export async function getChatHeaders(chatID, callback) {
-    // console.log("called")
-    await onValue(ref(rtdb, 'chatHeaders/' + chatID), (snapshot) => {
-        let header = snapshot.val()
-        // console.log("firebase header = +>",header)
-        header.id = chatID
-        callback(old =>[...old,header])
-    }, {
-        onlyOnce: true
+export async function getChatHeaders(chatIDs, setChats) {
+    const promises = chatIDs.map(async (id)=> {
+        return onValue(ref(rtdb, 'chatHeaders/' + id), (snapshot) => {
+            setChats((old)=>({...old,[snapshot.key]:snapshot.val()}))
+        })
     })
+    const res = await Promise.all(promises)
+    return res
+    //
+    // const promises = chatIDs.map(async (id)=> {
+    //     const unsubscribe =  await get(ref(rtdb, 'chatHeaders/' + id))
+    //     return unsubscribe;
+    // })
+    // const res = await Promise.all(promises)
+
 }
 
 export async function getOffers(max,filter) {
@@ -261,6 +266,7 @@ export async function newRequest(request, userEmail) {
 
 export async function newProfile(userEmail, profileData) {
     await setDoc(doc(db, "Users", userEmail.toLowerCase()), {
+        avatar:profileData.avatar,
         about: profileData.about,
         name: profileData.name,
         resources: profileData.resources,
@@ -292,6 +298,7 @@ export async function getProfile(email, callback) {
 
 export async function updateProfile(userEmail, profileData) {
     await updateDoc(doc(db, "Users", userEmail.toLowerCase()), {
+        avatar:profileData.avatar,
         about: profileData.about,
         name: profileData.name,
         resources: profileData.resources,
@@ -349,7 +356,13 @@ export async function setPoints(points,authToken) {
     });;
 }
 
-export async function setPublicUserInfo(data,authToken){
+export async function updatePublicUserInfo(avatar,authToken) {
+    await update(ref(rtdb, 'public/' + authToken), {
+        "avatar":avatar
+    });
+}
+
+    export async function setPublicUserInfo(data,authToken){
     console.log("called")
     await set(ref(rtdb, 'public/' + authToken), {
         "name": data.name,

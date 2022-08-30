@@ -6,4 +6,8 @@ export const images = [
     require('./avataaars_4.png'),
     require('./avataaars_5.png'),
     require('./avataaars_6.png'),
+    require('./avataaars_7.png'),
+    require('./avataaars_8.png'),
+    require('./avataaars_9.png'),
+    require('./avataaars_10.png'),
 ]
