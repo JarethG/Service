@@ -16,7 +16,8 @@ const NewRequestSheet = ({navigation}) => {
     const [request, setRequest] = useState({
         accepted:false,
         account:profile.email,
-        avatar:2,
+        avatar:profile.avatar,
+        userRating:profile.rating,
         type: "skill",
         name: profile.name,
         tags: [],

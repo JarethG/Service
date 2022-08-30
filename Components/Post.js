@@ -21,7 +21,7 @@ const Post = ({details, navButton}) => {
                     <View style={{flexDirection: "row", alignItems: "center", left: 15}}>
                         <Text style={[styles.header, {fontSize: 20}]}>{details.name}</Text>
                             <AntDesign name="star" size={18} color="white"  style={{left:15}}/>
-                            <Text style={{color: "white", fontSize: 12,left:20}}>4.68</Text>
+                            <Text style={{color: "white", fontSize: 12,left:20}}>{details.rating}</Text>
                     </View>
                     <View style={{flexDirection: "row"}}>
                         <FlatList data={details.tags} keyExtractor={(item) => item}

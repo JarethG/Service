@@ -1,5 +1,6 @@
 [
   {
+    "rating": 3,
     "avatar": 1,
     "accepted": false, "isComplete": true,
     "key": "JoB1",
@@ -13,6 +14,7 @@
     "description": "its come to the end of the financial year and I need help with the tax from my private business"
   },
   {
+    "rating": 3,
     "avatar": 3,
     "accepted": false, "isComplete": false,
     "key": "JoB2",
@@ -28,6 +30,7 @@
     "description": "As part of a personal project, I want to learn Photoshop. is there anyone that might be able to help me learn the basics?"
   },
   {
+    "rating": 3,
     "avatar": 2,
     "accepted": false, "isComplete": false,
     "key": "JoB3",
@@ -41,6 +44,7 @@
     "description": "Hey, just been asked to take some macro photos and dont have a particular lense. Can I borrow on for a weekend trip?"
   },
   {
+    "rating": 3,
     "avatar": 4,
     "accepted": false, "isComplete": false,
     "key": "JoB4",
@@ -55,6 +59,7 @@
     "description": "Im a recent design graduate that wants to make an online portfolio for myself. Need someone who can do the coding!"
   },
   {
+    "rating": 3,
     "avatar": 2,
     "accepted": false, "isComplete": false,
     "key": "JoB5",
@@ -69,6 +74,7 @@
     "description": "I have recently germinated some fruit seeds following a TikTok,now i need some pots so they can keep growing."
   },
   {
+    "rating": 3,
     "avatar": 6,
     "accepted": false, "isComplete": false,
     "key": "JoB6",
@@ -82,6 +88,7 @@
     "description": "I have recently written a spin-off series and would like someone to read over and give their opinion"
   },
   {
+    "rating": 3,
     "avatar": 5,
     "accepted": false, "isComplete": false,
     "key": "JoB7",
@@ -97,6 +104,7 @@
     "description": "Hello, I am putting together a Kit-Set shelf and need to borrow some tools for the afternoon."
   },
   {
+    "rating": 3,
     "avatar": 4,
     "accepted": false, "isComplete": false,
     "key": "JoB8",
@@ -110,6 +118,7 @@
     "description": "Help!, There is a patch of wooden floor in our house that has gone damp and rotting, need someone who will come and confirm in case a plumber is needed to be payed for. "
   },
   {
+    "rating": 3,
     "avatar": 3,
     "accepted": false, "isComplete": false,
     "key": "JoB9",
@@ -123,6 +132,7 @@
     "description": "Wanting to take up Sewing as a hobbie and have lots of materials to practice on. I have recently purchased all the gear and would like someone who has good experience to take some time to teach me."
   },
   {
+    "rating": 3,
     "avatar": 2,
     "accepted": false, "isComplete": false,
     "key": "JoB10",
@@ -138,6 +148,7 @@
     "description": "Need to move a small amount of furniture (chairs, desks) that cant be carried down the street. Two trips at most."
   },
   {
+    "rating": 3,
     "avatar": 6,
     "accepted": false, "accepted": false, "isComplete": false,
     "key": "JoB11",

@@ -114,7 +114,6 @@ const MenuItem = ({title, onPress, iconName}) => {
 
 const AboutMe = ({profile}) => {
     const auth = getAuth();
-    const rating = 4;
     {console.log(auth.currentUser.uid)}
     return (
         <View style={{width: "100%", padding: 15, flex: 1}}>
@@ -127,7 +126,7 @@ const AboutMe = ({profile}) => {
                 <Text style={styles.text}> Total Points: {profile.points}</Text>
                 <View style={{flexDirection: "row", padding: 10}}>
                     {Array.from({length: 5}, (x, i) => {
-                        return i < rating ?
+                        return i < profile.rating ?
                             <AntDesign key={i} name="star" size={24} color="rgb(255, 230, 80)"/> :
                             <AntDesign key={i} name="staro" size={24} color='rgb(255, 230, 80)'/>
                     })}
