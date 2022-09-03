@@ -5,7 +5,7 @@ import EventCard from "../Components/EventCard";
 import LeaderboardCard from "../Components/LeaderboardCard";
 import {FontAwesome} from '@expo/vector-icons';
 import ToggleButtons from "../Components/ToggleButtons";
-import {deleteRequest, getLeaderBoard, getOffers} from "../utils/Firebase";
+import {deleteRequest, getLeaderBoard} from "../utils/Firebase";
 import Post from "../Components/Post";
 
 export default function Community() {

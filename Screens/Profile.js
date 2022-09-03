@@ -14,8 +14,8 @@ import {
     createDummyData,
     deleteCollection,
     deleteDummyData,
-    deleteRequest,
-    getMyRequests, getMyReviews, setPoints, setPublicUserInfo
+    deleteRequest, getMyPosts,
+    getMyRequests, getMyReviews, readPosts, readReviews, setPoints, setPublicUserInfo
 } from "../utils/Firebase";
 import Post from "../Components/Post";
 import ProfileContext from "../utils/profileContext";
@@ -156,31 +156,38 @@ const AboutMe = ({profile}) => {
 
 const MyRequests = ({profile}) => {
 
-    const [requests, setRequests] = useState([])
-    useEffect(() => {
-        get().then(r => {
-            setRequests(r)
-        })
-    }, [profile])
+    const [posts, setPosts] = useState()
+    const [isFetching, setIsFetching] = useState(false);
 
-    function get() {
-        let newFeed = getMyRequests(profile.email).then()
-        return newFeed
-    }
+    useEffect(() => {
+        onRefresh()
+    },[])
+
+    const onRefresh = () => {
+        setIsFetching(true);
+        fetchData();
+    };
+
+    const fetchData = () => {
+        getMyPosts(getAuth().currentUser.uid,(r)=>setPosts(r))
+            .then()
+        setIsFetching(false)
+    };
+
 
     return (
         <View style={[{flex: 1, width: "100%"}, styles.lightColour]}>
-            {requests ?
-                <FlatList data={requests} keyExtractor={(item, index) => index.toString()}
+            {posts ?
+                <FlatList data={posts} keyExtractor={(item, index) => index.toString()}
                           renderItem={({item, index}) =>
-                              <Post details={item.doc} navButton={
-                                  item.doc.accepted ? <Text> sorry, you cant delete an accepted offer</Text> :
+                              <Post details={item} navButton={
+                                  item.accept ? <Text> sorry, you cant delete an accepted offer</Text> :
                                       <Button title={"delete request"} onPress={() => {
-                                          deleteRequest(item.id, profile.email).then(
-                                              setRequests((requests) => requests.filter((_, num) => num !== index))
-                                          )
                                       }}/>
-                              }/>}
+                              }/>
+                }
+                          onRefresh={onRefresh}
+                          refreshing={isFetching}
                 />
                 : <Text>It appears you haven't made any requests yet, head over to the Notice Boards tab to get
                     started</Text>}
@@ -200,7 +207,7 @@ const MyReviews = ({profile}) => {
     }, [])
 
     function get() {
-        getMyReviews(profile.email, setReviewsFrom, setReviewsTo).then(()=> setIsFetching(false))
+        readReviews(getAuth().currentUser.uid, setReviewsFrom, setReviewsTo).then(()=> setIsFetching(false))
     }
 
     const onRefresh = () => {
@@ -210,6 +217,7 @@ const MyReviews = ({profile}) => {
 
     return (
         <View style={[{flex: 1, width: "100%"}, styles.lightColour]}>
+            {console.log(reviewsFrom)}
             <Button title={a?"From you":"What people are saying about you"} onPress={()=> {
                 setIsFetching(true)
                 b(!a)
@@ -225,11 +233,11 @@ const MyReviews = ({profile}) => {
                                   <View style={{flexDirection: "row", flex: 1}}>
                                       <Image source={images[0]} style={styles.cardProfilePicture}/>
                                       <View>
-                                          <Text>{item.doc[a?"to":"from"]}</Text>
+                                          <Text>{item[a?"to":"from"]}</Text>
                                           <View style={{flexDirection: "row", flex: 1}}>
                                               {stars.map((index) => {
                                                   return (
-                                                      index <= item.doc.rating ?
+                                                      index <= item.rating ?
                                                           <AntDesign name="star" size={20} color="black"/> :
                                                           <AntDesign name="staro" size={20} color="black"/>
                                                   )
@@ -237,7 +245,7 @@ const MyReviews = ({profile}) => {
                                           </View>
                                       </View>
                                   </View>
-                                  <Text>{item.doc.review}</Text>
+                                  <Text>{item.review}</Text>
                               </View>
                           }
                           onRefresh={onRefresh}

@@ -2,27 +2,28 @@ import {Modal, Text, TextInput, View} from "react-native";
 import {styles} from "../../Styles";
 import React, {useState} from "react";
 import Button from "../Button";
-import {newRequest} from "../../utils/Firebase";
+import {writeNewPost} from "../../utils/Firebase";
 import Picker from "../Picker";
 import {Resources, Skills} from "../../JSONS/Tags.json";
 import ToggleButtons from "../ToggleButtons";
 import Post from "../Post";
 import ProfileContext from "../../utils/profileContext";
 import {Ionicons} from "@expo/vector-icons";
+import {getAuth} from "firebase/auth";
 
 const NewRequestSheet = ({navigation}) => {
 
     const profile = React.useContext(ProfileContext)
     const [request, setRequest] = useState({
-        accepted:false,
-        account:profile.email,
-        avatar:profile.avatar,
-        userRating:profile.rating,
-        type: "skill",
-        name: profile.name,
-        tags: [],
-        title: "",
-        description: ""
+        title:"",
+        rating:profile.rating,
+        tags:[],
+        avatar:0,
+        name:profile.name,
+        description:"",
+        email:"email",
+        settled:false,
+        uid:getAuth().currentUser.uid,
     })
 
     const inputs = ["Title","Description"]
@@ -50,7 +51,7 @@ const NewRequestSheet = ({navigation}) => {
             />
                 <View style={{height:30}}></View>
             <ToggleButtons titleLeft={"Skill"} titleRight={"Resource"} onToggle={()=>{
-                setRequest({...request, type: !toggle?"skill":"resource",tags:[]});
+                setRequest({...request,tags:[]});
                 switchToggle(!toggle)
             }}/>
             <Text style={[styles.header,{margin:10}]}>Create a new Request</Text>
@@ -71,15 +72,12 @@ const NewRequestSheet = ({navigation}) => {
             </View>
 
             <Button title={"Post"} onPress={()=>{
-                console.log("posting")
                 if(!blocking) {
                     setBlocking(true);
-                    newRequest(request, profile.email).then(() => {
+                    writeNewPost(getAuth().currentUser.uid,request)
                         setBlocking(false);
                         navigation.navigate("NoticeBoard");
-                    })
-                }
-            }}/>
+            }}}/>
         </View>
         </View>
 

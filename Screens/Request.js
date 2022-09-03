@@ -5,13 +5,14 @@ import {FontAwesome5, Entypo, AntDesign} from '@expo/vector-icons';
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import NewRequestSheet from "../Components/RequestComponents/newRequestSheet";
 import Button from "../Components/Button";
-import {acceptRequest, setChatHeader, getOffers} from "../utils/Firebase";
+import {readPosts, acceptPost} from "../utils/Firebase";
 import Post from "../Components/Post";
 import FilterSearch from "../Components/RequestComponents/FilterSearch";
 import Picker from "../Components/Picker";
 import {Skills, Resources} from '../JSONS/Tags.json'
 import ProfileContext from "../utils/profileContext";
 import RequestSearchEngine from "../Components/RequestComponents/RequestSearchEngine";
+import {getAuth} from "firebase/auth";
 
 export default function Request({navigation}) {
 
@@ -29,7 +30,7 @@ export default function Request({navigation}) {
     const [isFetching, setIsFetching] = useState(false);
 
     const fetchData = () => {
-        getOffers(20, filter).then((r) => setFeed(r))
+        readPosts((r)=>setFeed(r))
         setIsFetching(false);
     };
 
@@ -49,14 +50,19 @@ export default function Request({navigation}) {
         )
     }
 
+    function createGreeting(chat){
+        return {
+            from:getAuth().currentUser.uid,
+            message:"Hi, my name is " + profile.name.split(" ")[0],
+            timestamp:Date.now()
+        }
+    }
+
     const NoticeBoard = ({navigation}) => {
         return (
             <View style={styles.background}>
                 <View style={{alignItems: "center", justifyContent: "center", flexDirection: "row"}}>
                     <SearchBar onPress={() => navigation.navigate("Search")}/>
-                    {/*<AntDesign name="menu-fold" size={24} color="black"*/}
-                    {/*           onPress={() => navigation.navigate("Filter")}/>*/}
-                    {/*<Button title={"refresh"} onPress={()=>onRefresh()}/>*/}
                 </View>
                 {filter ?
                     <View style={[styles.transparentContainer,{flexDirection:"row",justifyContent:"space-between"}]}>
@@ -70,12 +76,15 @@ export default function Request({navigation}) {
                         <Button title={"reload"} onPress={() => onRefresh()}/>
                     </> :
                     null}
-                <View style={{width: "100%"}}>
+                <View style={{width: "100%",flex:1}}>
                     <FlatList data={feed} keyExtractor={(item, index) => index.toString()}
                               renderItem={({item}) =>
                                   <Post details={item} navButton={item.account != profile.email ?
                                       <Button title={"Message " + item.name.split(" ")[0]} onPress={() => {
-                                          acceptRequest(item.requestID, profile.email, profile.name).then(() => navigation.navigate("Messages"))
+                                          let greeting = createGreeting(item)
+                                          item["lastMessage"]=greeting
+                                          acceptPost(getAuth().currentUser.uid,item,greeting)
+                                          navigation.navigate("Messages")
                                       }}/> : <Text style={styles.header}>this is your request!</Text>
                                   }/>
                               }

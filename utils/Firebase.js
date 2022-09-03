@@ -17,7 +17,7 @@ import {
     arrayRemove,
     increment
 } from 'firebase/firestore';
-import {getDatabase, ref, onValue, set, push, update, remove,get,child,orderByChild,limitToLast,Unsubscribe} from 'firebase/database';
+import {getDatabase, ref, onValue, set, push, update, remove,get,child,orderByChild,limitToLast,Unsubscribe,onChildChanged} from 'firebase/database';
 import React from "react";
 
 const firebaseConfig = {
@@ -44,105 +44,41 @@ function getUserDoc(userEmail) {
     return doc(db, "Users", userEmail);
 }
 
-export async function pushMessage(chatID, message, userID) {
-    let now = Date.now()
-    await push(ref(rtdb, 'chats/' + chatID), {
-        userID: userID,
-        message: message,
-        timestamp: now
-    });
-
-    await update(ref(rtdb, 'chatHeaders/' + chatID), {
-        lastMessage:message,
-        lastTimeStamp: now
+export async function proposeJobCompleted(id, uid) {
+    await update(ref(rtdb, 'chat-room/' + id + '/chat'), {
+        settled: true,
+        settledID: uid
     });
 }
 
-export function getMessage(chatID, userID, callback) {
-    onValue(ref(rtdb, 'chats/' + chatID), (snapshot) => {
-        let list = [];
-        snapshot.forEach(snap => {
-            const issue = snap.val();
-            list.push(issue)
-        })
-        callback(list)
-    })
-}
-
-export async function setChatState(chatID, data) {
-    await set(ref(rtdb, 'chatState/' + chatID), {
-        isComplete: "",
-        acceptingUserEmail: "",
-        client: data.name,
-        clientEmail: data.account,
-        jobTitle: data.title
+export async function acceptJobCompletion(id) {
+    await update(ref(rtdb, 'chat-room/' + id + '/chat'), {
+        isComplete: true,
+        reviews:0
     });
+    update(ref(rtdb, 'chat-room/' + id + '/chat/lastMessage'), {
+        message:"Leave review!",
+        timestamp:Date.now()
+    }).then()
 }
 
-export async function getChatState(chatID, callback){
-    onValue(ref(rtdb, 'chatState/' + chatID), (snapshot) => {
-        if (snapshot.exists()) {
-            callback(snapshot.val())
-        }
-    })
+export function writeReview(uid,uid2,chatId,review){
+    //make new key for review
+    let key = push(ref(rtdb,'reviews'),review).key
+    //add user access to both parties
+    set(ref(rtdb,'user-reviews/'+uid2 + '/to/' +key),true).then()
+    set(ref(rtdb,'user-reviews/'+uid + '/from/' +key),true).then()
+    //inc number of reviews
+    update(ref(rtdb, 'chat-room/' + chatId + '/chat'), {
+        reviews: 1
+    }).then();
+    //remove user access to chat-room
+    remove(ref(rtdb,'user-chats/'+uid +'/'+chatId)).then()
 }
 
-export async function setChatHeader(chatID, data) {
-    // console.log(data)
-    await set(ref(rtdb, 'chatHeaders/'+ chatID), {
-        isComplete:false,
-        reviewSubmitted:false,
-        client: data.name,
-        jobTitle:data.title,
-        acceptingUser: "",
-        lastMessage: "waiting for someone to accept your offer",
-        lastTimeStamp: Date.now(),
-    });
-}
-
-export async function getChatHeaders(chatIDs, setChats) {
-    const promises = chatIDs.map(async (id)=> {
-        return onValue(ref(rtdb, 'chatHeaders/' + id), (snapshot) => {
-            setChats((old)=>({...old,[snapshot.key]:snapshot.val()}))
-        })
-    })
-    const res = await Promise.all(promises)
-    return res
-    //
-    // const promises = chatIDs.map(async (id)=> {
-    //     const unsubscribe =  await get(ref(rtdb, 'chatHeaders/' + id))
-    //     return unsubscribe;
-    // })
-    // const res = await Promise.all(promises)
-
-}
-
-export async function getOffers(max,filter) {
-
-    const q = filter?
-        query(collection(db, "Requests"), limit(max), where("accepted", "==", false),where("tags" , "array-contains",filter)    )
-        :query(collection(db, "Requests"), limit(max), where("accepted", "==", false))
-    const querySnapshot = await getDocs(q);
-    let offers = querySnapshot.docs.map((doc) => {
-        let offer = doc.data();
-        // console.log("docid == ", doc.id)
-        offer.requestID = doc.id
-        return offer
-    })
-    console.log("returning review with filter : ",filter)
-    return offers.reverse()
-}
-
-export async function proposeJobCompleted(requestID, userEmail) {
-    await update(ref(rtdb, 'chatState/' + requestID), {
-        isComplete: userEmail
-    });
-}
-
-export async function acceptJobCompletion(requestID) {
-    await update(ref(rtdb, 'chatHeaders/' + requestID), {
-        isComplete: true
-    });
+export function closeChatRoom(chat){
+    remove(ref(rtdb,'chat-room/'+chat.id)).then()
+    remove(ref(rtdb,'user-posts/'+chat.uid +'/' +chat.id)).then()
 }
 
 export async function postReview(review,request,userEmail,userName){
@@ -170,7 +106,6 @@ console.log("mark 1")
         );
         console.log("mark 4")
     } else {
-
         await updateDoc(getUserDoc(userEmail),
             request.client==userName?
                 {myRequests: arrayRemove(request.id)}:
@@ -189,79 +124,117 @@ console.log("mark 1")
 
 }
 
-export async function deleteRequest(requestID, userEmail) {
-    //delete the main request doc
-    await deleteDoc(doc(db, "Requests", requestID));
-
-    await updateDoc(getUserDoc(userEmail), {
-        myRequests: arrayRemove(requestID)
-    });
-
-    //delete chat and chat head references
-    await remove(ref(rtdb, 'chatHeaders/' + requestID))
-    await remove(ref(rtdb, 'chatState/' + requestID))
-    await remove(ref(rtdb, 'chats/' + requestID))
+export function writeNewPost(uid,post){
+    let key = push(ref(rtdb,'posts'),post).key
+    set(ref(rtdb,'user-posts/'+uid + '/' +key),true).then()
 }
 
-export async function getMyRequests(email) {
-    const q = query(collection(db, "Requests"), where("account", "==", email));
-    const querySnapshot = await getDocs(q);
-    let offers = querySnapshot.docs.map((doc) => {
-        return {id: doc.id, doc: doc.data()}
+export function readPosts(callback){
+    let reference = ref(rtdb,'posts')
+    const q = query(reference)
+    onValue(q,(snapshot) => {
+        let posts = []
+        snapshot.forEach((post)=> {
+            let p = post.val();
+            p["id"]=post.key
+            posts.push(p)
+        })
+        callback(posts)
     })
-    return offers
 }
 
-export async function getMyReviews(email,from,to) {
-    console.log(email)
-    const q = query(collection(db, "Reviews"), where("fromAccount", "==", email) );
-    const q2 = query(collection(db, "Reviews"), where("toAccount", "==", email) );
-    const querySnapshot = await getDocs(q);
-    const querySnapshot2 = await getDocs(q2);
-    let reviews = querySnapshot.docs.map((doc) => {
-        return {id: doc.id, doc: doc.data()}
+export function acceptPost(uid,post,firstMessage){
+    //add accepting users uid so review can be added at the end
+    post["uid2"]=uid
+    //create chatroom
+    set(ref(rtdb,'chat-room/'+post.id + '/chat'),post).then()
+    push(ref(rtdb,'chat-room/'+post.id + '/messages'),firstMessage)
+    //remove the post
+    remove(ref(rtdb, 'posts/' + post.id)).then()
+    //set user access
+    set(ref(rtdb,'user-chats/'+uid + '/' +post.id),true).then()
+    //add other user
+    set(ref(rtdb,'user-chats/'+post.uid + '/' +post.id),true).then()
+}
+
+export async function getMyPosts(uid,callback) {
+    get(ref(rtdb,'user-posts/'+uid)).then(async (snapshot)=> {
+        if(snapshot.exists()) {
+            let ids =[]
+            snapshot.forEach((postID)=> {ids.push(postID.key)})
+            const promises = ids.map(async (id)=> {
+                return await get(ref(rtdb, 'posts/' + id))
+
+            })
+            const res = await Promise.all(promises)
+            callback(res.map(e=> e.val()).filter(r=>r!=null))
+        }
+    })
+}
+
+export async function readChats(uid,callback){
+    get(ref(rtdb,'user-chats/'+uid)).then(async (snapshot)=> {
+        if(snapshot.exists()) {
+            let ids =[]
+            snapshot.forEach((postID)=> {ids.push(postID.key)})
+            const promises = ids.map(async (id)=> {
+                return await get(ref(rtdb, 'chat-room/' + id + '/chat'))
+            })
+            const res = await Promise.all(promises)
+            callback(res.map(e=> e.val()).filter(r=>r!=null))
+        }
+    })
+}
+
+export async function getChat(id,callback){
+    await onValue(ref(rtdb, 'chat-room/' + id + '/chat'),(snapshot)=>{
+        if(snapshot.exists())
+        callback(snapshot.val())
+    })
+}
+
+export function readMessages(id,callback) {
+    onValue(ref(rtdb, 'chat-room/' + id + '/messages'), (snapshot) => {
+        let list = [];
+        snapshot.forEach(message => {
+            list.push(message.val())
+        })
+        callback(list)
+    })
+}
+
+export function writeMessage(id, message) {
+    push(ref(rtdb, 'chat-room/' + id + '/messages'), message);
+    update(ref(rtdb, 'chat-room/' + id + '/chat/lastMessage'),message).then()
+}
+
+export async function readReviews(uid,from,to) {
+
+    get(ref(rtdb,'user-reviews/'+uid +'/from')).then(async (snapshot)=> {
+        if(snapshot.exists()) {
+            let ids =[]
+            snapshot.forEach((postID)=> {ids.push(postID.key)})
+            const promises = ids.map(async (id)=> {
+                return await get(ref(rtdb, 'reviews/' + id))
+
+            })
+            const res = await Promise.all(promises)
+            from(res.map(e=> e.val()).filter(r=>r!=null))
+        }
     })
 
-    let reviews2 = querySnapshot2.docs.map((doc) => {
-        return {id: doc.id, doc: doc.data()}
+    get(ref(rtdb,'user-reviews/'+uid +'/to')).then(async (snapshot)=> {
+        if(snapshot.exists()) {
+            let ids =[]
+            snapshot.forEach((postID)=> {ids.push(postID.key)})
+            const promises = ids.map(async (id)=> {
+                return await get(ref(rtdb, 'reviews/' + id))
+
+            })
+            const res = await Promise.all(promises)
+            to(res.map(e=> e.val()).filter(r=>r!=null))
+        }
     })
-    from(reviews)
-    to(reviews2)
-}
-
-export async function acceptRequest(requestID, userEmail,userName) {
-    //set accepted boolean to true
-    const requestDoc = doc(db,"Requests", requestID)
-    await updateDoc(requestDoc, {
-        accepted: true
-    });
-    //add request to accepting users account
-    const userDoc = doc(db, "Users", userEmail);
-    await updateDoc(userDoc, {
-        acceptedRequests: arrayUnion(requestID)
-    });
-    //update chatHeader to reflect acceptance
-    await update(ref(rtdb, 'chatState/' + requestID), {
-        acceptingUser:userName,
-        acceptingUserEmail:userEmail
-    });
-    await update(ref(rtdb, 'chatHeaders/' + requestID), {
-        acceptingUser:userName,
-        avatar:5
-    });
-    pushMessage(requestID, "hey, my name is " + userName+ ". I think I can help you", userEmail)
-        .then(console.log("request accepted"))
-}
-
-export async function newRequest(request, userEmail) {
-    const docRef = await addDoc(collection(db, "Requests"), request);
-
-// Atomically add a new region to the "regions" array field.
-    await updateDoc(getUserDoc(userEmail), {
-        myRequests: arrayUnion(docRef.id)
-    });
-    await setChatHeader(docRef.id, request)
-    await setChatState(docRef.id, request)
 }
 
 export async function newProfile(userEmail, profileData) {
@@ -362,7 +335,7 @@ export async function updatePublicUserInfo(avatar,authToken) {
     });
 }
 
-    export async function setPublicUserInfo(data,authToken){
+export async function setPublicUserInfo(data,authToken){
     console.log("called")
     await set(ref(rtdb, 'public/' + authToken), {
         "name": data.name,

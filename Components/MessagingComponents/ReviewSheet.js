@@ -3,11 +3,11 @@ import {styles} from "../../Styles";
 import {AntDesign, Ionicons} from "@expo/vector-icons";
 import React, {useContext, useEffect, useState} from "react";
 import Button from "../Button";
-import {getChatState, getMessage, postReview} from "../../utils/Firebase";
+import {closeChatRoom, getChatState, getMessage, postReview, writeReview} from "../../utils/Firebase";
 import ProfileContext from "../../utils/profileContext";
+import {getAuth} from "firebase/auth";
 
-const ReviewSheet = ({navigation, route}) => {
-    const request = route.params.request;
+const ReviewSheet = ({navigation,chat}) => {
     const profile = useContext(ProfileContext)
     const stars = [1, 2, 3, 4, 5]
     const [rating, setRating] = useState(0)
@@ -15,37 +15,23 @@ const ReviewSheet = ({navigation, route}) => {
     const [chatState, setChatState] = useState()
     const [submitting, setSubmitting] = useState(false)
 
-
-    useEffect(() => {
-        get()
-    }, [])
-
-    function get() {
-        getChatState(request.id, setChatState).then()
-    }
-
     function onSubmit() {
+        console.log("triggered")
         setSubmitting(true)
-        postReview({
+        let myAuth = getAuth().currentUser.uid
+        let uid2 = chat.uid==myAuth?chat.uid2:chat.uid
+        writeReview(myAuth,uid2,chat.id,{
             "rating": rating,
             "review": review,
-            "fromAccount": profile.email,
-            "toAccount": (profile.email === chatState.clientEmail)? chatState.acceptingUserEmail:chatState.clientEmail,
-            "from":profile.name,
-            "to": (profile.name === chatState.client)? chatState.acceptingUser:chatState.client
-        }, request, profile.email, profile.name).then(() => {
-            console.log("complete")
-            navigation.goBack()
+            "job":chat.title,
+            "from":profile.name
         })
+        if(chat.reviews==1)closeChatRoom(chat)
+        navigation.goBack()
     }
 
     return (
-        <View style={styles.background}>
-            <Ionicons name="arrow-back-outline" size={24} color="black"
-                      onPress={() => navigation.goBack()}
-                      style={[styles.button, {alignSelf: "flex-start"}]}
-            />
-            <Text>{JSON.stringify(chatState)}</Text>
+        <>
             <Text style={styles.header}>
                 Leave a star Rating!
             </Text>
@@ -69,8 +55,9 @@ const ReviewSheet = ({navigation, route}) => {
                 onChangeText={(text) => setReview(text)}
                 multiline={true}
             />
-            <Button title={"submit"} onPress={() => onSubmit()}/>
-        </View>
+            <Button title={"submit"} onPress={() => {onSubmit()}
+            }/>
+        </>
     );
 }
 
