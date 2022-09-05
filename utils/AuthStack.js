@@ -144,7 +144,7 @@ function NewProfileScreen({navigation, route}) {
             await createUserWithEmailAndPassword(auth, route.params.value.email, route.params.value.password);
 
             newProfile(route.params.value.email, profile).then(r => console.log("new profile created"))
-            await setPublicUserInfo({name: profile.name, avatar: 0, points: profile.points},auth.currentUser.uid)
+            await setPublicUserInfo({name: profile.name, avatar: 0, points: 0},auth.currentUser.uid)
             navigation.navigate('sign in');
         } catch (error) {
             console.log("Massive errors", error)

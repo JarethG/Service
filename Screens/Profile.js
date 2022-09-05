@@ -20,10 +20,10 @@ import {
     getMyResourceOffers,
     getMyReviews,
     readMyPublicData,
-    readPosts,
+    readPosts, readRating,
     readReviews,
     setPoints,
-    setPublicUserInfo
+    setPublicUserInfo, writeRating
 } from "../utils/Firebase";
 import Post from "../Components/Post";
 import ProfileContext from "../utils/profileContext";
@@ -99,8 +99,8 @@ const ProfileNavigator = ({callback}) => {
                     <MenuItem title={"Log out"} iconName={"log-out"} onPress={() => {
                         signOut(getAuth()).then()
                     }}/>
-                    {profile.role!=undefined?
-                        <AdminFunctions/>:null}
+                    {profile.role != undefined ?
+                        <AdminFunctions/> : null}
                 </View>
                 <Pressable style={styles.sidebarOff}
                            onPress={() => setIsVisible(!isVisible)}/>
@@ -123,18 +123,23 @@ const MenuItem = ({title, onPress, iconName}) => {
 
 const AboutMe = ({profile}) => {
     const auth = getAuth();
-    const [publicProfile,set]=useState({})
+    const [publicProfile, set] = useState({})
+    const [rating, setRating] = useState(0)
     useEffect(() => {
-        readMyPublicData(auth.currentUser.uid,(r)=>set(r))
-    },[])
+        readMyPublicData(auth.currentUser.uid, (r) => set(r))
+        // readRating(auth.currentUser.uid,(r)=> setRating(r))
+    }, [])
     return (
         <View style={{width: "100%", padding: 15, flex: 1}}>
+            {console.log("profile about data", profile)}
+            <Button title={""} onPress={()=>console.log(readRating(getAuth().currentUser.uid))}/>
             <View style={[styles.container, styles.midColour, {width: "100%", flex: 1, alignItems: "center"}]}>
                 {/*<UpdateAccount email={auth.currentUser.email} oldData={profile}/>*/}
                 <Image source={images[profile.avatar]} style={{width: 150, height: 150}}/>
                 <Text style={[styles.header, {paddingTop: 10}]}>{profile.name}</Text>
                 <Text style={styles.text}>{profile.title}</Text>
-                <Text style={styles.text}> Total Points: {publicProfile.points}</Text>
+                <Text style={styles.text}> Total Points: {profile.points}</Text>
+                <Text style={styles.text}> Rating: {profile.rating}</Text>
                 <View style={{flexDirection: "row", padding: 10}}>
                     {Array.from({length: 5}, (x, i) => {
                         return i < profile.rating ?
@@ -144,21 +149,23 @@ const AboutMe = ({profile}) => {
                 </View>
                 <Text style={styles.header}>About</Text>
                 <Text style={styles.text}>{profile.about}</Text>
-                <Text style={styles.header}>Skills</Text>
-                <View>
-                    <ScrollView horizontal>
-                        {profile.skills.map((skill, index) => {
-                            return <Text style={[styles.tags, styles.darkColour]} key={index}>{skill}</Text>
-                        })}
-                    </ScrollView>
-                </View>
-                <Text style={styles.header}>Resources</Text>
-                <View>
-                    <ScrollView horizontal>
-                        {profile.resources.map((skill, index) => {
-                            return <Text style={[styles.tags, styles.darkColour]} key={index}>{skill}</Text>
-                        })}
-                    </ScrollView>
+                <View style={{flexDirection: "row",justifyContent:"space-between",width:"80%",marginTop:10}}>
+                    <View>
+                        <Text style={styles.header}>Skills</Text>
+                        <ScrollView>
+                            {profile.skills.map((skill, index) => {
+                                return <Text style={[styles.tags, styles.darkColour]} key={index}>{skill}</Text>
+                            })}
+                        </ScrollView>
+                    </View>
+                    <View>
+                        <Text style={styles.header}>Resources</Text>
+                        <ScrollView>
+                            {profile.resources.map((skill, index) => {
+                                return <Text style={[styles.tags, styles.darkColour]} key={index}>{skill}</Text>
+                            })}
+                        </ScrollView>
+                    </View>
                 </View>
             </View>
         </View>
@@ -172,7 +179,7 @@ const MyRequests = () => {
 
     useEffect(() => {
         onRefresh()
-    },[])
+    }, [])
 
     const onRefresh = () => {
         setIsFetching(true);
@@ -180,9 +187,9 @@ const MyRequests = () => {
     };
 
     const fetchData = () => {
-        getMyPosts(getAuth().currentUser.uid,(r)=>setPosts(r))
+        getMyPosts(getAuth().currentUser.uid, (r) => setPosts(r))
             .then()
-        getMyResourceOffers(getAuth().currentUser.uid,(r)=>setPosts((posts)=>[...posts,r]))
+        getMyResourceOffers(getAuth().currentUser.uid, (r) => setPosts((posts) => [...posts, r]))
             .then()
         setIsFetching(false)
     };
@@ -198,7 +205,7 @@ const MyRequests = () => {
                                       <Button title={"delete request"} onPress={() => {
                                       }}/>
                               }/>
-                }
+                          }
                           onRefresh={onRefresh}
                           refreshing={isFetching}
                 />
@@ -213,14 +220,14 @@ const MyReviews = ({profile}) => {
     const [reviewsFrom, setReviewsFrom] = useState([])
     const [reviewsTo, setReviewsTo] = useState([])
     const [isFetching, setIsFetching] = useState(false);
-    const [a,b] = useState(false)
+    const [a, b] = useState(false)
     const stars = [1, 2, 3, 4, 5]
     useEffect(() => {
         get()
     }, [])
 
     function get() {
-        readReviews(getAuth().currentUser.uid, setReviewsFrom, setReviewsTo).then(()=> setIsFetching(false))
+        readReviews(getAuth().currentUser.uid, setReviewsFrom, setReviewsTo).then(() => setIsFetching(false))
     }
 
     const onRefresh = () => {
@@ -231,70 +238,72 @@ const MyReviews = ({profile}) => {
     return (
         <View style={[{flex: 1, width: "100%"}, styles.lightColour]}>
             {console.log(reviewsFrom)}
-            <Button title={a?"From you":"What people are saying about you"} onPress={()=> {
+            <Button title={a ? "From you" : "What people are saying about you"} onPress={() => {
                 setIsFetching(true)
                 b(!a)
                 setIsFetching(false)
             }}/>
-                <FlatList data={a?reviewsFrom:reviewsTo} keyExtractor={(item, index) => index.toString()}
-                          renderItem={({item, index}) =>
-                              <View style={[styles.transparentContainer, {
-                                  backgroundColor: "white",
-                                  borderRadius: 5,
-                                  padding: 5
-                              }]}>
-                                  <View style={{flexDirection: "row", flex: 1}}>
-                                      <Image source={images[0]} style={styles.cardProfilePicture}/>
-                                      <View>
-                                          <Text>{item[a?"to":"from"]}</Text>
-                                          <View style={{flexDirection: "row", flex: 1}}>
-                                              {stars.map((index) => {
-                                                  return (
-                                                      index <= item.rating ?
-                                                          <AntDesign name="star" size={20} color="black"/> :
-                                                          <AntDesign name="staro" size={20} color="black"/>
-                                                  )
-                                              })}
-                                          </View>
+            <FlatList data={a ? reviewsFrom : reviewsTo} keyExtractor={(item, index) => index.toString()}
+                      renderItem={({item, index}) =>
+                          <View style={[styles.transparentContainer, {
+                              backgroundColor: "white",
+                              borderRadius: 5,
+                              padding: 5
+                          }]}>
+                              <View style={{flexDirection: "row", flex: 1}}>
+                                  <Image source={images[0]} style={styles.cardProfilePicture}/>
+                                  <View>
+                                      <Text>{item[a ? "to" : "from"]}</Text>
+                                      <View style={{flexDirection: "row", flex: 1}}>
+                                          {stars.map((index) => {
+                                              return (
+                                                  index <= item.rating ?
+                                                      <AntDesign name="star" size={20} color="black"/> :
+                                                      <AntDesign name="staro" size={20} color="black"/>
+                                              )
+                                          })}
                                       </View>
                                   </View>
-                                  <Text>{item.review}</Text>
                               </View>
-                          }
-                          onRefresh={onRefresh}
-                          refreshing={isFetching}
-                />
+                              <Text>{item.review}</Text>
+                          </View>
+                      }
+                      onRefresh={onRefresh}
+                      refreshing={isFetching}
+            />
         </View>
     );
 }
 
 const Achievements = ({profile}) => {
-    return <View style={{flex:1}}>
+    return <View style={{flex: 1}}>
         <FlatList data={achievement_list} keyExtractor={(item, index) => index.toString()}
                   renderItem={({item, index}) => {
-            const requirement = requirements[item]
-            function progressBar () {
-                let bar = []
-                for(let i = 0; i < requirement.required;i++){
-                    bar.push(
-                    (i<requirement.progress)
-                        ?
-                        <Entypo name="progress-full" size={24} color="black" />:
-                        <Entypo name="progress-empty" size={24} color="black" />
-                    )
-                }
-                return bar
-            }
-            return (
-                <View style={styles.transparentContainer}>
-                    <Text>{requirement.title}</Text>
-                    <Text>{requirement.description}</Text>
-                    <View style={{flexDirection:"row"}}>
-                        {progressBar()}
-                    </View>
-                    {/*<Text>{requirement.tags}</Text>*/}
-                </View>
-            )
-        }}/>
+                      const requirement = requirements[item]
+
+                      function progressBar() {
+                          let bar = []
+                          for (let i = 0; i < requirement.required; i++) {
+                              bar.push(
+                                  (i < requirement.progress)
+                                      ?
+                                      <Entypo name="progress-full" size={24} color="black"/> :
+                                      <Entypo name="progress-empty" size={24} color="black"/>
+                              )
+                          }
+                          return bar
+                      }
+
+                      return (
+                          <View style={styles.transparentContainer}>
+                              <Text>{requirement.title}</Text>
+                              <Text>{requirement.description}</Text>
+                              <View style={{flexDirection: "row"}}>
+                                  {progressBar()}
+                              </View>
+                              {/*<Text>{requirement.tags}</Text>*/}
+                          </View>
+                      )
+                  }}/>
     </View>
 }

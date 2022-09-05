@@ -6,11 +6,12 @@ import Community from "../Screens/Community";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import {NavigationContainer} from "@react-navigation/native";
 import React, {useState} from "react";
-import {getProfile} from "./Firebase";
+import {getProfile, readMyPublicData} from "./Firebase";
 import Splash from "../Screens/Splash";
 import Updates from "../Components/Updates";
 import ProfileContext from "./profileContext";
 import {MyStatusBar} from "../Components/IOSProblemSolver";
+import {getAuth} from "firebase/auth";
 
 const Tab = createBottomTabNavigator();
 
@@ -25,8 +26,9 @@ function UserStack(user) {
         // Fetch the token from storage then navigate to our appropriate place
         const getUserProfile = async () => {
             //check if profile exists in storage, if not check online
-            let profileDoc = await getProfile(user.user.email, setProfile)
-            // console.log("profile at effect", profileDoc)
+            await getProfile(user.user.email, setProfile)
+            await readMyPublicData(getAuth().currentUser.uid,(r)=>setProfile((profile)=>({...profile,...r})))
+            // console.log("profile at launch", profile)
             //need to persist profile
             // profileDoc["email"] = user.user.email
             // return profileDoc

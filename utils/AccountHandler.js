@@ -20,7 +20,7 @@ export const UpdateAccount = ({oldData,callback}) => {
         try {
             await updatePublicUserInfo(updates,getAuth().currentUser.uid)
             updateProfile(oldData.email, updates).then(setLoading(false))
-            clearResourceOffers(getAuth().currentUser.uid)
+            await clearResourceOffers(getAuth().currentUser.uid).then(
             updates.resources.map((resource)=> {
                 writeResourceOffers(getAuth().currentUser.uid, {
                         title:"Offer: " + resource + " available.",
@@ -29,7 +29,7 @@ export const UpdateAccount = ({oldData,callback}) => {
                         name:updates.name,
                         isComplete:false,
                         uid:getAuth().currentUser.uid
-                    })})
+                    })}))
         } catch (error) {
             console.log("updates errors : ", error)
         }

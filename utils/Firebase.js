@@ -33,6 +33,7 @@ import {
 } from 'firebase/database';
 import React from "react";
 import {Alert} from "react-native";
+import {getAuth} from "firebase/auth";
 
 const firebaseConfig = {
     apiKey: "AIzaSyC3YZcmR4Q_mHcA381qJYamGj8xsYT5cAY",
@@ -77,7 +78,6 @@ export async function acceptJobCompletion(id) {
 }
 
 export function writeReview(uid, uid2, chatId, review) {
-
     //make new key for review
     let key = push(ref(rtdb, 'reviews'), review).key
     //add user access to both parties
@@ -85,8 +85,9 @@ export function writeReview(uid, uid2, chatId, review) {
     set(ref(rtdb, 'user-reviews/' + uid + '/from/' + key), true).then()
     //add points to reviewed users profile
     update(ref(rtdb, 'public/' + uid2), {
-        points: increment(10 + review.rating)
+        monthlyPoints: increment(10 + review.rating)
     }).then()
+    writeRating(uid2,review.rating)
     //inc number of reviews
     update(ref(rtdb, 'chat-room/' + chatId + '/chat'), {
         reviews: 1
@@ -103,48 +104,17 @@ export function closeChatRoom(chat) {
         remove(ref(rtdb, 'user-resources/' + chat.uid + '/' + chat.id)).then()
 }
 
-export async function postReview(review, request, userEmail, userName) {
-    console.log("Firebase post review requests:", review)
-    const docRef = await addDoc(collection(db, "Reviews"), review);
-    console.log("mark 0")
-// Atomically add a new region to the "regions" array field.
-    await updateDoc(getUserDoc(userEmail), {
-        myReviews: arrayUnion(docRef.id)
-    });
-    console.log("mark 1")
-
-    if (request.reviewSubmitted == false) {
-        console.log("mark 2")
-        //notify header that the first review has been submitted
-        await update(ref(rtdb, 'chatHeaders/' + request.id), {
-            reviewSubmitted: true
-        });
-        console.log("mark 3")
-        //remove individual access to request
-        await updateDoc(getUserDoc(userEmail),
-            request.client == userName ?
-                {myRequests: arrayRemove(request.id)} :
-                {acceptedRequests: arrayRemove(request.id)}
-        );
-        console.log("mark 4")
-    } else {
-        await updateDoc(getUserDoc(userEmail),
-            request.client == userName ?
-                {myRequests: arrayRemove(request.id)} :
-                {acceptedRequests: arrayRemove(request.id)}
-        );
-        //remove all content relating to request
-        // console.log(request.id)
-        await deleteDoc(doc(db, "Requests", request.id));
-        // console.log(request.id)
-        await remove(ref(rtdb, 'chatHeaders/' + request.id))
-        // console.log(request.id)
-        await remove(ref(rtdb, 'chatState/' + request.id))
-        // console.log(request.id)
-        await remove(ref(rtdb, 'chats/' + request.id))
-    }
-
+export function returnResource(chat,rating){
+    writeResourceOffers(chat.uid, {
+        title:chat.title,
+        rating:rating,
+        avatar:chat.avatar,
+        name:chat.name,
+        isComplete:false,
+        uid:chat.uid
+    })
 }
+
 
 export function writeNewPost(uid, post) {
     let key = push(ref(rtdb, 'posts'), post).key
@@ -156,7 +126,7 @@ export function writeResourceOffers(uid, post) {
     set(ref(rtdb, 'user-resources/' + uid + '/' + key), true).then()
 }
 
-export function clearResourceOffers(uid) {
+export async function clearResourceOffers(uid) {
     get(ref(rtdb, 'user-resources/' + uid))
         .then((snapshot) => {
             if (snapshot.exists()) {
@@ -166,10 +136,11 @@ export function clearResourceOffers(uid) {
                 })
                 ids.forEach((id) => {
                     remove(ref(rtdb, 'posts/' + id)).then()
+                    remove(ref(rtdb, 'user-resources/' + uid + "/" + id)).then()
                 })
             }
+
         })
-    remove(ref(rtdb, 'user-resources/' + uid)).then()
 }
 
 function keysToRef(uid, keyPath, refPath) {
@@ -326,10 +297,26 @@ export async function readReviews(uid, from, to) {
 export function readMyPublicData(uid, callback) {
     get(ref(rtdb, 'public/' + uid)).then(async (snapshot) => {
         if (snapshot.exists()) {
-            callback(snapshot.val())
+            let publicData = snapshot.val()
+            if(publicData.rating){
+                let count = 0;
+                let total = 0;
+                Object.keys(publicData.rating).forEach((key)=> {
+                    count+=publicData.rating[key]
+                    total+=parseInt(key)*publicData.rating[key]
+                })
+                publicData["rating"] = (total/count).toFixed(2)
+            } else publicData["rating"]=0;
+            publicData.monthlyPoints?
+                publicData.totalPoints?
+                publicData["points"]=publicData.monthlyPoints+publicData.totalPoints
+                :publicData["points"]=publicData.monthlyPoints
+                :publicData["points"]=0
+            callback(publicData)
         }
     })
 }
+
 
 export async function newProfile(userEmail, profileData) {
     await setDoc(doc(db, "Users", userEmail.toLowerCase()), {
@@ -340,8 +327,7 @@ export async function newProfile(userEmail, profileData) {
         skills: profileData.skills,
         title: profileData.title,
         acceptedRequests: [],
-        myRequests: [],
-        points: profileData.points
+        myRequests: []
     });
 }
 
@@ -474,7 +460,7 @@ export async function updateAllUsersRankings(role) {
                     } else if (post[key].rank == "gold" && post[key].monthlyPoints <= 10) {
                         post[key].rank = "silver"
                     }
-                    post[key].points += post[key].monthlyPoints;
+                    post[key].totalPoints += post[key].monthlyPoints;
                     post[key].monthlyPoints = 0;
 
                 });
@@ -486,5 +472,29 @@ export async function updateAllUsersRankings(role) {
     } else Alert.alert("Please contact the owner of this app." +
         "You should not have access to this and it likely means that" +
         "your security might be at risk!")
+}
+
+export function writeRating(uid,rating){
+    console.log("run")
+    update(ref(rtdb,'public/' + uid +"/rating"),{
+        [rating]:increment(1)
+    }).then()
+}
+
+export function readRating(uid,callback){
+    get(ref(rtdb,'public/' + uid +"/rating")).then((ratings)=> {
+        if(ratings) {
+            let count = 0;
+            let total = 0;
+            ratings.forEach((rating) => {
+                let index = rating.key
+                count += rating.val()
+                total += rating.val() * index
+            })
+            console.log((total / count).toFixed(2))
+            callback((total / count).toFixed(2))
+        }
+        callback(0)
+    })
 }
 

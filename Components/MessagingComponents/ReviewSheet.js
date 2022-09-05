@@ -3,7 +3,7 @@ import {styles} from "../../Styles";
 import {AntDesign, Ionicons} from "@expo/vector-icons";
 import React, {useContext, useEffect, useState} from "react";
 import Button from "../Button";
-import {closeChatRoom, getChatState, getMessage, postReview, writeReview} from "../../utils/Firebase";
+import {closeChatRoom, getChatState, getMessage, returnResource, writeReview} from "../../utils/Firebase";
 import ProfileContext from "../../utils/profileContext";
 import {getAuth} from "firebase/auth";
 
@@ -26,6 +26,9 @@ const ReviewSheet = ({navigation,chat}) => {
             "job":chat.title,
             "from":profile.name
         })
+        if(chat.uid==myAuth){
+            returnResource(chat,profile.rating)
+        }
         if(chat.reviews==1)closeChatRoom(chat)
         navigation.goBack()
     }
