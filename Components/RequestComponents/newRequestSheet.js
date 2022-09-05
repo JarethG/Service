@@ -18,7 +18,7 @@ const NewRequestSheet = ({navigation}) => {
         title:"",
         rating:profile.rating,
         tags:[],
-        avatar:0,
+        avatar:profile.avatar,
         name:profile.name,
         description:"",
         email:"email",

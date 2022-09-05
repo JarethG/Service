@@ -60,7 +60,6 @@ const MessagingModal = ({navigation, route}) => {
     }, [])
 
     function get() {
-        console.log("get called")
         readMessages(chatId, (r) => setMessages(r.reverse()))
         getChat(chatId, (r) => setChat(r)).then()
     }
@@ -75,12 +74,7 @@ const MessagingModal = ({navigation, route}) => {
         })
     }
 
-    return <Modal
-        animationType="slide"
-        transparent={true}
-        visible={true}
-    >
-        <View style={styles.background}>
+    return <View style={styles.background}>
             <View style={[styles.container, styles.midColour, {width: "100%", flex: 1}]}>
                 <Ionicons name="arrow-back-outline" size={24} color="black"
                           onPress={() => navigation.goBack()}
@@ -91,7 +85,6 @@ const MessagingModal = ({navigation, route}) => {
                     :
                     <>
                         {completion()}
-                        <Text>{JSON.stringify(chat)}</Text>
                         <View style={{margin: 10, flex: 1}}>
                             <FlatList data={messages} keyExtractor={(item, index) => index.toString()}
                                       renderItem={({item}) => renderItem(item)}
@@ -116,7 +109,6 @@ const MessagingModal = ({navigation, route}) => {
                 }
             </View>
         </View>
-    </Modal>
 
 }
 

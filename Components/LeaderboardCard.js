@@ -23,7 +23,7 @@ export default function LeaderboardCard({info,place}) {
                 }}/>
                 <Text style={{fontWeight: "bold", fontSize: 18, color: "#fff",left:5}}>{info.name}</Text>
             </View>
-            <Text style={{fontWeight: "bold", fontSize: 18, color: "#fff", flex: 1}}>{info.points}</Text>
+            <Text style={{fontWeight: "bold", fontSize: 18, color: "#fff", flex: 1}}>{info.monthlyPoints}</Text>
         </View>
     );
 }

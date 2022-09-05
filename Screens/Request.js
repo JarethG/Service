@@ -79,11 +79,11 @@ export default function Request({navigation}) {
                 <View style={{width: "100%",flex:1}}>
                     <FlatList data={feed} keyExtractor={(item, index) => index.toString()}
                               renderItem={({item}) =>
-                                  <Post details={item} navButton={item.account != profile.email ?
+                                  <Post details={item} navButton={item.uid != getAuth().currentUser.uid ?
                                       <Button title={"Message " + item.name.split(" ")[0]} onPress={() => {
                                           let greeting = createGreeting(item)
                                           item["lastMessage"]=greeting
-                                          acceptPost(getAuth().currentUser.uid,item,greeting)
+                                          acceptPost(getAuth().currentUser.uid,profile.name,item,greeting)
                                           navigation.navigate("Messages")
                                       }}/> : <Text style={styles.header}>this is your request!</Text>
                                   }/>
@@ -92,11 +92,11 @@ export default function Request({navigation}) {
                               refreshing={isFetching}
                     />
                 </View>
+                <View  style={{position: 'absolute', bottom: 15, right: 0, backgroundColor: "white", borderRadius: 30}}>
                 <AntDesign
-                    style={{position: 'absolute', bottom: 15, right: 0, backgroundColor: "white", borderRadius: 30}}
                     name="pluscircle" size={60} color="orange"
                     onPress={() => navigation.navigate("NewRequest")}/>
-                <StatusBar style="auto"/>
+                </View>
             </View>
         )
     }

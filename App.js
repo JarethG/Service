@@ -5,6 +5,7 @@ import UserStack from './utils/UserStack';
 import AuthStack from './utils/AuthStack';
 import Splash from "./Screens/Splash";
 import {LogBox, } from "react-native";
+import {MyStatusBar} from "./Components/IOSProblemSolver";
 export default function App() {
 
     LogBox.ignoreLogs([""]);
@@ -28,5 +29,16 @@ export default function App() {
 
      */
 
-    return  user ? <UserStack  user={user} /> : checkingUserStatus ? Splash("checking user login") : <AuthStack />;
+    return  (
+        <>
+            <MyStatusBar/>
+            {
+                user ? <UserStack user={user}/>
+                    : checkingUserStatus ?
+                        Splash("checking user login")
+                        :
+                        <AuthStack/>
+            }
+        </>
+    );
 }

@@ -1,5 +1,5 @@
 import {createUserWithEmailAndPassword, getAuth} from "firebase/auth";
-import {updateProfile, updatePublicUserInfo} from "./Firebase";
+import {clearResourceOffers, updateProfile, updatePublicUserInfo, writeNewPost, writeResourceOffers} from "./Firebase";
 import {Modal, Pressable, Text, TextInput, View} from "react-native";
 import {styles} from "../Styles";
 import Button from "../Components/Button";
@@ -18,8 +18,18 @@ export const UpdateAccount = ({oldData,callback}) => {
 
     async function apply() {
         try {
-            await updatePublicUserInfo(updates.avatar,getAuth().currentUser.uid)
+            await updatePublicUserInfo(updates,getAuth().currentUser.uid)
             updateProfile(oldData.email, updates).then(setLoading(false))
+            clearResourceOffers(getAuth().currentUser.uid)
+            updates.resources.map((resource)=> {
+                writeResourceOffers(getAuth().currentUser.uid, {
+                        title:"Offer: " + resource + " available.",
+                        rating:updates.rating,
+                        avatar:updates.avatar,
+                        name:updates.name,
+                        isComplete:false,
+                        uid:getAuth().currentUser.uid
+                    })})
         } catch (error) {
             console.log("updates errors : ", error)
         }

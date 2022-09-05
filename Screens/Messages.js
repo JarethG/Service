@@ -21,7 +21,6 @@ import {getAuth} from "firebase/auth";
 
 export default function Messages() {
     const profile = useContext(ProfileContext)
-    // console.log(profile)
     const [isFetching, setIsFetching] = useState(false);
 
     const [messageIDs,setMessageIDs] = useState()
@@ -45,7 +44,6 @@ export default function Messages() {
 
 
     const MessageLanding = ({navigation}) => {
-        {console.log("page-reloaded")}
         return <View style={styles.background}>
             <View style={[styles.container, styles.midColour, {width: "100%", flex: 1, alignItems: "center"}]}>
             <Text style={styles.header}>Messages</Text>

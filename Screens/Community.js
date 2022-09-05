@@ -34,7 +34,7 @@ export default function Community() {
                 <View style={{backgroundColor: "#f6d14f", borderRadius: 5,flexDirection:"row"}}>
                     <Text style={{flex:1}}>Rank</Text>
                     <Text style={{flex:3}}>User </Text>
-                    <Text style={{flex:2}}>Points this week</Text>
+                    <Text style={{flex:2}}>Points this Month</Text>
                 </View>
 
 

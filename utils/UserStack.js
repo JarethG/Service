@@ -10,6 +10,7 @@ import {getProfile} from "./Firebase";
 import Splash from "../Screens/Splash";
 import Updates from "../Components/Updates";
 import ProfileContext from "./profileContext";
+import {MyStatusBar} from "../Components/IOSProblemSolver";
 
 const Tab = createBottomTabNavigator();
 

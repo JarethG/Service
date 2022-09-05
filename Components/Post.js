@@ -40,7 +40,7 @@ const Post = ({details, navButton}) => {
                 </View>
                 {navButton}
 
-            </> : <Text style={styles.text}>{details.description.substr(0, 100)}</Text>}
+            </> : <Text style={styles.text}>{details.description?.substr(0, 100)}</Text>}
         </Pressable>
 
     )

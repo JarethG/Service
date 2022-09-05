@@ -10,12 +10,20 @@ import {achievement_list, requirements} from '../JSONS/Achievements.json'
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {NavigationContainer} from '@react-navigation/native';
 import {
-    addPoints,
+    addNewInfoRTDB,
     createDummyData,
     deleteCollection,
     deleteDummyData,
-    deleteRequest, getMyPosts,
-    getMyRequests, getMyReviews, readPosts, readReviews, setPoints, setPublicUserInfo
+    deleteRequest,
+    getMyPosts,
+    getMyRequests,
+    getMyResourceOffers,
+    getMyReviews,
+    readMyPublicData,
+    readPosts,
+    readReviews,
+    setPoints,
+    setPublicUserInfo
 } from "../utils/Firebase";
 import Post from "../Components/Post";
 import ProfileContext from "../utils/profileContext";
@@ -23,6 +31,7 @@ import {AdminFunctions} from "../utils/AdminFunctions";
 import requests from "../JSONS/requestDummyData.json";
 import ButtonModal from "../Components/ButtonModal";
 import {images} from "../assets/Avatars/ImageLoader";
+import {MyStatusBar} from "../Components/IOSProblemSolver";
 
 export default function Profile() {
 
@@ -57,6 +66,7 @@ const ProfileNavigator = ({callback}) => {
             animationType="fade"
             transparent={true}
         >
+            <MyStatusBar/>
             <View style={{flexDirection: "row", flex: 1}}>
                 <View style={[styles.sidebarMenu, styles.darkColour]} onPress={e => e.stopPropagation()}>
                     <View style={{flexDirection: "row"}}>
@@ -111,19 +121,20 @@ const MenuItem = ({title, onPress, iconName}) => {
     )
 }
 
-
 const AboutMe = ({profile}) => {
     const auth = getAuth();
-    {console.log(auth.currentUser.uid)}
+    const [publicProfile,set]=useState({})
+    useEffect(() => {
+        readMyPublicData(auth.currentUser.uid,(r)=>set(r))
+    },[])
     return (
         <View style={{width: "100%", padding: 15, flex: 1}}>
-
             <View style={[styles.container, styles.midColour, {width: "100%", flex: 1, alignItems: "center"}]}>
                 {/*<UpdateAccount email={auth.currentUser.email} oldData={profile}/>*/}
                 <Image source={images[profile.avatar]} style={{width: 150, height: 150}}/>
                 <Text style={[styles.header, {paddingTop: 10}]}>{profile.name}</Text>
                 <Text style={styles.text}>{profile.title}</Text>
-                <Text style={styles.text}> Total Points: {profile.points}</Text>
+                <Text style={styles.text}> Total Points: {publicProfile.points}</Text>
                 <View style={{flexDirection: "row", padding: 10}}>
                     {Array.from({length: 5}, (x, i) => {
                         return i < profile.rating ?
@@ -154,7 +165,7 @@ const AboutMe = ({profile}) => {
     );
 }
 
-const MyRequests = ({profile}) => {
+const MyRequests = () => {
 
     const [posts, setPosts] = useState()
     const [isFetching, setIsFetching] = useState(false);
@@ -170,6 +181,8 @@ const MyRequests = ({profile}) => {
 
     const fetchData = () => {
         getMyPosts(getAuth().currentUser.uid,(r)=>setPosts(r))
+            .then()
+        getMyResourceOffers(getAuth().currentUser.uid,(r)=>setPosts((posts)=>[...posts,r]))
             .then()
         setIsFetching(false)
     };
