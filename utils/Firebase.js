@@ -87,7 +87,7 @@ export function writeReview(uid, uid2, chatId, review) {
     update(ref(rtdb, 'public/' + uid2), {
         monthlyPoints: increment(10 + review.rating)
     }).then()
-    writeRating(uid2,review.rating)
+    writeRating(uid2, review.rating)
     //inc number of reviews
     update(ref(rtdb, 'chat-room/' + chatId + '/chat'), {
         reviews: 1
@@ -104,17 +104,16 @@ export function closeChatRoom(chat) {
         remove(ref(rtdb, 'user-resources/' + chat.uid + '/' + chat.id)).then()
 }
 
-export function returnResource(chat,rating){
+export function returnResource(chat, rating) {
     writeResourceOffers(chat.uid, {
-        title:chat.title,
-        rating:rating,
-        avatar:chat.avatar,
-        name:chat.name,
-        isComplete:false,
-        uid:chat.uid
+        title: chat.title,
+        rating: rating,
+        avatar: chat.avatar,
+        name: chat.name,
+        isComplete: false,
+        uid: chat.uid
     })
 }
-
 
 export function writeNewPost(uid, post) {
     let key = push(ref(rtdb, 'posts'), post).key
@@ -141,23 +140,6 @@ export async function clearResourceOffers(uid) {
             }
 
         })
-}
-
-function keysToRef(uid, keyPath, refPath) {
-    get(ref(rtdb, 'user-resources/' + uid)).then(async (snapshot) => {
-        if (snapshot.exists()) {
-            let ids = []
-            snapshot.forEach((postID) => {
-                ids.push(postID.key)
-            })
-            const promises = ids.map(async (id) => {
-                return await get(ref(rtdb, 'posts/' + id))
-
-            })
-            const res = await Promise.all(promises)
-            callback(res.map(e => e.val()).filter(r => r != null))
-        }
-    })
 }
 
 export function readPosts(callback) {
@@ -201,8 +183,13 @@ export async function getMyPosts(uid, callback) {
 
             })
             const res = await Promise.all(promises)
-            callback(res.map(e => e.val()).filter(r => r != null))
-        }
+
+            callback(res.map(e => {
+                let res = e.val();
+                res["id"] = e.key
+                return res
+            }).filter(r => r != null))
+        } else callback([])
     })
 }
 
@@ -218,9 +205,22 @@ export async function getMyResourceOffers(uid, callback) {
 
             })
             const res = await Promise.all(promises)
-            callback(res.map(e => e.val()).filter(r => r != null))
+            callback(res.map(e => {
+                    let res = e.val();
+                    res["id"] = e.key
+                    return res
+                }
+            ).filter(r => r != null))
         }
     })
+}
+
+export async function deletePost(chat){
+    remove(ref(rtdb, 'posts/' + chat.id)).then()
+    chat.description ?
+        remove(ref(rtdb, 'user-posts/' + chat.uid + '/' + chat.id)).then()
+        :
+        remove(ref(rtdb, 'user-resources/' + chat.uid + '/' + chat.id)).then()
 }
 
 export async function readChats(uid, callback) {
@@ -298,25 +298,24 @@ export function readMyPublicData(uid, callback) {
     get(ref(rtdb, 'public/' + uid)).then(async (snapshot) => {
         if (snapshot.exists()) {
             let publicData = snapshot.val()
-            if(publicData.rating){
+            if (publicData.rating) {
                 let count = 0;
                 let total = 0;
-                Object.keys(publicData.rating).forEach((key)=> {
-                    count+=publicData.rating[key]
-                    total+=parseInt(key)*publicData.rating[key]
+                Object.keys(publicData.rating).forEach((key) => {
+                    count += publicData.rating[key]
+                    total += parseInt(key) * publicData.rating[key]
                 })
-                publicData["rating"] = (total/count).toFixed(2)
-            } else publicData["rating"]=0;
-            publicData.monthlyPoints?
-                publicData.totalPoints?
-                publicData["points"]=publicData.monthlyPoints+publicData.totalPoints
-                :publicData["points"]=publicData.monthlyPoints
-                :publicData["points"]=0
+                publicData["rating"] = (total / count).toFixed(2)
+            } else publicData["rating"] = 0;
+            publicData.monthlyPoints ?
+                publicData.totalPoints ?
+                    publicData["points"] = publicData.monthlyPoints + publicData.totalPoints
+                    : publicData["points"] = publicData.monthlyPoints
+                : publicData["points"] = 0
             callback(publicData)
         }
     })
 }
-
 
 export async function newProfile(userEmail, profileData) {
     await setDoc(doc(db, "Users", userEmail.toLowerCase()), {
@@ -410,6 +409,7 @@ export async function setPublicUserInfo(data, authToken) {
         "points": data.points,
         "monthlyPoints": data.points,
         "avatar": data.avatar,
+        "rating": data.rating,
         "rank": "bronze"
     });
 }
@@ -474,16 +474,16 @@ export async function updateAllUsersRankings(role) {
         "your security might be at risk!")
 }
 
-export function writeRating(uid,rating){
+export function writeRating(uid, rating) {
     console.log("run")
-    update(ref(rtdb,'public/' + uid +"/rating"),{
-        [rating]:increment(1)
+    update(ref(rtdb, 'public/' + uid + "/rating"), {
+        [rating]: increment(1)
     }).then()
 }
 
-export function readRating(uid,callback){
-    get(ref(rtdb,'public/' + uid +"/rating")).then((ratings)=> {
-        if(ratings) {
+export function readRating(uid, callback) {
+    get(ref(rtdb, 'public/' + uid + "/rating")).then((ratings) => {
+        if (ratings) {
             let count = 0;
             let total = 0;
             ratings.forEach((rating) => {

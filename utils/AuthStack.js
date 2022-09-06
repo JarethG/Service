@@ -3,13 +3,14 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import {createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword} from "firebase/auth";
-import {newProfile, setPublicUserInfo} from "./Firebase";
+import {newProfile, setPublicUserInfo, writeResourceOffers} from "./Firebase";
 import {Text, TextInput, View, Touchable, Pressable, Modal, Image} from "react-native";
 import {styles} from "../Styles";
 import Button from '../Components/Button'
 import {Skills, Resources} from '../JSONS/Tags.json'
 import Picker from "../Components/Picker";
 import AvatarChooser from "../Components/AvatarChooser";
+import {UpdateAccount, UserDataForm} from "./AccountHandler";
 
 function SignInScreen({navigation}) {
     const auth = getAuth()
@@ -61,7 +62,7 @@ function SignInScreen({navigation}) {
                     />
                 </View>
                 <Button title="Sign in" onPress={() => signIn()}/>
-                <Button title="Sign up" onPress={() => navigation.navigate("sign up")}/>
+                <Button title="Sign up" onPress={() => navigation.navigate("create profile")}/>
                 {/*<Button title="Sign in as Jareth" onPress={() =>*/}
                 {/*    signInWithEmailAndPassword(auth, "jarethgaskin@gmail.com", "123456").then()}/>*/}
                 {/*<Button title="Sign in as Wane" onPress={() =>*/}
@@ -71,8 +72,9 @@ function SignInScreen({navigation}) {
     );
 }
 
-function SignUpScreen({navigation}) {
-
+function SignUpScreen({navigation,route}) {
+    const profile = route.params.newProfile
+    console.log(profile)
     const [value, setValue] = React.useState({
         email: '',
         password: '',
@@ -87,7 +89,29 @@ function SignUpScreen({navigation}) {
             })
             return;
         }
-        navigation.navigate("create profile", {value})
+        createUserWithEmailAndPassword(getAuth(), value.email, value.password)
+            .then((userCredential) => {
+                newProfile(value.email, profile).then(r => console.log("new profile created"))
+                setPublicUserInfo({name: profile.name, avatar: profile.avatar, monthlyPoints: 0,points: 0,rating:{"0":0}},getAuth().currentUser.uid)
+                    .then()
+                profile.resources.map((resource)=> {
+                    writeResourceOffers(getAuth().currentUser.uid, {
+                        title:"Offer: " + resource + " available.",
+                        rating:0,
+                        avatar:profile.avatar,
+                        name:profile.name,
+                        isComplete:false,
+                        uid:getAuth().currentUser.uid
+                    })})
+            })
+            .catch((error) => {
+                setValue({
+                    ...value,
+                    error: error.message
+                })
+            }
+            );
+
     }
 
     return (
@@ -115,8 +139,7 @@ function SignUpScreen({navigation}) {
                         secureTextEntry={true}
                     />
                 </View>
-
-                <Button title="Next" onPress={signUp}/>
+                <Button title="create new account" onPress={signUp}/>
             </View>
             </View>
         </View>
@@ -124,117 +147,21 @@ function SignUpScreen({navigation}) {
 }
 
 function NewProfileScreen({navigation, route}) {
-    // console.log(route.params)
-    const [profile, setProfile] = React.useState({
+    const emptyProfile = {
         avatar:0,
         about: "",
         name: "",
         resources: [],
         skills: [],
-        title: "",
-        points: Math.floor(Math.random()*100)
-    })
-    const [stage,setStage] = useState(0)
-
-
-    const auth = getAuth()
-
-    async function createNewAccount() {
-        try {
-            await createUserWithEmailAndPassword(auth, route.params.value.email, route.params.value.password);
-
-            newProfile(route.params.value.email, profile).then(r => console.log("new profile created"))
-            await setPublicUserInfo({name: profile.name, avatar: 0, points: 0},auth.currentUser.uid)
-            navigation.navigate('sign in');
-        } catch (error) {
-            console.log("Massive errors", error)
-        }
+        title: ""
     }
 
     return (
         <View style={[styles.background,{justifyContent:"center"}]}>
+            <Button title={"back"} onPress={()=>navigation.goBack()}/>
             <View style={[styles.midColour,{width:"100%"},styles.container]}>
-            {stage == 0 ?
-                <>
-                    <Button title={"back"} onPress={()=>navigation.goBack()}/>
-                    <Text style={styles.header}>Welcome!</Text>
-                    <Text style={styles.text}>Lets continue the creation of your account.</Text>
-                    <Text style={styles.text}>All of this information can be changed later, do not worry too much
-                        about the specifics!</Text>
-                    <Text style={styles.header}>Tell us about yourself</Text>
-                    <View style={styles.transparentContainer}>
-                        <TextInput
-                            value={profile.about}
-                            placeholder='What sort of things might people want to know about you?'
-                            onChangeText={(text) => setProfile({...profile, about: text})}
-                            multiline={true}
-                        />
-                    </View>
-                    <Text style={styles.header}> Name </Text>
-                    <View style={styles.transparentContainer}>
-                        <TextInput
-                            value={profile.name}
-                            placeholder='Name...'
-                            onChangeText={(text) => setProfile({...profile, name: text})}
-                            multiline={true}
-                        />
-                    </View>
-                    <Text style={styles.header}> Your personal title</Text>
-                    <View style={styles.transparentContainer}>
-                        <TextInput
-                            value={profile.title}
-                            placeholder='i.e Teacher, Student, Doctor'
-                            onChangeText={(text) => setProfile({...profile, title: text})}
-                            multiline={true}
-                        />
-                    </View>
-                    <Button title={"next"} onPress={() => {
-                       setStage(1)}}/>
-                </>
-                : stage==1?
-                <>
-                    <Button title={"back"} onPress={() => {
-                        setStage(0)
-                    }}/>
-                    <Text style={styles.header}>What can you provide?</Text>
-                    <Picker data={Resources}
-                            buttonTitle={"Select Resource"}
-                            apply={(r) => setProfile({...profile, resources: r})
-                            }/>
-                    <View style={styles.transparentContainer}>
-                        {profile.resources?.map((resource, index) => {
-                            return <Text key={index}>{resource}</Text>
-                        })}
-                    </View>
-                    <Picker data={Skills}
-                            buttonTitle={"Select Skills"}
-                            apply={(r) => setProfile({...profile, skills: r})
-                            }/>
-                    <View style={styles.transparentContainer}>
-                        {profile.skills?.map((resource, index) => {
-                            return <Text key={index}>{resource}</Text>
-                        })}
-
-
-                    </View>
-                    <Button title={"next"} onPress={() => {
-                        setStage(2)}}/>
-
-                </>:
-                    <View style={{alignItems:"center"}}>
-                        <Button title={"back"} onPress={() => {
-                            setStage(1)
-                        }}/>
-                        <Text style={styles.header}>select your avatar</Text>
-                        <AvatarChooser setter={(r)=>setProfile({...profile, avatar: r})} old={0}/>
-                        <Button title={"Create Account"} onPress={() => {
-                            createNewAccount().then(r => console.log("finished"))
-                            navigation.navigate("sign in")
-                        }
-                        }/>
-                    </View>
-            }
-        </View>
+                 <UserDataForm oldData={emptyProfile} submit={(r)=>navigation.navigate("sign up", {newProfile:r})}/>
+             </View>
         </View>
     )
 }

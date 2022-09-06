@@ -13,7 +13,7 @@ import {
     addNewInfoRTDB,
     createDummyData,
     deleteCollection,
-    deleteDummyData,
+    deleteDummyData, deletePost,
     deleteRequest,
     getMyPosts,
     getMyRequests,
@@ -131,10 +131,7 @@ const AboutMe = ({profile}) => {
     }, [])
     return (
         <View style={{width: "100%", padding: 15, flex: 1}}>
-            {console.log("profile about data", profile)}
-            <Button title={""} onPress={()=>console.log(readRating(getAuth().currentUser.uid))}/>
             <View style={[styles.container, styles.midColour, {width: "100%", flex: 1, alignItems: "center"}]}>
-                {/*<UpdateAccount email={auth.currentUser.email} oldData={profile}/>*/}
                 <Image source={images[profile.avatar]} style={{width: 150, height: 150}}/>
                 <Text style={[styles.header, {paddingTop: 10}]}>{profile.name}</Text>
                 <Text style={styles.text}>{profile.title}</Text>
@@ -174,7 +171,7 @@ const AboutMe = ({profile}) => {
 
 const MyRequests = () => {
 
-    const [posts, setPosts] = useState()
+    const [posts, setPosts] = useState([])
     const [isFetching, setIsFetching] = useState(false);
 
     useEffect(() => {
@@ -189,7 +186,7 @@ const MyRequests = () => {
     const fetchData = () => {
         getMyPosts(getAuth().currentUser.uid, (r) => setPosts(r))
             .then()
-        getMyResourceOffers(getAuth().currentUser.uid, (r) => setPosts((posts) => [...posts, r]))
+        getMyResourceOffers(getAuth().currentUser.uid, (r) => setPosts((posts) => [...posts, ...r]))
             .then()
         setIsFetching(false)
     };
@@ -199,13 +196,13 @@ const MyRequests = () => {
         <View style={[{flex: 1, width: "100%"}, styles.lightColour]}>
             {posts ?
                 <FlatList data={posts} keyExtractor={(item, index) => index.toString()}
-                          renderItem={({item, index}) =>
-                              <Post details={item} navButton={
-                                  item.accept ? <Text> sorry, you cant delete an accepted offer</Text> :
-                                      <Button title={"delete request"} onPress={() => {
-                                      }}/>
+                          renderItem={({item, index}) => {
+                              return <Post details={item} navButton={
+                                      <Button title={"delete request"} onPress={() =>
+                                          deletePost(item).then(()=>onRefresh())
+                                      }/>
                               }/>
-                          }
+                          }}
                           onRefresh={onRefresh}
                           refreshing={isFetching}
                 />
