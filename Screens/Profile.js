@@ -31,6 +31,7 @@ import {AdminFunctions} from "../utils/AdminFunctions";
 import requests from "../JSONS/requestDummyData.json";
 import ButtonModal from "../Components/ButtonModal";
 import {images} from "../assets/Avatars/ImageLoader";
+import {achievementImages} from "../assets/Achievments/AchievmentLoader";
 import {MyStatusBar} from "../Components/IOSProblemSolver";
 
 export default function Profile() {
@@ -272,7 +273,7 @@ const MyReviews = ({profile}) => {
     );
 }
 
-const Achievements = ({profile}) => {
+const Achievements = () => {
     return <View style={{flex: 1}}>
         <FlatList data={achievement_list} keyExtractor={(item, index) => index.toString()}
                   renderItem={({item, index}) => {
@@ -292,12 +293,13 @@ const Achievements = ({profile}) => {
                       }
 
                       return (
-                          <View style={styles.transparentContainer}>
-                              <Text>{requirement.title}</Text>
+                          <View style={[styles.transparentContainer, {flexDirection: "row",alignItems:"center"}]}>
+                              <Image source={item in achievementImages?achievementImages[item]:achievementImages["blank"]} style={{width:64,height:64}}/>
+                              <View><Text>{requirement.title}</Text>
                               <Text>{requirement.description}</Text>
                               <View style={{flexDirection: "row"}}>
                                   {progressBar()}
-                              </View>
+                              </View></View>
                               {/*<Text>{requirement.tags}</Text>*/}
                           </View>
                       )

@@ -35,20 +35,20 @@ const MessagingModal = ({navigation, route}) => {
     function completion() {
 
         return (
-            chat.settled ?
-                chat.settledID === getAuth().currentUser.uid ?
-                    <Text>You have proposed that the job is done</Text>
-                    :
-                    <>
-                        <Text>The other user thinks this job is complete, do you agree?</Text>
+            // chat.settled ?
+            //     chat.settledID === getAuth().currentUser.uid ?
+            //         <Text>You have proposed that the job is done</Text>
+            //         :
+            //         <>
+            //             <Text>The other user thinks this job is complete, do you agree?</Text>
                         <Button title={"Request completed"} onPress={() => {
                             acceptJobCompletion(chatId).then()
                         }}/>
-                    </>
-                :
-                <Button title={"Propose completion"} onPress={() => {
-                    proposeJobCompleted(chatId, getAuth().currentUser.uid).then()
-                }}/>
+                    // </>
+                // :
+                // <Button title={"Propose completion"} onPress={() => {
+                //     proposeJobCompleted(chatId, getAuth().currentUser.uid).then()
+                // }}/>
         )
     }
 
