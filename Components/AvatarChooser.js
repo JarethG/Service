@@ -17,7 +17,7 @@ const AvatarChooser = ({setter, old}) => {
                     num==1?
                         inc(images.length-1):inc(num-1)
                 }} />
-            <Image source={images[num]} style={[{margin:4},styles.midColour,{width:200,height:200}]}/>
+            <Image source={images[num]} style={[styles.midColour,{width:200,height:200,margin:4}]}/>
 
                 <FontAwesome name="arrow-right" size={24} color="black" onPress={()=>{
                 num<images.length-1?

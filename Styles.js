@@ -79,6 +79,10 @@ export const styles = StyleSheet.create({
     text: {
         color: '#ffffff'
     },
+    boldText: {
+        fontWeight: "bold",
+        color: '#ffffff'
+    },
     menuItem: {
         flexDirection: "row",
         justifyContent: "center",
@@ -149,5 +153,18 @@ export const styles = StyleSheet.create({
     sidebarMenuItem: {
         flexDirection:"row",
         margin:10
+    },
+    leaderboardContainer: {
+        borderRadius: 10,
+        marginTop:5,
+        flexDirection: "row",
+        alignItems: "center",
+        padding:5,
+       justifyContent:"space-around"
+    },
+    leaderboardImage: {
+        borderRadius: 25,
+        width: 50,
+        height: 50
     }
 });

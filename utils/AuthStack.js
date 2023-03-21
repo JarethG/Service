@@ -1,16 +1,13 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import {createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword} from "firebase/auth";
 import {newProfile, setPublicUserInfo, writeResourceOffers} from "./Firebase";
-import {Text, TextInput, View, Touchable, Pressable, Modal, Image} from "react-native";
+import {Text, TextInput, View, Image} from "react-native";
 import {styles} from "../Styles";
 import Button from '../Components/Button'
-import {Skills, Resources} from '../JSONS/Tags.json'
-import Picker from "../Components/Picker";
-import AvatarChooser from "../Components/AvatarChooser";
-import {UpdateAccount, UserDataForm} from "./AccountHandler";
+import {UserDataForm} from "./AccountHandler";
 
 function SignInScreen({navigation}) {
     const auth = getAuth()
@@ -63,11 +60,6 @@ function SignInScreen({navigation}) {
                 </View>
                 <Button title="Sign in" onPress={() => signIn()}/>
                 <Button title="Sign up" onPress={() => navigation.navigate("create profile")}/>
-                {/*<Button title="Sign in as Jareth" onPress={() =>*/}
-                {/*    signInWithEmailAndPassword(auth, "jarethgaskin@gmail.com", "123456").then()}/>*/}
-                {/*<Button title="Sign in as Wane" onPress={() =>*/}
-                {/*    signInWithEmailAndPassword(auth, "waneking@gmail.com", "123456").then()}/>*/}
-
         </View>
     );
 }
@@ -173,7 +165,6 @@ function AuthStack() {
     return (
         <NavigationContainer>
             <Stack.Navigator screenOptions={{headerShown: false}}>
-                {/*<Stack.Screen name="Welcome" component={WelcomeScreen} />*/}
                 <Stack.Screen name="sign in" component={SignInScreen}/>
                 <Stack.Screen name="sign up" component={SignUpScreen}/>
                 <Stack.Screen name="create profile" component={NewProfileScreen}/>

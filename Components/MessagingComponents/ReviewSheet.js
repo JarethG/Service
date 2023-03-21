@@ -12,11 +12,9 @@ const ReviewSheet = ({navigation,chat}) => {
     const stars = [1, 2, 3, 4, 5]
     const [rating, setRating] = useState(0)
     const [review, setReview] = useState("")
-    const [chatState, setChatState] = useState()
     const [submitting, setSubmitting] = useState(false)
 
     function onSubmit() {
-        console.log("triggered")
         setSubmitting(true)
         let myAuth = getAuth().currentUser.uid
         let uid2 = chat.uid==myAuth?chat.uid2:chat.uid
@@ -30,6 +28,7 @@ const ReviewSheet = ({navigation,chat}) => {
             returnResource(chat,profile.rating)
         }
         if(chat.reviews==1)closeChatRoom(chat)
+        setSubmitting(false)
         navigation.goBack()
     }
 
@@ -58,7 +57,7 @@ const ReviewSheet = ({navigation,chat}) => {
                 onChangeText={(text) => setReview(text)}
                 multiline={true}
             />
-            <Button title={"submit"} onPress={() => {onSubmit()}
+            <Button title={"submit"} onPress={() => {if(!submitting)onSubmit()}
             }/>
         </>
     );

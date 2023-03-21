@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 export default function Splash(loadingString) {
     return (
         <View style={styles.container}>
-            <Text>Welcome to thyme!</Text>
+            <Text>Welcome to Service!</Text>
             <Text>{loadingString}</Text>
             <StatusBar style="auto" />
         </View>

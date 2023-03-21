@@ -1,4 +1,4 @@
-import {Text, View, FlatList, Pressable, TextInput, StatusBar,} from 'react-native';
+import {Text, View, FlatList, Pressable} from 'react-native';
 import {styles} from "../Styles";
 import React, {useEffect, useState} from "react";
 import {FontAwesome5, Entypo, AntDesign} from '@expo/vector-icons';
@@ -7,9 +7,6 @@ import NewRequestSheet from "../Components/RequestComponents/newRequestSheet";
 import Button from "../Components/Button";
 import {readPosts, acceptPost} from "../utils/Firebase";
 import Post from "../Components/Post";
-import FilterSearch from "../Components/RequestComponents/FilterSearch";
-import Picker from "../Components/Picker";
-import {Skills, Resources} from '../JSONS/Tags.json'
 import ProfileContext from "../utils/profileContext";
 import RequestSearchEngine from "../Components/RequestComponents/RequestSearchEngine";
 import {getAuth} from "firebase/auth";
@@ -101,58 +98,7 @@ export default function Request({navigation}) {
         )
     }
 
-    // const FilterSearch = ({navigation}) => {
-    {/*    const [input, setInput] = useState()*/
-    }
-    {/*    const options = ["All", "Skills", "Resources"]*/
-    }
 
-    {/*    const [tags, setTags] = useState(Skills.concat(Resources))*/
-    }
-
-    {/*    function updateList(option) {*/
-    }
-    //         setFilter({...filter, type: option})
-    //         option === "All" ? setTags(Skills.concat(Resources)) :
-    //             option === "Skills" ? setTags(Skills) :
-    //                 setTags(Resources)
-    //     }
-    //
-    //     return (
-    //         <>
-    //             <Button title={"Back"} onPress={() => {
-    //                 navigation.navigate("NoticeBoard")
-    //             }}/>
-    //             <Text> Type | {filter.type} </Text>
-    //             <Text> Tags | {filter.tags}</Text>
-    //             <View style={{flexDirection: "row", justifyContent: "space-around"}}>
-    //                 {options.map((option, index) => {
-    //                     return (
-    //                         <Pressable key={index} style={[styles.transparentContainer, {
-    //                             width: 100,
-    //                             height: 40
-    //                         }, option === filter.type ? {backgroundColor: "green"} : {backgroundColor: "red"}]}
-    //                                    onPress={() => updateList(option)}>
-    //                             <Text style={{alignSelf: "center"}}>{option}</Text></Pressable>
-    {/*                    )*/
-    }
-    {/*                })}*/
-    }
-    {/*            </View>*/
-    }
-    {/*            <TextInput*/
-    }
-    //                 placeholder='FilterSearch'
-    //                 value={input}
-    //                 onChangeText={(text) => setInput(text)}
-    //             />
-    //             <Picker data={tags} apply={(r) => setFilter({...filter, tags: r})}/>
-    //             <Button title={"FilterSearch"} onPress={() => {
-    //                 navigation.navigate("NoticeBoard")
-    //             }}/>
-    //         </>
-    //     )
-    // }
 
     return (
         <Stack.Navigator
@@ -160,7 +106,6 @@ export default function Request({navigation}) {
                 headerShown: false
             }}>
             <Stack.Screen name={"NoticeBoard"} component={NoticeBoard}/>
-            {/*<Stack.Screen name={"Filter"} component={FilterSearch}/>*/}
             <Stack.Screen name={"Search"} component={RequestSearchEngine} initialParams={{setFilter: setFilter}}/>
             <Stack.Screen name={"NewRequest"} component={NewRequestSheet} initialParams={profile}/>
         </Stack.Navigator>

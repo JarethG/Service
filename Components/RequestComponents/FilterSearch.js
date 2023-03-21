@@ -1,10 +1,8 @@
-import {Alert, FlatList, Modal, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {FlatList, Modal, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {AntDesign} from "@expo/vector-icons";
 import {useState} from "react";
-import lists from "../../JSONS/Filters.json"
 
-export default function FilterSearch({data,text,onSearch}) {
-    const tools = lists.Tools
+export default function FilterSearch({data, text, onSearch}) {
 
     const [searching, setSearching] = useState(false)
     const [searchText, setSearchText] = useState();
@@ -45,8 +43,9 @@ export default function FilterSearch({data,text,onSearch}) {
 
     return (
         <View>
-            <TouchableOpacity style={{flexDirection: "row", padding: 5, borderWidth: 1, borderRadius: 5,alignSelf:"center"}}
-                              onPress={() => setSearching(true)}>
+            <TouchableOpacity
+                style={{flexDirection: "row", padding: 5, borderWidth: 1, borderRadius: 5, alignSelf: "center"}}
+                onPress={() => setSearching(true)}>
                 <AntDesign name="search1" size={24} color="black"/>
                 <Text>{text}</Text>
             </TouchableOpacity>
@@ -55,7 +54,7 @@ export default function FilterSearch({data,text,onSearch}) {
                     onRequestClose={() => {
                         setSearching(false);
                     }}>
-                    <View style={{backgroundColor: "#68984e",flex:1}}>
+                    <View style={{backgroundColor: "#68984e", flex: 1}}>
                         <View style={{flexDirection: "row", padding: 5, borderWidth: 1, borderRadius: 5}}>
                             <AntDesign name="caretleft" size={24} color="black" onPress={() => setSearching(false)}/>
                             <TextInput

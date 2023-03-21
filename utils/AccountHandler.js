@@ -1,12 +1,11 @@
-import {createUserWithEmailAndPassword, getAuth} from "firebase/auth";
-import {clearResourceOffers, updateProfile, updatePublicUserInfo, writeNewPost, writeResourceOffers} from "./Firebase";
-import {Modal, Pressable, Text, TextInput, View} from "react-native";
+import { getAuth} from "firebase/auth";
+import {clearResourceOffers, updateProfile, updatePublicUserInfo, writeResourceOffers} from "./Firebase";
+import {Text, TextInput, View} from "react-native";
 import {styles} from "../Styles";
 import Button from "../Components/Button";
 import React, {useState} from "react";
 import Picker from "../Components/Picker";
 import {Resources, Skills} from "../JSONS/Tags.json";
-import {FontAwesome} from "@expo/vector-icons";
 import AvatarChooser from "../Components/AvatarChooser";
 
 

@@ -3,7 +3,6 @@ import {styles} from "../Styles";
 import {AntDesign, Ionicons} from "@expo/vector-icons";
 import React, {useState} from "react";
 import ProfileContext from "../utils/profileContext";
-import {deleteRequest} from "../utils/Firebase";
 
 const Settings = ({data}) => {
 

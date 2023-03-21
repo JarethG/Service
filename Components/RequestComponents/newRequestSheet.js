@@ -1,4 +1,4 @@
-import {Modal, Text, TextInput, View} from "react-native";
+import {Alert, Modal, Text, TextInput, View} from "react-native";
 import {styles} from "../../Styles";
 import React, {useState} from "react";
 import Button from "../Button";
@@ -14,6 +14,7 @@ import {getAuth} from "firebase/auth";
 const NewRequestSheet = ({navigation}) => {
 
     const profile = React.useContext(ProfileContext)
+    console.log(profile)
     const [request, setRequest] = useState({
         title:"",
         rating:profile.rating,
@@ -74,9 +75,15 @@ const NewRequestSheet = ({navigation}) => {
             <Button title={"Post"} onPress={()=>{
                 if(!blocking) {
                     setBlocking(true);
-                    writeNewPost(getAuth().currentUser.uid,request)
+                    try {
+                        writeNewPost(getAuth().currentUser.uid, request)
+                    } catch(E){
+                        console.log(E)
+                        Alert.alert("Error :please contact the developer!")
+                    } finally {
                         setBlocking(false);
-                        navigation.navigate("NoticeBoard");
+                    }
+                    navigation.navigate("NoticeBoard");
             }}}/>
         </View>
         </View>

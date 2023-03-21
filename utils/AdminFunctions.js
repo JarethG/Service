@@ -23,13 +23,15 @@ export const AdminFunctions = () => {
     return (
         <ButtonModal title={"settings"}>
             <ScrollView style={{backgroundColor:'#950dda'}}>
-            {/*<Button title={"Create Dummy Data"} onPress={()=>createDummyData(requests).then(()=>console.log("done"))}/>*/}
-            <Button title={"Delete Dummy Data"} onPress={()=>deleteDummyData(requests).then(()=>console.log("done"))}/>
-            <Button title={"Clear Reviews"} onPress={()=>deleteCollection("Reviews",10).then(()=>console.log("reviews cleared"))}/>
-            <Button title={"Clear Requests"} onPress={()=>deleteCollection("Requests",10).then(()=>console.log("reviews cleared"))}/>
-            <Button title={"create dummy leadrboard"} onPress={()=>leaderboard.forEach((data,index)=>setPublicUserInfo(data,"fakeAuth" +index))}/>
-            <Button title={"add new info"} onPress={()=>addNewInfoRTDB("public","monthlyPoints",0)}/>
-            <Button title={"updateAllUserPoints"} onPress={()=>updateAllUsersRankings("admin")}/>
+            <Button title={"Create Dummy Data"} onPress={()=>createDummyData(requests).then(()=>console.log("done"))}/>
+            {/*<Button title={"Delete Dummy Data"} onPress={()=>deleteDummyData(requests).then(()=>console.log("done"))}/>*/}
+            {/*<Button title={"Clear Reviews"} onPress={()=>deleteCollection("Reviews",10).then(()=>console.log("reviews cleared"))}/>*/}
+            {/*<Button title={"Clear Requests"} onPress={()=>deleteCollection("Requests",10).then(()=>console.log("reviews cleared"))}/>*/}
+            {/*<Button title={"create dummy leadrboard"} onPress={()=>leaderboard.forEach((data,index)=>setPublicUserInfo(data,"fakeAuth" +index))}/>*/}
+            {/*<Button title={"add new info"} onPress={()=>addNewInfoRTDB("public","monthlyPoints",0)}/>*/}
+            {/*<Button title={"updateAllUserPoints"} onPress={()=>updateAllUsersRankings("admin")}/>*/}
+            {/*<Button title={"reset user data"} onPress={()=>setPublicUserInfo({name: "resetUserName", avatar: 1, monthlyPoints: 0,points: 0,rating:{"0":0}},getAuth().currentUser.uid)*/}
+            {/*    .then()}/>*/}
             <Button title={"add new Post"} onPress={()=>writeNewPost(getAuth().currentUser.uid,{
                 title:"title",
                 rating:"rating",

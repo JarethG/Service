@@ -2,9 +2,7 @@ import React, {useState} from "react";
 import {FlatList, Pressable, Text, TextInput, View} from "react-native";
 import {Resources,Skills} from '../../JSONS/Tags.json'
 import {styles} from "../../Styles";
-import Post from "../Post";
 import Button from "../Button";
-import {acceptRequest} from "../../utils/Firebase";
 
 export default function RequestSearchEngine({navigation,route}) {
     const [searchText,setSearchText]=useState("")

@@ -1,164 +1,152 @@
 [
   {
-    "rating": 3,
-    "avatar": 1,
-    "accepted": false, "isComplete": true,
-    "key": "JoB1",
-    "account": "jarethgaskin@gmail.com",
-    "type": "skill",
-    "name": "Riggs Hendricks",
+    "avatar": 3,
+    "description": "quis cillum dolore velit qui id aliquip sunt eu tempor est ea fugiat do non",
+    "email": "jarethgaskin@gmail.com",
+    "name": "Christi Dillon",
+    "rating": 1.31,
+    "settled": false,
     "tags": [
-      "Tax Support"
+      " Social",
+      " Photography",
+      " Caretaker"
     ],
-    "title": "Ird Help",
-    "description": "its come to the end of the financial year and I need help with the tax from my private business"
+    "title": "aute proident quis dolore",
+    "uid": "6o5j1PxOEygKIhMfK83HyRBfiRf2"
   },
   {
-    "rating": 3,
-    "avatar": 3,
-    "accepted": false, "isComplete": false,
-    "key": "JoB2",
-    "account": "jarethgaskin@gmail.com",
-    "type": "skill",
-    "name": "Jennings Romero",
+    "avatar": 9,
+    "description": "nostrud do elit adipisicing sint irure fugiat deserunt dolor reprehenderit nulla adipisicing veniam aliqua dolor",
+    "email": "jarethgaskin@gmail.com",
+    "name": "Thornton Brewer",
+    "rating": 2.97,
+    "settled": false,
     "tags": [
-      " Digital Support",
-      " Photography",
+      " IT Skills",
+      " Carpenter",
+      " Electrician"
+    ],
+    "title": "quis anim amet do",
+    "uid": "6o5j1PxOEygKIhMfK83HyRBfiRf2"
+  },
+  {
+    "avatar": 9,
+    "description": "ullamco nostrud elit est nostrud laboris amet ut duis consequat anim sint sunt elit Lorem",
+    "email": "jarethgaskin@gmail.com",
+    "name": "Mathews Snider",
+    "rating": 2.82,
+    "settled": false,
+    "tags": [
+      " Carpenter",
+      " Electrician",
+      " Caretaker"
+    ],
+    "title": "voluptate mollit fugiat enim",
+    "uid": "6o5j1PxOEygKIhMfK83HyRBfiRf2"
+  },
+  {
+    "avatar": 9,
+    "description": "nostrud mollit commodo voluptate Lorem Lorem aliquip aute aute dolore tempor non aliqua cillum enim",
+    "email": "jarethgaskin@gmail.com",
+    "name": "Dolly Fuentes",
+    "rating": 3.6,
+    "settled": false,
+    "tags": [
+      " Carpenter",
+      " Electrician",
+      " Website Building"
+    ],
+    "title": "est culpa et ex",
+    "uid": "6o5j1PxOEygKIhMfK83HyRBfiRf2"
+  },
+  {
+    "avatar": 7,
+    "description": "irure Lorem exercitation ipsum minim quis veniam ipsum dolor tempor id duis voluptate ullamco commodo",
+    "email": "jarethgaskin@gmail.com",
+    "name": "Debbie Gallagher",
+    "rating": 2.78,
+    "settled": false,
+    "tags": [
+      " Writing",
+      " Carpenter",
       " IT Skills"
     ],
-    "title": "Adobe Photoshop",
-    "description": "As part of a personal project, I want to learn Photoshop. is there anyone that might be able to help me learn the basics?"
+    "title": "anim qui duis non",
+    "uid": "6o5j1PxOEygKIhMfK83HyRBfiRf2"
   },
   {
-    "rating": 3,
-    "avatar": 2,
-    "accepted": false, "isComplete": false,
-    "key": "JoB3",
-    "account": "jarethgaskin@gmail.com",
-    "type": "resource",
-    "name": "Mckinney Webster",
+    "avatar": 6,
+    "description": "irure aliqua adipisicing tempor exercitation ipsum aute in Lorem elit nisi id magna anim et",
+    "email": "jarethgaskin@gmail.com",
+    "name": "Marissa Harrison",
+    "rating": 0.51,
+    "settled": false,
     "tags": [
-      "Videography"
-    ],
-    "title": "Sony FE 24-105mm F4 G OSS Lens",
-    "description": "Hey, just been asked to take some macro photos and dont have a particular lense. Can I borrow on for a weekend trip?"
-  },
-  {
-    "rating": 3,
-    "avatar": 4,
-    "accepted": false, "isComplete": false,
-    "key": "JoB4",
-    "account": "jarethgaskin@gmail.com",
-    "type": "skill",
-    "name": "Donna Bray",
-    "tags": [
-      " Website Building",
+      " Caretaker",
+      " Photography",
       " Digital Support"
     ],
-    "title": "Personal Online Portfolio",
-    "description": "Im a recent design graduate that wants to make an online portfolio for myself. Need someone who can do the coding!"
+    "title": "in dolor adipisicing ad",
+    "uid": "6o5j1PxOEygKIhMfK83HyRBfiRf2"
   },
   {
-    "rating": 3,
-    "avatar": 2,
-    "accepted": false, "isComplete": false,
-    "key": "JoB5",
-    "account": "jarethgaskin@gmail.com",
-    "type": "resource",
-    "name": "Christi Rios",
+    "avatar": 1,
+    "description": "aliquip velit ad voluptate exercitation consequat velit ullamco deserunt dolore nostrud sit officia nostrud velit",
+    "email": "jarethgaskin@gmail.com",
+    "name": "Nieves Snyder",
+    "rating": 1.19,
+    "settled": false,
     "tags": [
-      "Gardening Equipment",
-      "Pots"
+      " IT Skills",
+      " Writing",
+      " Social"
     ],
-    "title": "Help!!",
-    "description": "I have recently germinated some fruit seeds following a TikTok,now i need some pots so they can keep growing."
+    "title": "exercitation et et incididunt",
+    "uid": "6o5j1PxOEygKIhMfK83HyRBfiRf2"
   },
   {
-    "rating": 3,
-    "avatar": 6,
-    "accepted": false, "isComplete": false,
-    "key": "JoB6",
-    "account": "jarethgaskin@gmail.com",
-    "type": "skill",
-    "name": "Mcleod Ferrell",
+    "avatar": 10,
+    "description": "in esse deserunt quis aliquip qui qui non laboris qui pariatur proident culpa excepteur veniam",
+    "email": "jarethgaskin@gmail.com",
+    "name": "Marguerite Shields",
+    "rating": 1.95,
+    "settled": false,
     "tags": [
-      " Writing"
-    ],
-    "title": "Novella",
-    "description": "I have recently written a spin-off series and would like someone to read over and give their opinion"
-  },
-  {
-    "rating": 3,
-    "avatar": 5,
-    "accepted": false, "isComplete": false,
-    "key": "JoB7",
-    "account": "jarethgaskin@gmail.com",
-    "type": "resource",
-    "name": "Schroeder Wilcox",
-    "tags": [
-      "Screwdrivers",
-      "Power Tools",
-      "Measuring Tape"
-    ],
-    "title": "DIY project",
-    "description": "Hello, I am putting together a Kit-Set shelf and need to borrow some tools for the afternoon."
-  },
-  {
-    "rating": 3,
-    "avatar": 4,
-    "accepted": false, "isComplete": false,
-    "key": "JoB8",
-    "account": "jarethgaskin@gmail.com",
-    "type": "resource",
-    "name": "Iva Hooper",
-    "tags": [
-      "Plumber"
-    ],
-    "title": "Suspected Leak",
-    "description": "Help!, There is a patch of wooden floor in our house that has gone damp and rotting, need someone who will come and confirm in case a plumber is needed to be payed for. "
-  },
-  {
-    "rating": 3,
-    "avatar": 3,
-    "accepted": false, "isComplete": false,
-    "key": "JoB9",
-    "account": "jarethgaskin@gmail.com",
-    "type": "skill",
-    "name": "Jerri Watkins",
-    "tags": [
+      " Writing",
+      " Electrician",
       " Sewing"
     ],
-    "title": "New Beginner",
-    "description": "Wanting to take up Sewing as a hobbie and have lots of materials to practice on. I have recently purchased all the gear and would like someone who has good experience to take some time to teach me."
+    "title": "aliqua veniam duis enim",
+    "uid": "6o5j1PxOEygKIhMfK83HyRBfiRf2"
   },
   {
-    "rating": 3,
+    "avatar": 9,
+    "description": "adipisicing deserunt veniam exercitation ut esse proident ullamco ad fugiat laborum ut fugiat Lorem ea",
+    "email": "jarethgaskin@gmail.com",
+    "name": "Douglas Arnold",
+    "rating": 1.4,
+    "settled": false,
+    "tags": [
+      " Carpenter",
+      " Senior Support",
+      " Writing"
+    ],
+    "title": "aliqua pariatur laboris minim",
+    "uid": "6o5j1PxOEygKIhMfK83HyRBfiRf2"
+  },
+  {
     "avatar": 2,
-    "accepted": false, "isComplete": false,
-    "key": "JoB10",
-    "account": "jarethgaskin@gmail.com",
-    "type": "resource",
-    "name": "Burt Sanchez",
+    "description": "laborum sit exercitation pariatur quis ea nostrud laborum adipisicing ad ut quis minim commodo laborum",
+    "email": "jarethgaskin@gmail.com",
+    "name": "Chang Johnston",
+    "rating": 4.05,
+    "settled": false,
     "tags": [
-      "Trailer",
-      "Van",
-      "Car"
+      " Digital Support",
+      " Videography",
+      " IT Skills"
     ],
-    "title": "Moving Flats",
-    "description": "Need to move a small amount of furniture (chairs, desks) that cant be carried down the street. Two trips at most."
-  },
-  {
-    "rating": 3,
-    "avatar": 6,
-    "accepted": false, "accepted": false, "isComplete": false,
-    "key": "JoB11",
-    "account": "jarethgaskin@gmail.com",
-    "type": "resource",
-    "name": "Barno NoE",
-    "tags": [
-      "Gardening Equipment"
-    ],
-    "title": "Wheelbarrow and spade",
-    "description": "Need to borrow a wheelbarrow and a spade for a day this weekend"
+    "title": "fugiat amet aute sunt",
+    "uid": "6o5j1PxOEygKIhMfK83HyRBfiRf2"
   }
 ]

@@ -1,31 +1,22 @@
-import {StatusBar} from 'expo-status-bar';
 import {
     Text,
     View,
-    TouchableOpacity,
-    ScrollView, FlatList,
+    TouchableOpacity,FlatList,
 } from 'react-native';
 import {styles} from "../Styles";
 import React, {useContext, useEffect, useState} from "react";
-import Firebase, {readChats,} from "../utils/Firebase";
+import  {readChats} from "../utils/Firebase";
 import ProfileContext from "../utils/profileContext";
 import MessagingModal from "../Components/MessagingComponents/MessagingModal";
 import {ContactItem} from "../Components/MessagingComponents/ContactItem";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
-import NewRequestSheet from "../Components/RequestComponents/newRequestSheet";
 import ReviewSheet from "../Components/MessagingComponents/ReviewSheet";
-import {ReviewCard} from "../Components/MessagingComponents/ReviewCard";
-import Button from "../Components/Button";
-import Post from "../Components/Post";
 import {getAuth} from "firebase/auth";
 
 export default function Messages() {
     const profile = useContext(ProfileContext)
     const [isFetching, setIsFetching] = useState(false);
-
-    const [messageIDs,setMessageIDs] = useState()
     const [chats,setChats] = useState({})
-    const [unsubscribe,setUnsubscribe] = useState([])
 
 
     useEffect(() => {
@@ -82,7 +73,6 @@ export default function Messages() {
             <Stack.Screen name={"MessageLanding"} component={MessageLanding}/>
             <Stack.Screen name={"MessagingModal"} component={MessagingModal}/>
             <Stack.Screen name={"ReviewSheet"} component={ReviewSheet}/>
-            {/*<Stack.Screen name={"FilterSearch"} component={FilterSearch}/>*/}
         </Stack.Navigator>
 
     );

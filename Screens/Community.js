@@ -1,12 +1,8 @@
-import {Text, View, ScrollView, Button, FlatList} from 'react-native';
+import {Text, View,FlatList} from 'react-native';
 import {styles} from "../Styles";
 import {useEffect, useState} from "react";
-import EventCard from "../Components/EventCard";
 import LeaderboardCard from "../Components/LeaderboardCard";
-import {FontAwesome} from '@expo/vector-icons';
-import ToggleButtons from "../Components/ToggleButtons";
-import {deleteRequest, getLeaderBoard} from "../utils/Firebase";
-import Post from "../Components/Post";
+import { getLeaderBoard} from "../utils/Firebase";
 
 export default function Community() {
 
@@ -30,9 +26,9 @@ export default function Community() {
     return (
         <View style={styles.background}>
             <View style={{width: "100%", padding: 15,flex:1}}>
-                <Text style={{fontWeight: "bold", fontSize: 24, color: "#fff"}}>Leaderboard</Text>
+                <Text style={styles.header}>Leaderboard</Text>
                 <View style={{backgroundColor: "#f6d14f", borderRadius: 5,flexDirection:"row"}}>
-                    <Text style={{flex:1}}>Rank</Text>
+                    <Text style={{flex:2}}>Rank</Text>
                     <Text style={{flex:3}}>User </Text>
                     <Text style={{flex:2}}>Points this Month</Text>
                 </View>
@@ -45,11 +41,6 @@ export default function Community() {
                           onRefresh={onRefresh}
                           refreshing={isFetching}
                 />
-
-                {/*<View style={{flexDirection: "row", padding: 10}}>*/}
-                {/*    <FontAwesome name="plus" size={24} color="white" style={{top: 5}}/>*/}
-                {/*    <Text style={{fontWeight: "bold", fontSize: 24, color: "#fff", left: 10}}>Invite Your Friends</Text>*/}
-                {/*</View>*/}
             </View>
         </View>
     );

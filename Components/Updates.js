@@ -1,8 +1,6 @@
-import {StatusBar} from 'expo-status-bar';
-import {Button, StyleSheet, Text, View} from 'react-native';
+import {Button, Text, View} from 'react-native';
 import {pastUpdates, sinceLastUpdate, toDo} from '../JSONS/UpdateLog.json'
 import {styles} from "../Styles";
-import {useState} from "react";
 import {ScrollView} from "react-native-gesture-handler";
 
 const Updates = (dismiss) => {

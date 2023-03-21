@@ -2,34 +2,20 @@ import {Text, View, ScrollView, FlatList, Image, Pressable, Modal} from 'react-n
 import {styles} from "../Styles";
 import React, {useContext, useEffect, useState} from "react";
 import {AntDesign, Entypo, FontAwesome, Ionicons} from '@expo/vector-icons';
-import ToggleButtons from "../Components/ToggleButtons";
 import {signOut, getAuth} from 'firebase/auth';
 import Button from '../Components/Button'
 import {UpdateAccount} from "../utils/AccountHandler";
 import {achievement_list, requirements} from '../JSONS/Achievements.json'
-import {createDrawerNavigator} from '@react-navigation/drawer';
-import {NavigationContainer} from '@react-navigation/native';
 import {
-    addNewInfoRTDB,
-    createDummyData,
-    deleteCollection,
-    deleteDummyData, deletePost,
-    deleteRequest,
+    deletePost,
     getMyPosts,
-    getMyRequests,
     getMyResourceOffers,
-    getMyReviews,
     readMyPublicData,
-    readPosts, readRating,
     readReviews,
-    setPoints,
-    setPublicUserInfo, writeRating
 } from "../utils/Firebase";
 import Post from "../Components/Post";
 import ProfileContext from "../utils/profileContext";
 import {AdminFunctions} from "../utils/AdminFunctions";
-import requests from "../JSONS/requestDummyData.json";
-import ButtonModal from "../Components/ButtonModal";
 import {images} from "../assets/Avatars/ImageLoader";
 import {achievementImages} from "../assets/Achievments/AchievmentLoader";
 import {MyStatusBar} from "../Components/IOSProblemSolver";
@@ -71,7 +57,7 @@ const ProfileNavigator = ({callback}) => {
             <View style={{flexDirection: "row", flex: 1}}>
                 <View style={[styles.sidebarMenu, styles.darkColour]} onPress={e => e.stopPropagation()}>
                     <View style={{flexDirection: "row"}}>
-                        <Image source={require('../assets/Avatars/avataaars_2.png')} style={{width: 50, height: 50}}/>
+                        <Image source={images[profile.avatar]} style={{width: 50, height: 50}}/>
                         <View style={{marginLeft: 10}}>
                             <Text style={styles.text}>{profile.name}</Text>
                             <Text style={styles.text}>{profile.title}</Text>
@@ -123,13 +109,6 @@ const MenuItem = ({title, onPress, iconName}) => {
 }
 
 const AboutMe = ({profile}) => {
-    const auth = getAuth();
-    const [publicProfile, set] = useState({})
-    const [rating, setRating] = useState(0)
-    useEffect(() => {
-        readMyPublicData(auth.currentUser.uid, (r) => set(r))
-        // readRating(auth.currentUser.uid,(r)=> setRating(r))
-    }, [])
     return (
         <View style={{width: "100%", padding: 15, flex: 1}}>
             <View style={[styles.container, styles.midColour, {width: "100%", flex: 1, alignItems: "center"}]}>

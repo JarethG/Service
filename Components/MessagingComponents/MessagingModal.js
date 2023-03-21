@@ -1,24 +1,18 @@
-import {FlatList, Keyboard, Modal, Text, TextInput, View} from "react-native";
+import {FlatList, Keyboard, Text, TextInput, View} from "react-native";
 import {styles} from "../../Styles";
 import {
     acceptJobCompletion, getChat,
-    getChatState,
-    getMessage,
     proposeJobCompleted,
-    pushMessage,
     readMessages, writeMessage
 } from "../../utils/Firebase";
 import {FontAwesome, Ionicons} from "@expo/vector-icons";
-import profileContext from "../../utils/profileContext";
-import React, {useContext, useEffect, useState} from "react";
-import {StatusBar} from "expo-status-bar";
+import React, {useEffect, useState} from "react";
 import Button from "../Button";
 import {getAuth} from "firebase/auth";
 import ReviewSheet from "./ReviewSheet";
 
 const MessagingModal = ({navigation, route}) => {
     const chatId = route.params.requestID;
-    const profile = useContext(profileContext)
     const [chat, setChat] = useState({});
 
     const renderItem = (item) => {
@@ -33,27 +27,25 @@ const MessagingModal = ({navigation, route}) => {
     }
 
     function completion() {
-
         return (
-            // chat.settled ?
-            //     chat.settledID === getAuth().currentUser.uid ?
-            //         <Text>You have proposed that the job is done</Text>
-            //         :
-            //         <>
-            //             <Text>The other user thinks this job is complete, do you agree?</Text>
+            chat.settled ?
+                chat.settledID === getAuth().currentUser.uid ?
+                    <Text>You have proposed that the job is done</Text>
+                    :
+                    <>
+                         <Text>The other user thinks this job is complete, do you agree?</Text>
                         <Button title={"Request completed"} onPress={() => {
                             acceptJobCompletion(chatId).then()
                         }}/>
-                    // </>
-                // :
-                // <Button title={"Propose completion"} onPress={() => {
-                //     proposeJobCompleted(chatId, getAuth().currentUser.uid).then()
-                // }}/>
+                     </>
+                :
+                <Button title={"Propose completion"} onPress={() => {
+                    proposeJobCompleted(chatId, getAuth().currentUser.uid).then()
+                }}/>
         )
     }
 
     const [messages, setMessages] = useState()
-    const [chatState, setChatState] = useState()
 
     useEffect(() => {
         get()
@@ -105,7 +97,6 @@ const MessagingModal = ({navigation, route}) => {
                             </View>
                         </View>
                     </>
-
                 }
             </View>
         </View>

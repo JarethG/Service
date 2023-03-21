@@ -2,19 +2,14 @@ import {initializeApp} from 'firebase/app';
 import {
     getFirestore,
     setDoc,
-    addDoc,
     doc,
     getDocs,
     deleteDoc,
     collection,
-    getDoc,
     limit,
     query,
     updateDoc,
-    arrayUnion,
-    where,
     onSnapshot,
-    arrayRemove,
 } from 'firebase/firestore';
 import {
     getDatabase,
@@ -25,7 +20,6 @@ import {
     update,
     remove,
     get,
-    child,
     orderByChild,
     limitToLast,
     increment,
@@ -33,19 +27,15 @@ import {
 } from 'firebase/database';
 import React from "react";
 import {Alert} from "react-native";
-import {getAuth} from "firebase/auth";
 
 const firebaseConfig = {
     apiKey: "AIzaSyC3YZcmR4Q_mHcA381qJYamGj8xsYT5cAY",
     authDomain: "community-exchange-36fb6.firebaseapp.com",
-    // databaseURL: "https://community-exchange-36fb6-default-rtdb.firebaseio.com",
     projectId: "community-exchange-36fb6",
     storageBucket: "community-exchange-36fb6.appspot.com",
     messagingSenderId: "439003403125",
     appId: "1:439003403125:web:34b9dd7b5ef52bf9f5793c",
     measurementId: "G-PJ5QRPDMXN"
-    //????
-    // databaseURL: 'https://project-id.firebaseio.com',}  // apiKey, authDomain, etc. (see above)
 }
 
 
@@ -312,6 +302,7 @@ export function readMyPublicData(uid, callback) {
                     publicData["points"] = publicData.monthlyPoints + publicData.totalPoints
                     : publicData["points"] = publicData.monthlyPoints
                 : publicData["points"] = 0
+            console.log("public data:",publicData)
             callback(publicData)
         }
     })
@@ -361,13 +352,8 @@ export async function updateProfile(userEmail, profileData) {
 
 export async function createDummyData(data) {
     data.map(async (item) => {
-        const request = item;
-        await setDoc(doc(db, "Requests", item.key), request).then(console.log("done =>", item.key))
-        await updateDoc(getUserDoc(item.account), {
-            myRequests: arrayUnion(item.key)
-        });
-        await setChatHeader(item.key, request)
-        await setChatState(item.key, request)
+        let key = push(ref(rtdb, 'posts'), item).key
+        set(ref(rtdb, 'user-posts/' + item.uid + '/' + key), true).then()
     });
 }
 
